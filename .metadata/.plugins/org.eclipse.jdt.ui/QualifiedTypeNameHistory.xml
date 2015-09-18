@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.puredata.core.utils.IoUtils"/>
+<fullyQualifiedTypeName name="org.puredata.core.PdBase"/>
+<fullyQualifiedTypeName name="org.puredata.android.io.PdAudio"/>
+<fullyQualifiedTypeName name="org.puredata.android.io.AudioParameters"/>
+<fullyQualifiedTypeName name="android.widget.Button"/>
+<fullyQualifiedTypeName name="android.graphics.Color"/>
+<fullyQualifiedTypeName name="com.github.mikephil.charting.charts.LineChart"/>
+<fullyQualifiedTypeName name="com.github.mikephil.charting.data.ChartData"/>
+<fullyQualifiedTypeName name="com.github.mikephil.charting.data.LineData"/>
+<fullyQualifiedTypeName name="com.github.mikephil.charting.components.YAxis"/>
+<fullyQualifiedTypeName name="com.github.mikephil.charting.components.Legend"/>
+<fullyQualifiedTypeName name="android.content.Intent"/>
+<fullyQualifiedTypeName name="android.view.View"/>
+<fullyQualifiedTypeName name="android.media.AudioManager"/>
+<fullyQualifiedTypeName name="android.content.Context"/>
+<fullyQualifiedTypeName name="android.view.KeyEvent"/>
+<fullyQualifiedTypeName name="android.widget.EditText"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
+<fullyQualifiedTypeName name="java.sql.Date"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+</qualifiedTypeNameHistroy>

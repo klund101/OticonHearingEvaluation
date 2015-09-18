@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:chartview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <com.fima.chartview.ChartView
+        android:id="@+id/chart_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        <area grid="@drawable/o">
+                <area.xaxis position="Top"/>
+        </area>
+        chartview:bottomLabelHeight="20dp"
+        chartview:gridLineColor="#E5E5E5"
+        chartview:gridLineWidth="1dp"
+        chartview:gridLinesHorizontal="5"
+        chartview:gridLinesVertical="5"
+        chartview:leftLabelWidth="56dp" >
+    </com.fima.chartview.ChartView>
+
+</RelativeLayout>

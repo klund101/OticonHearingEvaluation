@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Oticon Hearing Evaluation</string>
+    <string name="hello_world">Hearing Evaluation</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_instructions">InstructionsActivity</string>
+
+</resources>

@@ -1,0 +1,123 @@
+package com.example.hearing_evaluation;
+
+import org.puredata.core.PdBase;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
+
+import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+public class ResultActivity extends ActionBarActivity implements OnClickListener {
+	
+	Button backToMenuButton;
+	
+	private LineChart mChart;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_result);
+		
+        initGui();
+        
+//////////MPchart
+    	
+	//LineChart chart = (LineChart) findViewById(R.id.chart);
+	mChart = (LineChart) findViewById(R.id.chart);
+	// enable value highlighting
+	mChart.setHighlightEnabled(false);
+
+	// enable touch gestures
+	mChart.setTouchEnabled(true);
+
+	// enable scaling and dragging
+	mChart.setDragEnabled(true);
+	mChart.setScaleEnabled(false);
+	// mChart.setScaleXEnabled(true);
+	// mChart.setScaleYEnabled(true);
+
+ 	// if disabled, scaling can be done on x- and y-axis separately
+ 	mChart.setPinchZoom(false);
+ 
+ 	// x-axis limit line
+ 	// LimitLine llXAxis = new LimitLine(10f, "Index 10");
+ 	// llXAxis.setLineWidth(4f);
+	// llXAxis.enableDashedLine(10f, 10f, 0f);
+	// llXAxis.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
+ 	// llXAxis.setTextSize(10f);
+ 	//
+	// XAxis xAxis = mChart.getXAxis();
+	// xAxis.addLimitLine(llXAxis);
+ 
+ 	YAxis leftAxis = mChart.getAxisLeft();
+ 	YAxis rightAxis = mChart.getAxisRight();
+ 
+ 	leftAxis.setAxisMaxValue(10f);
+ 	rightAxis.setAxisMaxValue(10f);
+ 	leftAxis.setStartAtZero(false);
+ 	rightAxis.setStartAtZero(false);
+ 	leftAxis.setAxisMinValue(-120f);
+ 	rightAxis.setAxisMinValue(-120f);
+ 
+	// XAxis xAxis = mChart.getXAxis();
+ 
+ 	// xAxis.setAxisMaxValue(120f);
+	// xAxis.setAxisMinValue(0f);
+	//	
+	setData(20,1);
+	
+	mChart.setVisibleXRangeMinimum(0f);
+	mChart.setVisibleXRangeMaximum(8000);
+//	mChart.setVisibleYRangeMaximum(0f,leftAxis);
+//	mChart.setVisibleYRangeMaximum(8000);
+	
+	mChart.setDescription("Audiogram");
+	
+	//////////	
+		
+	}
+
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.result, menu);
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		// Handle action bar item clicks here. The action bar will
+//		// automatically handle clicks on the Home/Up button, so long
+//		// as you specify a parent activity in AndroidManifest.xml.
+//		int id = item.getItemId();
+//		if (id == R.id.action_settings) {
+//			return true;
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
+	@Override
+	public void onBackPressed() {
+	}
+	
+	private void initGui() {
+		backToMenuButton = (Button) findViewById(R.id.btnBackToMenu);
+		backToMenuButton.setOnClickListener(this);
+	}
+	
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btnBackToMenu:
+			startActivity(new Intent(ResultActivity.this, MainActivity.class)); // 
+		break;
+		}
+	}
+
+}
