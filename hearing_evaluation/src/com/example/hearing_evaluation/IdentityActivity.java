@@ -1,5 +1,12 @@
 package com.example.hearing_evaluation;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import org.puredata.core.PdBase;
@@ -15,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,7 +38,9 @@ public class IdentityActivity extends Activity implements OnClickListener {
 	Button newStartTestButton;
 	EditText uName;
 	public String uNameString;
-
+	
+	public String dataFile = "OticonAppData.txt";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,6 +52,7 @@ public class IdentityActivity extends Activity implements OnClickListener {
 		uName.clearComposingText();
 		Log.d("username", getName(this));
 		uName.setText(getName(this));	
+
 	}       
 	
 	private void initGui() {
@@ -54,6 +65,31 @@ public class IdentityActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnStartTest:
 			uNameString = uName.getText().toString();
+			
+            //get the path to sdcard 
+            File pathToExternalStorage = Environment.getExternalStorageDirectory();
+            File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/documents/Oticon");
+            // have the object build the directory structure, if needed.
+            appDirectory.mkdirs();
+            
+            //Create a File for the output file data
+            File saveFilePath = new File (appDirectory, dataFile);
+
+            try{
+                String newline = "\r\n";
+                FileOutputStream fos = new FileOutputStream (saveFilePath, true);
+                OutputStreamWriter OutDataWriter  = new OutputStreamWriter(fos);
+                OutDataWriter.append(uNameString + newline);
+                // OutDataWriter.append(equipNo.getText() + newline);
+                OutDataWriter.close();
+                fos.flush();
+                fos.close();
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        
+			
 			Intent testA = new Intent(IdentityActivity.this, TestActivity.class);
 			testA.putExtra("name", uNameString); // pass username to TestActivity
 			PdBase.sendBang("playTestTone");

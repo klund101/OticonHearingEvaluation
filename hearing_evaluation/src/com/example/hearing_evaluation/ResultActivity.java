@@ -1,5 +1,10 @@
 package com.example.hearing_evaluation;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +21,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -30,7 +36,8 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	
 	private LineChart mChart;
 	public String passed_uName_result;
-	String date;
+	public String date;
+	public String readDataName;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +104,25 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 //	mChart.setVisibleYRangeMaximum(0f,leftAxis);
 //	mChart.setVisibleYRangeMaximum(8000);
 	
+	try {  
+        File pathToExternalStorage = Environment.getExternalStorageDirectory();
+        File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/documents/Oticon");        
+        //Create a File for the output file data
+        File saveFilePath = new File (appDirectory, "OticonAppData.txt");
+        FileInputStream fIn = new FileInputStream(saveFilePath);  
+        BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));  
+        String line = ""; 
+        while ((line = myReader.readLine()) != null) {  
+        	readDataName = line;
+        }  
+        myReader.close();  
+          
+    } catch (IOException e) {  
+        e.printStackTrace();  
+    }  
+	
 	date = new SimpleDateFormat("MM/dd-yyyy  HH:mm").format(new Date());
-	mChart.setDescription(passed_uName_result + ", " + date); // set user name on audiogram
+	mChart.setDescription(readDataName + ", " + date); // set user name on audiogram
 	//////////	
 		
 	}

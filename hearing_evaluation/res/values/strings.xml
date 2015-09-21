@@ -10,5 +10,6 @@
     <string name="title_activity_options">OptionsActivity</string>
     <string name="title_activity_archive">ArchiveActivity</string>
     <string name="title_activity_identity">IdentityActivity</string>
-
+    
+ 
 </resources>
