@@ -30,10 +30,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	Button toneButton;
 	Button proceedButton;
 	
-	public int initialRingVolume;
-	
-	public String passed_uName_main;
-	
+	public int initialRingVolume;	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +39,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         
         initGui();
         
-        Intent mainAn = getIntent();
-        Bundle b = mainAn.getExtras();
-
-        if (b != null) {
-        	passed_uName_main  = (String) b.get("name_test"); // get user name from TestActivity
-        }
         
         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE); // fix audio output volume
         
@@ -69,7 +60,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnProceed:
 			Intent mainA = new Intent(MainActivity.this, OptionsActivity.class);
-			mainA.putExtra("name_test", passed_uName_main); // pass username to result activity
 	        startActivity(mainA);
 		break;
 		}

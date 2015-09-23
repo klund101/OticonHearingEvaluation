@@ -79,7 +79,7 @@ public class IdentityActivity extends Activity implements OnClickListener {
                 String newline = "\r\n";
                 FileOutputStream fos = new FileOutputStream (saveFilePath, true);
                 OutputStreamWriter OutDataWriter  = new OutputStreamWriter(fos);
-                OutDataWriter.append(uNameString + newline);
+                OutDataWriter.append(newline + uNameString + newline);
                 // OutDataWriter.append(equipNo.getText() + newline);
                 OutDataWriter.close();
                 fos.flush();
@@ -91,7 +91,6 @@ public class IdentityActivity extends Activity implements OnClickListener {
         
 			
 			Intent testA = new Intent(IdentityActivity.this, TestActivity.class);
-			testA.putExtra("name", uNameString); // pass username to TestActivity
 			PdBase.sendBang("playTestTone");
 			startActivity(testA);
 		break;

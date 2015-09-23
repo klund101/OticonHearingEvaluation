@@ -12,7 +12,9 @@ import java.util.Date;
 import org.puredata.core.PdBase;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.components.XAxis; 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -20,6 +22,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -29,15 +32,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class ResultActivity extends IdentityActivity implements OnClickListener {
 	
 	Button backToMenuButton;
+	Button sendEmailButton;
 	
 	private LineChart mChart;
-	public String passed_uName_result;
 	public String date;
 	public String readDataName;
+	public int[] freqValues = {0, 250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000};
+	ArrayList<String> lineList = new ArrayList<String>();
+	float[] dBValues;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,31 +53,25 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		
         initGui();
         
-        Intent resultAn = getIntent();
-        Bundle b = resultAn.getExtras();
-
-        if (b != null) {
-        	passed_uName_result  = (String) b.get("name_test"); // get user name from TestActivity
-        }
         
 //////////MPchart
     	
 	//LineChart chart = (LineChart) findViewById(R.id.chart);
 	mChart = (LineChart) findViewById(R.id.chart);
 	// enable value highlighting
-	mChart.setHighlightEnabled(false);
+	mChart.setHighlightEnabled(true);
 
 	// enable touch gestures
-	mChart.setTouchEnabled(true);
+	mChart.setTouchEnabled(false);
 
 	// enable scaling and dragging
 	mChart.setDragEnabled(true);
-	mChart.setScaleEnabled(false);
+	mChart.setScaleEnabled(true);
 	// mChart.setScaleXEnabled(true);
 	// mChart.setScaleYEnabled(true);
 
  	// if disabled, scaling can be done on x- and y-axis separately
- 	mChart.setPinchZoom(false);
+ 	mChart.setPinchZoom(true);
  
  	// x-axis limit line
  	// LimitLine llXAxis = new LimitLine(10f, "Index 10");
@@ -97,13 +98,14 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
  	// xAxis.setAxisMaxValue(120f);
 	// xAxis.setAxisMinValue(0f);
 	//	
-	setData(20,1);
+	setData(freqValues.length,1);
 	
-	mChart.setVisibleXRangeMinimum(0f);
+	mChart.setVisibleXRangeMinimum(0);
 	mChart.setVisibleXRangeMaximum(8000);
 //	mChart.setVisibleYRangeMaximum(0f,leftAxis);
 //	mChart.setVisibleYRangeMaximum(8000);
 	
+	//-----READ FROM TEXT FILE
 	try {  
         File pathToExternalStorage = Environment.getExternalStorageDirectory();
         File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/documents/Oticon");        
@@ -112,10 +114,19 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
         FileInputStream fIn = new FileInputStream(saveFilePath);  
         BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));  
         String line = ""; 
-        while ((line = myReader.readLine()) != null) {  
-        	readDataName = line;
+        while ((line = myReader.readLine()) != null) {
+        	lineList.add(line);
         }  
+        readDataName = lineList.get(lineList.size()-2);
         myReader.close();  
+        
+        String[] flostr = lineList.get(lineList.size()-1).split(", ");
+        dBValues = new float[flostr.length];
+        for(int i=0; i<dBValues.length; i++){
+        	dBValues[i] = Float.parseFloat(flostr[i]);
+        	Log.d("dBValue", Float.toString(dBValues[i]));
+        }
+        
           
     } catch (IOException e) {  
         e.printStackTrace();  
@@ -132,7 +143,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < count; i++) {
-            xVals.add((i*500) + "");
+            xVals.add(Integer.toString(freqValues[i]));
             Log.d("xval", String.valueOf(xVals));
         }
 
@@ -177,25 +188,6 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
         // set data
         mChart.setData(data);
     }
-
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.result, menu);
-//		return true;
-//	}
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		// Handle action bar item clicks here. The action bar will
-//		// automatically handle clicks on the Home/Up button, so long
-//		// as you specify a parent activity in AndroidManifest.xml.
-//		int id = item.getItemId();
-//		if (id == R.id.action_settings) {
-//			return true;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
     
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -218,6 +210,8 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	private void initGui() {
 		backToMenuButton = (Button) findViewById(R.id.btnBackToMenu);
 		backToMenuButton.setOnClickListener(this);
+		sendEmailButton = (Button) findViewById(R.id.btnSendEmail);
+		sendEmailButton.setOnClickListener(this);
 	}
 	
 	@Override
@@ -226,8 +220,20 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		case R.id.btnBackToMenu:
 			//startActivity(new Intent(ResultActivity.this, MainActivity.class)); // 
 			 Intent mainA = new Intent(ResultActivity.this, MainActivity.class);
-			 mainA.putExtra("name_test", passed_uName_result); // pass username to result activity
 	         startActivity(mainA);
+		break;
+		case R.id.btnSendEmail:
+		    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+		    emailIntent.setType("message/rfc822");
+		    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{"kasperduemose@gmail.com"});
+		    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
+		    emailIntent.putExtra(Intent.EXTRA_TEXT   , lineList.get(lineList.size()-1));
+			try {
+			    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+			    Log.i("Finished sending email...", "");
+			} catch (android.content.ActivityNotFoundException ex) {
+			    Toast.makeText(ResultActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+			}
 		break;
 		}
 	}

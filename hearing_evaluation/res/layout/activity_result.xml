@@ -24,15 +24,6 @@
 
     </com.github.mikephil.charting.charts.LineChart>
 
-    <Button
-        android:id="@+id/btnBackToMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:text="Back to menu" />
-
     <TextView
         android:id="@+id/introText"
         android:layout_width="wrap_content"
@@ -42,12 +33,30 @@
         android:text="TextView" />
 
     <Button
-        android:id="@+id/btnExportPdf"
+        android:id="@+id/btnBackToMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Back to menu" />
+
+    <Button
+        android:id="@+id/btnSendEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnBackToMenu"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp"
-        android:text="Export as PDF" />
+        android:text="Send data to email" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnSendEmail"
+        android:layout_alignLeft="@+id/btnSendEmail"
+        android:layout_alignRight="@+id/btnSendEmail"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="textEmailAddress" />
 
 </RelativeLayout>

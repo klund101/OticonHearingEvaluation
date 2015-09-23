@@ -1,7 +1,9 @@
 package com.example.hearing_evaluation;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 
 public class TestActivity extends ActionBarActivity implements OnClickListener {
 	
@@ -42,8 +45,6 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	Button noButton;
 	
 	public int tmpCount;
-	
-	public String passed_uName_test;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +55,6 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		setContentView(R.layout.activity_test);
 		
         initGui();
-        
-        Intent testAn = getIntent();
-        Bundle b = testAn.getExtras();
-
-        if (b != null) {
-        	passed_uName_test  = (String) b.get("name"); // get user name from IdentityActivity
-        }
         
 		try {
 			initPd();
@@ -93,10 +87,32 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnYes:
 			 tmpCount += 1;
-			 while(tmpCount==7){
+			 
+			//get the path to sdcard 
+	        File pathToExternalStorage = Environment.getExternalStorageDirectory();
+	        File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/documents/Oticon");
+	        // have the object build the directory structure, if needed.
+	        appDirectory.mkdirs();
+	            
+	        //Create a File for the output file data
+	        File saveFilePath = new File (appDirectory, "OticonAppData.txt");
+
+	        try{
+		        FileOutputStream fos = new FileOutputStream (saveFilePath, true);
+		        OutputStreamWriter OutDataWriter  = new OutputStreamWriter(fos);
+		        OutDataWriter.append((float)(Math.random()*10)-20 + ", ");
+		        // OutDataWriter.append(equipNo.getText() + newline);
+		        OutDataWriter.close();
+		        fos.flush();
+		        fos.close();
+	        }
+	        catch(Exception e){
+	        	e.printStackTrace();
+	        }
+			 
+			 if(tmpCount>=10){
 				 tmpCount = 0;
 				 Intent resultA = new Intent(TestActivity.this, ResultActivity.class);
-				 resultA.putExtra("name_test", passed_uName_test); // pass username to result activity
 		         startActivity(resultA);
 				 PdAudio.stopAudio();
 				 PdAudio.release();
