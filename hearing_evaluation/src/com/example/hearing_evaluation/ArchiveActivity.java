@@ -1,22 +1,34 @@
 package com.example.hearing_evaluation;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class ArchiveActivity extends ListActivity {
 	
 	//LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
     ArrayList<String> listItems = new ArrayList<String>();
+	ArrayList<String> lineList = new ArrayList<String>();
+	private String readDataName;
+	private String dBValues;
 
     //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
     ArrayAdapter<String> adapter;
@@ -26,10 +38,32 @@ public class ArchiveActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_archive);
 		
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
-        setListAdapter(adapter);
-        listItems.add("Result 1");
-        adapter.notifyDataSetChanged();
+		//-----READ FROM TEXT FILE
+		try {  
+	        File pathToExternalStorage = Environment.getExternalStorageDirectory();
+	        File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/Oticon");        
+	        //Create a File for the output file data
+	        File saveFilePath = new File (appDirectory, "OticonAppData.txt");
+	        FileInputStream fIn = new FileInputStream(saveFilePath);  
+	        BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));  
+	        String line = ""; 
+	        while ((line = myReader.readLine()) != null) {
+	        	lineList.add(line);
+	        }        
+	        
+	        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+	        setListAdapter(adapter);
+	        
+	        for(int i=lineList.size()-1; i>0; i = i-2){	// Set archive item names from text file
+	        	readDataName = lineList.get(lineList.size()-i);	
+		        listItems.add(readDataName);
+		        adapter.notifyDataSetChanged();
+	        }
+	        myReader.close();
+	          
+	    } catch (IOException e) {  
+	        e.printStackTrace();  
+	    }  
 	}
 	
 	@Override
@@ -53,6 +87,16 @@ public class ArchiveActivity extends ListActivity {
 		else
 			return true;
 	}
+	
+	@Override 
+    public void onListItemClick(ListView l, View v, int position, long id) {
+		Log.d("position", Integer.toString(position));
+		Log.d("username", lineList.get((position*2)+1));
+		Intent archiveResultA = new Intent(ArchiveActivity.this, ArchiveResultActivity.class);
+		archiveResultA.putExtra("namePos", Integer.toString(((position*2)+1)));
+		archiveResultA.putExtra("hearingDataPos", Integer.toString((position*2)+2));
+        startActivity(archiveResultA);
+    }
 
 //	@Override
 //	public boolean onCreateOptionsMenu(Menu menu) {

@@ -7,25 +7,25 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.hearing_evaluation.ResultActivity" >
+    tools:context="com.example.hearing_evaluation.ArchiveResultActivity" >
 
     <TextView
-        android:id="@+id/results"
+        android:id="@+id/archiveResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Results" />
+        android:text="Archive Results" />
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart"
+        android:id="@+id/chartArchive"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/introText"
-        android:layout_below="@+id/results" >
+        android:layout_above="@+id/archiveIntroText"
+        android:layout_below="@+id/archiveResults" >
 
     </com.github.mikephil.charting.charts.LineChart>
 
     <TextView
-        android:id="@+id/introText"
+        android:id="@+id/archiveIntroText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -33,31 +33,26 @@
         android:text="TextView" />
 
     <Button
-        android:id="@+id/btnBackToMenu"
+        android:id="@+id/btnArchiveSendEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Back to menu" />
-
-    <Button
-        android:id="@+id/btnSendEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnBackToMenu"
-        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="52dp"
         android:text="Send data to email" />
 
     <EditText
-        android:id="@+id/userEmail"
+        android:id="@+id/archiveUserEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnSendEmail"
-        android:layout_alignLeft="@+id/chart"
-        android:layout_alignRight="@+id/chart"
+        android:layout_above="@+id/btnArchiveSendEmail"
+        android:layout_centerHorizontal="true"
         android:ems="10"
         android:enabled="true"
         android:gravity="center_vertical"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

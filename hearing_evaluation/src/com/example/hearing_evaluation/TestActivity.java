@@ -90,7 +90,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 			 
 			//get the path to sdcard 
 	        File pathToExternalStorage = Environment.getExternalStorageDirectory();
-	        File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/documents/Oticon");
+	        File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/Oticon");
 	        // have the object build the directory structure, if needed.
 	        appDirectory.mkdirs();
 	            
@@ -100,7 +100,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	        try{
 		        FileOutputStream fos = new FileOutputStream (saveFilePath, true);
 		        OutputStreamWriter OutDataWriter  = new OutputStreamWriter(fos);
-		        OutDataWriter.append((float)(Math.random()*10)-20 + ", ");
+		        OutDataWriter.append((float)(Math.random()*10)-20 + "; ");
 		        // OutDataWriter.append(equipNo.getText() + newline);
 		        OutDataWriter.close();
 		        fos.flush();
@@ -110,7 +110,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	        	e.printStackTrace();
 	        }
 			 
-			 if(tmpCount>=10){
+			 if(tmpCount>=9){// number of tested frequencies
 				 tmpCount = 0;
 				 Intent resultA = new Intent(TestActivity.this, ResultActivity.class);
 		         startActivity(resultA);

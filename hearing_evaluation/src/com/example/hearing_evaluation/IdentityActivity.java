@@ -7,7 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.puredata.core.PdBase;
 
@@ -38,6 +40,7 @@ public class IdentityActivity extends Activity implements OnClickListener {
 	Button newStartTestButton;
 	EditText uName;
 	public String uNameString;
+	public String date;
 	
 	public String dataFile = "OticonAppData.txt";
 	
@@ -48,7 +51,7 @@ public class IdentityActivity extends Activity implements OnClickListener {
 		
 		initGui();
 		
-		uName   = (EditText)findViewById(R.id.userName);
+		uName = (EditText)findViewById(R.id.userName);
 		uName.clearComposingText();
 		Log.d("username", getName(this));
 		uName.setText(getName(this));	
@@ -68,7 +71,7 @@ public class IdentityActivity extends Activity implements OnClickListener {
 			
             //get the path to sdcard 
             File pathToExternalStorage = Environment.getExternalStorageDirectory();
-            File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/documents/Oticon");
+            File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/Oticon");
             // have the object build the directory structure, if needed.
             appDirectory.mkdirs();
             
@@ -78,8 +81,9 @@ public class IdentityActivity extends Activity implements OnClickListener {
             try{
                 String newline = "\r\n";
                 FileOutputStream fos = new FileOutputStream (saveFilePath, true);
+                date = new SimpleDateFormat("MM/dd-yyyy  HH:mm").format(new Date());
                 OutputStreamWriter OutDataWriter  = new OutputStreamWriter(fos);
-                OutDataWriter.append(newline + uNameString + newline);
+                OutDataWriter.append(newline + uNameString + ", " + date + newline);
                 // OutDataWriter.append(equipNo.getText() + newline);
                 OutDataWriter.close();
                 fos.flush();

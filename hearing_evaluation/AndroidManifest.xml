@@ -46,17 +46,17 @@
             android:name=".IdentityActivity"
             android:label="@string/title_activity_identity" >
         </activity>
-               
+        <activity
+            android:name=".ArchiveResultActivity"
+            android:label="@string/title_activity_archive_result" >
+        </activity>
     </application>
-	
+
     <!-- Required to access the Contacts Provider and user profile -->
-	<uses-permission android:name="android.permission.READ_PROFILE"/>
-	<uses-permission android:name="android.permission.READ_CONTACTS"/>
-	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-	
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    
-	
-	
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 </manifest>

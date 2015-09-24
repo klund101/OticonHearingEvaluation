@@ -41,14 +41,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class ResultActivity extends IdentityActivity implements OnClickListener {
+public class ArchiveResultActivity extends IdentityActivity implements OnClickListener {
 	
-	Button backToMenuButton;
 	Button sendEmailButton;
 	EditText uEmail;
 	
 	private LineChart mChart;
 	public String date;
+	public String passedNamePos;
+	public String passedDataPos;
+	public int passedNamePosInt;
+	public int passedDataPosInt;
 	public String readUserName;
 	public int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000};
 	ArrayList<String> lineList = new ArrayList<String>();
@@ -58,11 +61,23 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_result);
+		setContentView(R.layout.activity_archive_result);
 		
         initGui();
         
-        uEmail = (EditText)findViewById(R.id.userEmail);
+        Intent iin = getIntent();
+        Bundle b = iin.getExtras();
+        if (b != null) {
+        	passedNamePos  = (String) b.get("namePos");
+        	passedDataPos = (String) b.get("hearingDataPos");
+        }
+        
+        Log.d("passedDataPos", passedDataPos);
+        
+        passedNamePosInt = Integer.valueOf(passedNamePos);
+        passedDataPosInt = Integer.valueOf(passedDataPos);
+        
+        uEmail = (EditText)findViewById(R.id.archiveUserEmail);
         uEmail.clearComposingText();
            
 		Log.d("user email", getEmailId(this));
@@ -72,7 +87,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 //////////MPchart
     	
 	//LineChart chart = (LineChart) findViewById(R.id.chart);
-	mChart = (LineChart) findViewById(R.id.chart);
+	mChart = (LineChart) findViewById(R.id.chartArchive);
 	// enable value highlighting
 	mChart.setHighlightEnabled(true);
 
@@ -131,10 +146,9 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
         while ((line = myReader.readLine()) != null) {
         	lineList.add(line);
         }  
-        readUserName = lineList.get(lineList.size()-2);
-        myReader.close();  
-        
-        String[] readUserData = lineList.get(lineList.size()-1).split("; ");
+        readUserName = lineList.get(passedNamePosInt);        
+        String[] readUserData = lineList.get(passedDataPosInt).split("; ");
+        myReader.close(); 
         dBValues = new float[readUserData.length];
         for(int i=0; i<dBValues.length; i++){
         	dBValues[i] = Float.parseFloat(readUserData[i]);
@@ -146,7 +160,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
           
     } catch (IOException e) {  
         e.printStackTrace();  
-    } 
+    }  
 	
 	setData(freqValues.length,1);
 	
@@ -166,10 +180,18 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
         }
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
+        
+        Log.d("yval", String.valueOf(dBValues[0]));
+        Log.d("yval", String.valueOf(dBValues[1]));
+        Log.d("yval", String.valueOf(dBValues[2]));
 
         for (int i = 0; i < count; i++) {
+
+            //float mult = (range + 1);
+            //float val = (float) (Math.random() * mult) - 20;
             //Log.d("yval", String.valueOf(val));
             yVals.add(new Entry(dBValues[i], i));
+            Log.d("yval", String.valueOf(dBValues[i]));
         }
 
         // create a dataset and give it a type
@@ -216,26 +238,23 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP 
 	    		|| keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
 	    	return true;
+	    else if (keyCode == KeyEvent.KEYCODE_BACK){
+	    	super.onBackPressed();
+	    	return true;
+	    }
 		else
 			return true;
 	}
 	
 	private void initGui() {
-		backToMenuButton = (Button) findViewById(R.id.btnBackToMenu);
-		backToMenuButton.setOnClickListener(this);
-		sendEmailButton = (Button) findViewById(R.id.btnSendEmail);
+		sendEmailButton = (Button) findViewById(R.id.btnArchiveSendEmail);
 		sendEmailButton.setOnClickListener(this);
 	}
 	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btnBackToMenu:
-			//startActivity(new Intent(ResultActivity.this, MainActivity.class)); // 
-			 Intent mainA = new Intent(ResultActivity.this, MainActivity.class);
-	         startActivity(mainA);
-		break;
-		case R.id.btnSendEmail:
+		case R.id.btnArchiveSendEmail:
 		    Intent emailIntent = new Intent(Intent.ACTION_SEND);
 		    emailIntent.setType("message/rfc822");
 		    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{uEmail.getText().toString()});
@@ -245,7 +264,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 			    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 			    Log.i("Finished sending email...", "");
 			} catch (android.content.ActivityNotFoundException ex) {
-			    Toast.makeText(ResultActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+			    Toast.makeText(ArchiveResultActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
 			}
 		break;
 		}
