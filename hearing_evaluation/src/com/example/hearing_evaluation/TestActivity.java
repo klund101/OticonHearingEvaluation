@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
@@ -13,6 +15,7 @@ import org.puredata.core.utils.IoUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings.System;
 
 public class TestActivity extends ActionBarActivity implements OnClickListener {
 	
@@ -44,14 +48,16 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	Button yesButton;
 	Button noButton;
 	
-	public int tmpCount;
+	public int tmpCount = 0;
+	public int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000}; 
+	public long startCheckTime, stopCheckTime; 
+	public int toneLevel = 40;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		tmpCount = 0;
-		
+				
 		setContentView(R.layout.activity_test);
 		
         initGui();
@@ -63,6 +69,37 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 			finish();
 		}
 		
+		/// TEST FLOW
+		
+		PdBase.sendFloat("toneLevel", toneLevel);
+		PdBase.sendFloat("freqValue", freqValues[2]);
+		startCheckTime = java.lang.System.currentTimeMillis();
+		Log.d("startCheckTime", Long.toString(startCheckTime));
+			
+			stopCheckTime = java.lang.System.currentTimeMillis();
+			Log.d("stopCheckTime", Long.toString(stopCheckTime));
+			
+			if(stopCheckTime-startCheckTime<= 3000)
+				toneLevel -= 10;
+			else
+				toneLevel += 5;
+			
+			Log.d("toneLevel", Integer.toString(toneLevel));
+			
+			PdBase.sendFloat("toneLevel", toneLevel);
+			PdBase.sendFloat("freqValue", freqValues[2]);
+			startCheckTime = java.lang.System.currentTimeMillis();
+			
+			Timer timer = new Timer();
+			TimerTask task = new TimerTask() {
+			    @Override
+			    public void run() {
+			    	Log.d("toneLevel", Integer.toString(toneLevel));
+			    }
+			};
+			
+			timer.scheduleAtFixedRate(task, 0, 3000 - (int)(Math.random()*100));	
+		//----
 	}
 	
 	//Initialize the PdAudio and it's parameters
@@ -82,12 +119,14 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		noButton.setOnClickListener(this);
 	}
 	
+	
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnYes:
+
 			 tmpCount += 1;
-			 
 			//get the path to sdcard 
 	        File pathToExternalStorage = Environment.getExternalStorageDirectory();
 	        File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/Oticon");
@@ -181,4 +220,6 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		PdAudio.release();
 		PdBase.release();
 	}
+	
+	
 }
