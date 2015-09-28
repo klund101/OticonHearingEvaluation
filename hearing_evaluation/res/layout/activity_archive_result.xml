@@ -48,7 +48,6 @@
         android:layout_above="@+id/btnArchiveSendEmail"
         android:layout_centerHorizontal="true"
         android:ems="10"
-        android:enabled="true"
         android:gravity="center_vertical"
         android:inputType="textEmailAddress" >
 

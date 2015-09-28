@@ -9,11 +9,16 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.puredata.core.PdBase;
 
+import com.parse.ParseException;
+import com.parse.ParseObject;
+
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.TelephonyManager;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -34,12 +39,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class IdentityActivity extends Activity implements OnClickListener {
 	
 	Button newStartTestButton;
 	EditText uName;
-	public String uNameString;
+	EditText uAge;
+	RadioButton radioButtonF;
+	RadioButton radioButtonM;
+	RadioGroup radioGenderGroup;
+	
+	public String uNameString = "";
+	public String uAgeString = "";
+	public String uGenderString = "";
 	public String date;
 	
 	public String dataFile = "OticonAppData.txt";
@@ -51,55 +65,97 @@ public class IdentityActivity extends Activity implements OnClickListener {
 		
 		initGui();
 		
+		uAge = (EditText)findViewById(R.id.userAge);
 		uName = (EditText)findViewById(R.id.userName);
 		uName.clearComposingText();
 		Log.d("username", getName(this));
-		uName.setText(getName(this));	
-
+		uName.setText(getName(this));
+		
 	}       
 	
 	private void initGui() {
 		newStartTestButton = (Button) findViewById(R.id.btnStartTest);
 		newStartTestButton.setOnClickListener(this);
+		
+		radioGenderGroup = (RadioGroup) findViewById(R.id.genderGroup);
+		
+		radioButtonF = (RadioButton) findViewById(R.id.genderFemale);
+		radioButtonF.setOnClickListener(this);
+		radioButtonM = (RadioButton) findViewById(R.id.genderMale);
+		radioButtonM.setOnClickListener(this);
+		
 	}
 	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnStartTest:
-			uNameString = uName.getText().toString();
-			
-            //get the path to sdcard 
-            File pathToExternalStorage = Environment.getExternalStorageDirectory();
-            File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/Oticon");
-            // have the object build the directory structure, if needed.
-            appDirectory.mkdirs();
-            
-            //Create a File for the output file data
-            File saveFilePath = new File (appDirectory, dataFile);
+				uNameString = uName.getText().toString();
+				uAgeString = uAge.getText().toString();
 
-            try{
-                String newline = "\r\n";
-                FileOutputStream fos = new FileOutputStream (saveFilePath, true);
-                date = new SimpleDateFormat("MM/dd-yyyy  HH:mm").format(new Date());
-                OutputStreamWriter OutDataWriter  = new OutputStreamWriter(fos);
-                OutDataWriter.append(newline + uNameString + ", " + date + newline);
-                // OutDataWriter.append(equipNo.getText() + newline);
-                OutDataWriter.close();
-                fos.flush();
-                fos.close();
+				 boolean isInt = true;
 
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        
+				 try { 
+				      Integer.parseInt(uAgeString);
+				 } catch (NumberFormatException e) {
+				     isInt = false;
+				 }
 			
-			Intent testA = new Intent(IdentityActivity.this, TestActivity.class);
-			PdBase.sendBang("playTestTone");
-			startActivity(testA);
+		if(uNameString.length() >= 1 && uGenderString != "" && isInt){	
+				//Parse
+		        
+				String androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+				ParseObject userDataObject = new ParseObject("hearingEvaluationData");
+		        userDataObject.put("Username", uNameString);
+		        userDataObject.put("DeviceId", androidId);
+		        userDataObject.put("HearingData", "");
+		        userDataObject.put("Age", uAgeString);
+		        userDataObject.put("Gender", uGenderString);
+		        Log.d("uGenderString", uGenderString);
+		        
+		        try {
+					userDataObject.save();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+							
+				Intent testA = new Intent(IdentityActivity.this, TestActivity.class);
+				PdBase.sendBang("playTestTone");
+				testA.putExtra("parseDataObjectId", userDataObject.getObjectId());
+				Log.d("parseDataObjectId idAct", userDataObject.getObjectId());
+				startActivity(testA);
+		}
+		break;
+		case R.id.genderFemale:
+        	uGenderString = "F";
+        	Log.d("uGenderString", uGenderString);
+		break;
+		case R.id.genderMale:
+        	uGenderString = "M";
+        	Log.d("uGenderString", uGenderString);
 		break;
 		}
 	}
+	
+//	public void onRadioButtonClicked(View view) {
+//	    // Is the button now checked?
+//	    boolean checked = ((RadioButton) view).isChecked();
+//	    
+//	    // Check which radio button was clicked
+//	    switch(view.getId()) {
+//	        case R.id.genderFemale:
+//	            if (checked)
+//	            	uGenderString = "F";
+//	            Log.d("uGenderString", uGenderString);
+//	            break;
+//	        case R.id.genderMale:
+//	            if (checked)
+//	            	uGenderString = "M";
+//	            	Log.d("uGenderString", uGenderString);
+//	            break;
+//	    }
+//	}
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -163,4 +219,5 @@ public class IdentityActivity extends Activity implements OnClickListener {
         }
         return emailCur;
     }
+	
 }

@@ -6,6 +6,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.ListActivity;
@@ -29,6 +35,9 @@ public class ArchiveActivity extends ListActivity {
 	ArrayList<String> lineList = new ArrayList<String>();
 	private String readDataName;
 	private String dBValues;
+	
+	public List<ParseObject> publicParseObjectsList;
+	public String parseListObjectId;
 
     //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
     ArrayAdapter<String> adapter;
@@ -38,32 +47,33 @@ public class ArchiveActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_archive);
 		
-		//-----READ FROM TEXT FILE
-		try {  
-	        File pathToExternalStorage = Environment.getExternalStorageDirectory();
-	        File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/Oticon");        
-	        //Create a File for the output file data
-	        File saveFilePath = new File (appDirectory, "OticonAppData.txt");
-	        FileInputStream fIn = new FileInputStream(saveFilePath);  
-	        BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));  
-	        String line = ""; 
-	        while ((line = myReader.readLine()) != null) {
-	        	lineList.add(line);
-	        }        
-	        
-	        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
-	        setListAdapter(adapter);
-	        
-	        for(int i=lineList.size()-1; i>0; i = i-2){	// Set archive item names from text file
-	        	readDataName = lineList.get(lineList.size()-i);	
-		        listItems.add(readDataName);
-		        adapter.notifyDataSetChanged();
-	        }
-	        myReader.close();
-	          
-	    } catch (IOException e) {  
-	        e.printStackTrace();  
-	    }  
+		//Parse
+		
+		String androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+		query.whereEqualTo("DeviceId", androidId);
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+        setListAdapter(adapter);
+		query.findInBackground(new FindCallback<ParseObject>() {	        
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				if (e == null) {
+					publicParseObjectsList = objects;
+					for(int i = objects.size()-1; i>=0; i--){
+			        listItems.add(objects.get(i).get("Username").toString() + ", " + objects.get(i).getCreatedAt().toString());
+					Log.d("object", objects.get(i).get("Username").toString());
+			        adapter.notifyDataSetChanged();
+					}
+		            
+		        } else {
+		            Log.d("score", "Error: " + e.getMessage());
+		        }
+				
+			}
+		});
+				
 	}
 	
 	@Override
@@ -90,11 +100,9 @@ public class ArchiveActivity extends ListActivity {
 	
 	@Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
-		Log.d("position", Integer.toString(position));
-		Log.d("username", lineList.get((position*2)+1));
+		Log.d("position", publicParseObjectsList.get(publicParseObjectsList.size()-1-position).getObjectId().toString());
 		Intent archiveResultA = new Intent(ArchiveActivity.this, ArchiveResultActivity.class);
-		archiveResultA.putExtra("namePos", Integer.toString(((position*2)+1)));
-		archiveResultA.putExtra("hearingDataPos", Integer.toString((position*2)+2));
+		archiveResultA.putExtra("pressedObjectId", publicParseObjectsList.get(publicParseObjectsList.size()-1-position).getObjectId().toString());
         startActivity(archiveResultA);
     }
 

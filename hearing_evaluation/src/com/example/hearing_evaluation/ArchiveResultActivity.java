@@ -18,6 +18,10 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import android.support.v7.app.ActionBarActivity;
 import android.accounts.Account;
@@ -47,16 +51,15 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
 	EditText uEmail;
 	
 	private LineChart mChart;
-	public String date;
-	public String passedNamePos;
-	public String passedDataPos;
-	public int passedNamePosInt;
-	public int passedDataPosInt;
+	public Date createdAt;
+	public String pressedObjectId;
+	float[] dBValues = {0,0,0,0,0,0,0,0,0};
+	public String dBValuesString;
+	public String dBValuesStringSubS;
+	public String freqsAndData = "";
 	public String readUserName;
 	public int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000};
-	ArrayList<String> lineList = new ArrayList<String>();
-	float[] dBValues;
-	public String freqsAndData = ""; 
+	ArrayList<String> lineList = new ArrayList<String>(); 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,23 +68,11 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
 		
         initGui();
         
-        Intent iin = getIntent();
-        Bundle b = iin.getExtras();
-        if (b != null) {
-        	passedNamePos  = (String) b.get("namePos");
-        	passedDataPos = (String) b.get("hearingDataPos");
-        }
-        
-        Log.d("passedDataPos", passedDataPos);
-        
-        passedNamePosInt = Integer.valueOf(passedNamePos);
-        passedDataPosInt = Integer.valueOf(passedDataPos);
-        
         uEmail = (EditText)findViewById(R.id.archiveUserEmail);
         uEmail.clearComposingText();
            
 		Log.d("user email", getEmailId(this));
-		uEmail.setText(getEmailId(this));	
+		uEmail.setText(getEmailId(this));	  
         
         
 //////////MPchart
@@ -97,21 +88,8 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
 	// enable scaling and dragging
 	mChart.setDragEnabled(true);
 	mChart.setScaleEnabled(true);
-	// mChart.setScaleXEnabled(true);
-	// mChart.setScaleYEnabled(true);
 
- 	// if disabled, scaling can be done on x- and y-axis separately
  	mChart.setPinchZoom(true);
- 
- 	// x-axis limit line
- 	// LimitLine llXAxis = new LimitLine(10f, "Index 10");
- 	// llXAxis.setLineWidth(4f);
-	// llXAxis.enableDashedLine(10f, 10f, 0f);
-	// llXAxis.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
- 	// llXAxis.setTextSize(10f);
- 	//
-	// XAxis xAxis = mChart.getXAxis();
-	// xAxis.addLimitLine(llXAxis);
  
  	YAxis leftAxis = mChart.getAxisLeft();
  	YAxis rightAxis = mChart.getAxisRight();
@@ -134,195 +112,199 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
 //	mChart.setVisibleYRangeMaximum(0f,leftAxis);
 //	mChart.setVisibleYRangeMaximum(8000);
 	
-	//-----READ FROM TEXT FILE
-	try {  
-        File pathToExternalStorage = Environment.getExternalStorageDirectory();
-        File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/Oticon");        
-        //Create a File for the output file data
-        File saveFilePath = new File (appDirectory, "OticonAppData.txt");
-        FileInputStream fIn = new FileInputStream(saveFilePath);  
-        BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));  
-        String line = ""; 
-        while ((line = myReader.readLine()) != null) {
-        	lineList.add(line);
-        }  
-        readUserName = lineList.get(passedNamePosInt);        
-        String[] readUserData = lineList.get(passedDataPosInt).split("; ");
-        myReader.close(); 
-        dBValues = new float[readUserData.length];
-        for(int i=0; i<dBValues.length; i++){
-        	dBValues[i] = Float.parseFloat(readUserData[i]);
-        	
-        	Log.d("dBValue",  "[" + Integer.toString(freqValues[i]) + ", " + Float.toString(dBValues[i]) + "]");
-        	freqsAndData +=  "[" + Integer.toString(freqValues[i]) + ", " + Float.toString(dBValues[i]) + "]" + "\t";
-        }
-        
-          
-    } catch (IOException e) {  
-        e.printStackTrace();  
-    }  
-	
+
 	setData(freqValues.length,1);
 	
-	//date = new SimpleDateFormat("MM/dd-yyyy  HH:mm").format(new Date());
-	mChart.setDescription(readUserName/* + ", " + date*/); // set user name on audiogram
 	//////////	
 		
 	}
 	
     //////////MPchart
     private void setData(int count, float range) {
-
-        ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count; i++) {
-            xVals.add(Integer.toString(freqValues[i]));
-            Log.d("xval", String.valueOf(xVals));
+    	
+    	
+        //Parse
+        Intent iin = getIntent();
+        Bundle b = iin.getExtras();
+        if (b != null) {
+        	pressedObjectId  = (String) b.get("pressedObjectId");
         }
-
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
         
-        Log.d("yval", String.valueOf(dBValues[0]));
-        Log.d("yval", String.valueOf(dBValues[1]));
-        Log.d("yval", String.valueOf(dBValues[2]));
-
-        for (int i = 0; i < count; i++) {
-
-            //float mult = (range + 1);
-            //float val = (float) (Math.random() * mult) - 20;
-            //Log.d("yval", String.valueOf(val));
-            yVals.add(new Entry(dBValues[i], i));
-            Log.d("yval", String.valueOf(dBValues[i]));
-        }
-
-        // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(yVals, "Normal hearing");
-        // set1.setFillAlpha(110);
-        // set1.setFillColor(Color.RED);
-
-        // set the line to be drawn like this "- - - - - -"
-        set1.enableDashedLine(10f, 5f, 0f);
-        set1.setColor(Color.RED);
-        set1.setCircleColor(Color.RED);
-        set1.setLineWidth(1f);
-        set1.setCircleSize(3f);
-        set1.setDrawCircleHole(false);
-        set1.setValueTextSize(9f);
-        set1.setDrawValues(false);
-        set1.setFillAlpha(65);
-        set1.setFillColor(Color.BLACK);
-//        set1.setDrawFilled(true);
-        // set1.setShader(new LinearGradient(0, 0, 0, mChart.getHeight(),
-        // Color.BLACK, Color.WHITE, Shader.TileMode.MIRROR));
-
-        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-        dataSets.add(set1); // add the datasets
-
-        // create a data object with the datasets
-        LineData data = new LineData(xVals, dataSets);
+        Log.d("pressedObjectId_archiveResult", pressedObjectId);
         
-        // set data
-        mChart.setData(data);
-    }
-    
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
-	            || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
-	        return true;
-	    else
-	        return true;
-	}
-	
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP 
-	    		|| keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
-	    	return true;
-	    else if (keyCode == KeyEvent.KEYCODE_BACK){
-	    	super.onBackPressed();
-	    	return true;
-	    }
-		else
-			return true;
-	}
-	
-	private void initGui() {
-		sendEmailButton = (Button) findViewById(R.id.btnArchiveSendEmail);
-		sendEmailButton.setOnClickListener(this);
-	}
-	
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.btnArchiveSendEmail:
-		    Intent emailIntent = new Intent(Intent.ACTION_SEND);
-		    emailIntent.setType("message/rfc822");
-		    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{uEmail.getText().toString()});
-		    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
-		    emailIntent.putExtra(Intent.EXTRA_TEXT   , "Oticon Mobile Hearing Evaluation data for " + readUserName + ":" + "\n\n" + freqsAndData);
-			try {
-			    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-			    Log.i("Finished sending email...", "");
-			} catch (android.content.ActivityNotFoundException ex) {
-			    Toast.makeText(ArchiveResultActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-			}
-		break;
-		}
-	}
-	
-	// Get user details
-	private String getName(Context context) {
-        Cursor CR=null;
-        CR=getOwner(context);
-        String id="",name="";
-        while (CR.moveToNext()) {
-            name = CR
-                    .getString(CR
-                            .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        }
+      //Parse
+      		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+      		query.getInBackground(pressedObjectId, new GetCallback<ParseObject>() {
+      			@Override
+      			public void done(ParseObject object, ParseException e) {
+      			dBValuesString = (String) object.get("HearingData");
+      			readUserName = (String) object.get("Username");
+      			createdAt = object.getCreatedAt();
+      			Log.d("dBValuesString", dBValuesString);
+      		    dBValuesStringSubS = dBValuesString.substring(1);
+      		    dBValuesStringSubS = dBValuesStringSubS.replace(']', ' ');
+      		    dBValuesStringSubS = dBValuesStringSubS.trim();
+      		    
+      	        ArrayList<Entry> yVals = new ArrayList<Entry>();
+      	        ArrayList<String> xVals = new ArrayList<String>();
+      		    
+      		    String[] dBValuesReader = dBValuesStringSubS.split(",");
+      		        for(int i=0; i<dBValues.length; i++){
+      		        	dBValues[i] = Float.parseFloat(dBValuesReader[i]);
+      		        	Log.d("dBValues", Float.toString(dBValues[i]));
+      		            yVals.add(new Entry(dBValues[i], i));
+      		            Log.d("yVals", Float.toString(dBValues[i]));
+      		        }
+      		        
+      		     // create a dataset and give it a type
+      		        LineDataSet set1 = new LineDataSet(yVals, "Normal hearing");
+      		        // set1.setFillAlpha(110);
+      		        // set1.setFillColor(Color.RED);
 
-        return name;
-    }
-	
-    static String getEmailId(Context context) {
+      		        // set the line to be drawn like this "- - - - - -"
+      		        set1.enableDashedLine(10f, 5f, 0f);
+      		        set1.setColor(Color.RED);
+      		        set1.setCircleColor(Color.RED);
+      		        set1.setLineWidth(1f);
+      		        set1.setCircleSize(3f);
+      		        set1.setDrawCircleHole(false);
+      		        set1.setValueTextSize(9f);
+      		        set1.setDrawValues(false);
+      		        set1.setFillAlpha(65);
+      		        set1.setFillColor(Color.BLACK);
+//      		        set1.setDrawFilled(true);
+      		        // set1.setShader(new LinearGradient(0, 0, 0, mChart.getHeight(),
+      		        // Color.BLACK, Color.WHITE, Shader.TileMode.MIRROR));
 
-        Cursor CR=null;
-        CR=getOwner(context);
-        String id="",email="";
-        while (CR.moveToNext()) {
-            id = CR.getString(CR
-                    .getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
-            email = CR
-                    .getString(CR
-                            .getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-        }
-        return email;
-    }
-	
-	static Cursor getOwner(Context context) {
+      		        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+      		        dataSets.add(set1); // add the datasets
+      		        
 
-        String accountName = null;
-        Cursor emailCur=null;
-        AccountManager accountManager = AccountManager.get(context);
-        Account[] accounts = accountManager.getAccountsByType("com.google");
-        if (accounts[0].name != null) {
-            accountName = accounts[0].name;
-            String where = ContactsContract.CommonDataKinds.Email.DATA + " = ?";
-            ArrayList<String> what = new ArrayList<String>();
-            what.add(accountName);
-            Log.v("Got account", "Account " + accountName);
-            for (int i = 1; i < accounts.length; i++) {
-                where += " or " + ContactsContract.CommonDataKinds.Email.DATA + " = ?";
-                what.add(accounts[i].name);
-                Log.v("Got account", "Account " + accounts[i].name);
-            }
-            String[] whatarr = (String[]) what.toArray(new String[what.size()]);
-            ContentResolver cr = context.getContentResolver();
-            emailCur = cr.query(
-                    ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, where, whatarr, null);
-        }
-        //return emailCur;
-        return emailCur;
-    }
+      		        for (int i = 0; i < freqValues.length; i++) {
+      		            xVals.add(Integer.toString(freqValues[i]));
+      		            Log.d("xval", String.valueOf(xVals));
+      		        }
 
-}
+      		        // create a data object with the datasets
+      		        LineData data = new LineData(xVals, dataSets);
+      		        
+      		        // set data
+      		        mChart.setData(data);
+      		    	mChart.setDescription(readUserName + ", " + createdAt.toString()); // set user name on audiogram
+      		    	Log.d("readUserName+createdAt", readUserName + ", " + createdAt.toString());
+      		    	mChart.invalidate();
+      			}
+      		});
+          	
+              
+          }
+          
+      	@Override
+      	public boolean onKeyDown(int keyCode, KeyEvent event) {
+      	    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+      	            || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      	        return true;
+      	    else
+      	        return true;
+      	}
+      	
+      	@Override
+      	public boolean onKeyUp(int keyCode, KeyEvent event) {
+      	    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP 
+      	    		|| keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      	    	return true;
+    	    else if (keyCode == KeyEvent.KEYCODE_BACK){
+    	    	super.onBackPressed();
+    	    	return true;
+    	    }
+      		else
+      			return true;
+      	}
+      	
+      	private void initGui() {
+      		sendEmailButton = (Button) findViewById(R.id.btnArchiveSendEmail);
+      		sendEmailButton.setOnClickListener(this);
+      	}
+      	
+      	@Override
+      	public void onClick(View v) {
+      		switch (v.getId()) {
+      		case R.id.btnArchiveSendEmail:
+      		    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+      		    emailIntent.setType("message/rfc822");
+      		    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{uEmail.getText().toString()});
+      		    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
+      		    
+      		    
+      		    for(int i=0; i<dBValues.length; i++){
+      		    	freqsAndData += "[" + Integer.toString(freqValues[i]) + "Hz, " + Float.toString(dBValues[i]) + "dB]; ";
+      		    }
+      		    
+      		    
+      		    emailIntent.putExtra(Intent.EXTRA_TEXT   , "Oticon Mobile Hearing Evaluation data for " + readUserName + ", " + createdAt.toString() + ":" + "\n\n" + freqsAndData);
+      			try {
+      			    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+      			    Log.i("Finished sending email...", "");
+      			} catch (android.content.ActivityNotFoundException ex) {
+      			    Toast.makeText(ArchiveResultActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+      			}
+      		break;
+      		}
+      	}
+      	
+      	// Get user details
+      	private String getName(Context context) {
+              Cursor CR=null;
+              CR=getOwner(context);
+              String id="",name="";
+              while (CR.moveToNext()) {
+                  name = CR
+                          .getString(CR
+                                  .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+              }
+
+              return name;
+          }
+      	
+          static String getEmailId(Context context) {
+
+              Cursor CR=null;
+              CR=getOwner(context);
+              String id="",email="";
+              while (CR.moveToNext()) {
+                  id = CR.getString(CR
+                          .getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
+                  email = CR
+                          .getString(CR
+                                  .getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+              }
+              return email;
+          }
+      	
+      	static Cursor getOwner(Context context) {
+
+              String accountName = null;
+              Cursor emailCur=null;
+              AccountManager accountManager = AccountManager.get(context);
+              Account[] accounts = accountManager.getAccountsByType("com.google");
+              if (accounts[0].name != null) {
+                  accountName = accounts[0].name;
+                  String where = ContactsContract.CommonDataKinds.Email.DATA + " = ?";
+                  ArrayList<String> what = new ArrayList<String>();
+                  what.add(accountName);
+                  Log.v("Got account", "Account " + accountName);
+                  for (int i = 1; i < accounts.length; i++) {
+                      where += " or " + ContactsContract.CommonDataKinds.Email.DATA + " = ?";
+                      what.add(accounts[i].name);
+                      Log.v("Got account", "Account " + accounts[i].name);
+                  }
+                  String[] whatarr = (String[]) what.toArray(new String[what.size()]);
+                  ContentResolver cr = context.getContentResolver();
+                  emailCur = cr.query(
+                          ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, where, whatarr, null);
+              }
+              //return emailCur;
+              return emailCur;
+          }
+
+      }

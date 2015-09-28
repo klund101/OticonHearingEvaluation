@@ -9,6 +9,9 @@ import org.puredata.android.io.PdAudio;
 import org.puredata.core.PdBase;
 import org.puredata.core.utils.IoUtils;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 //import com.xxmassdeveloper.mpchartexample.R;
 
 import android.support.v7.app.ActionBarActivity;
@@ -32,12 +35,23 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	
 	public int initialRingVolume;	
 	
+	public String parseDataObjectId = "";
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
         initGui();
+        
+        //Parse
+        Intent iin = getIntent();
+        Bundle b = iin.getExtras();
+        if (b != null) {
+        	parseDataObjectId  = (String) b.get("parseDataObjectId");
+        }
+       
+        Log.d("parseId_main", parseDataObjectId);
         
         
         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE); // fix audio output volume
@@ -47,6 +61,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);		
         audioManager.setStreamVolume(AudioManager.STREAM_RING, audioManager.getStreamMaxVolume(AudioManager.STREAM_RING), 0);		
 
+        //Parse
     }
 
 	
@@ -59,8 +74,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnProceed:
-			Intent mainA = new Intent(MainActivity.this, OptionsActivity.class);
-	        startActivity(mainA);
+			Intent optA = new Intent(MainActivity.this, OptionsActivity.class);
+			optA.putExtra("parseDataObjectId", parseDataObjectId);
+	        startActivity(optA);
 		break;
 		}
 	}

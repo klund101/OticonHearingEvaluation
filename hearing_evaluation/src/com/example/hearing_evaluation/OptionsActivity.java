@@ -5,6 +5,7 @@ import org.puredata.core.PdBase;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,8 @@ public class OptionsActivity extends ActionBarActivity implements OnClickListene
 	
 	Button newTestButton;
 	Button archiveButton;
+	
+	public String parseDataObjectId = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,15 @@ public class OptionsActivity extends ActionBarActivity implements OnClickListene
 		setContentView(R.layout.activity_options);
 		
 		initGui();
+		
+		//Parse
+        Intent iin = getIntent();
+        Bundle b = iin.getExtras();
+        if (b != null) {
+        	parseDataObjectId  = (String) b.get("parseDataObjectId");
+        }
+       
+        Log.d("parseId_options", parseDataObjectId);
 		
 	}
 	
@@ -37,10 +49,14 @@ public class OptionsActivity extends ActionBarActivity implements OnClickListene
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnNewTest:
-			startActivity(new Intent(OptionsActivity.this, InstructionsActivity.class)); // 
+			Intent instrA = new Intent(OptionsActivity.this, InstructionsActivity.class);
+			instrA.putExtra("parseDataObjectId", parseDataObjectId);
+	        startActivity(instrA);			
 		break;
 		case R.id.btnArchive:
-			startActivity(new Intent(OptionsActivity.this, ArchiveActivity.class)); // 
+			Intent ArchA = new Intent(OptionsActivity.this, ArchiveActivity.class);
+			ArchA.putExtra("parseDataObjectId", parseDataObjectId);
+	        startActivity(ArchA);	
 		break;
 		}
 	}

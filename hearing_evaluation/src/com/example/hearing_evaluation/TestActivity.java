@@ -4,13 +4,22 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
 import org.puredata.core.PdBase;
 import org.puredata.core.utils.IoUtils;
+
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -50,8 +59,10 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	
 	public int tmpCount = 0;
 	public int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000}; 
+	float[] testDbResult = {0,0,0,0,0,0,0,0,0};
 	public long startCheckTime, stopCheckTime; 
 	public int toneLevel = 40;
+	public String parseDataObjectId;
 	
 
 	@Override
@@ -62,6 +73,15 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		
         initGui();
         
+        //Parse
+        Intent iin = getIntent();
+        Bundle b = iin.getExtras();
+        if (b != null) {
+        	parseDataObjectId  = (String) b.get("parseDataObjectId");
+        }
+       
+        Log.d("d", parseDataObjectId);
+        
 		try {
 			initPd();
 		} catch (IOException e) {
@@ -71,7 +91,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		
 		/// TEST FLOW
 		
-		PdBase.sendFloat("toneLevel", toneLevel);
+		/*PdBase.sendFloat("toneLevel", toneLevel);
 		PdBase.sendFloat("freqValue", freqValues[2]);
 		startCheckTime = java.lang.System.currentTimeMillis();
 		Log.d("startCheckTime", Long.toString(startCheckTime));
@@ -99,7 +119,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 			};
 			
 			timer.scheduleAtFixedRate(task, 0, 3000 - (int)(Math.random()*100));	
-		//----
+		//----*/
 	}
 	
 	//Initialize the PdAudio and it's parameters
@@ -125,33 +145,38 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnYes:
-
+			
 			 tmpCount += 1;
-			//get the path to sdcard 
-	        File pathToExternalStorage = Environment.getExternalStorageDirectory();
-	        File appDirectory = new File(pathToExternalStorage.getAbsolutePath()  + "/Oticon");
-	        // have the object build the directory structure, if needed.
-	        appDirectory.mkdirs();
-	            
-	        //Create a File for the output file data
-	        File saveFilePath = new File (appDirectory, "OticonAppData.txt");
-
-	        try{
-		        FileOutputStream fos = new FileOutputStream (saveFilePath, true);
-		        OutputStreamWriter OutDataWriter  = new OutputStreamWriter(fos);
-		        OutDataWriter.append((float)(Math.random()*10)-20 + "; ");
-		        // OutDataWriter.append(equipNo.getText() + newline);
-		        OutDataWriter.close();
-		        fos.flush();
-		        fos.close();
-	        }
-	        catch(Exception e){
-	        	e.printStackTrace();
-	        }
-			 
+			        	       	        		 
 			 if(tmpCount>=9){// number of tested frequencies
 				 tmpCount = 0;
+				 
+				 for(int i=0; i<testDbResult.length;i++){
+					 testDbResult[i] = ((float)Math.random()*20)-20;
+				 }
+				 
+					//Parse
+			        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+			        query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
+			          public void done(ParseObject userDataObject, ParseException e) {
+			            if (e == null) {
+			              // object will be your game score
+			            	userDataObject.put("HearingData", Arrays.toString(testDbResult));
+			            	//Log.d("arrtostr", Arrays.toString(testDbResult));
+			            	try {
+			            		userDataObject.save();
+							} catch (ParseException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+			            } else {
+			              // something went wrong
+			            }
+			          }
+			        });
+				 
 				 Intent resultA = new Intent(TestActivity.this, ResultActivity.class);
+				 resultA.putExtra("parseDataObjectId", parseDataObjectId);
 		         startActivity(resultA);
 				 PdAudio.stopAudio();
 				 PdAudio.release();
