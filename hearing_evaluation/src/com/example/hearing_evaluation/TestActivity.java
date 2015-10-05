@@ -1,38 +1,27 @@
 package com.example.hearing_evaluation;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Vector;
-
 import org.puredata.android.io.AudioParameters;
 import org.puredata.android.io.PdAudio;
 import org.puredata.core.PdBase;
 import org.puredata.core.utils.IoUtils;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
-
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings.System;
+import android.os.Handler;
 
 public class TestActivity extends ActionBarActivity implements OnClickListener {
 	
@@ -55,14 +44,20 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	private static final int MIN_SAMPLE_RATE = 44100;
 	
 	Button yesButton;
-	Button noButton;
 	
-	public int tmpCount = 0;
-	public int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000}; 
+	public int tmpCount = 0; 
 	float[] testDbResult = {0,0,0,0,0,0,0,0,0};
-	public long startCheckTime, stopCheckTime; 
+	public static int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000};
 	public int toneLevel = 40;
+	public static boolean yesBtnClicked = false;
+	public long startCheckTime, stopCheckTime; 
+	public int nextTestEventTime = 3000;
+	public Handler testTimeHandler = new Handler();
+
 	public String parseDataObjectId;
+	
+	//public Runnable testFlowRunnable;
+	//RepeatTask repeatTask = new RepeatTask();
 	
 
 	@Override
@@ -90,37 +85,60 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		}
 		
 		/// TEST FLOW
+
+		testTimeHandler.postDelayed(testFlowRunnable, 3000);
 		
-		/*PdBase.sendFloat("toneLevel", toneLevel);
-		PdBase.sendFloat("freqValue", freqValues[2]);
-		startCheckTime = java.lang.System.currentTimeMillis();
-		Log.d("startCheckTime", Long.toString(startCheckTime));
+		
+		
+		//repeatTask.run();
+		
+		//repeatTask.timer.schedule(new RepeatTask(), 3000);
+		
+	
+			//Log.d("toneLevel", Integer.toString(toneLevel));
 			
-			stopCheckTime = java.lang.System.currentTimeMillis();
-			Log.d("stopCheckTime", Long.toString(stopCheckTime));
-			
-			if(stopCheckTime-startCheckTime<= 3000)
-				toneLevel -= 10;
-			else
-				toneLevel += 5;
-			
-			Log.d("toneLevel", Integer.toString(toneLevel));
-			
-			PdBase.sendFloat("toneLevel", toneLevel);
-			PdBase.sendFloat("freqValue", freqValues[2]);
-			startCheckTime = java.lang.System.currentTimeMillis();
-			
-			Timer timer = new Timer();
-			TimerTask task = new TimerTask() {
-			    @Override
-			    public void run() {
-			    	Log.d("toneLevel", Integer.toString(toneLevel));
-			    }
-			};
-			
-			timer.scheduleAtFixedRate(task, 0, 3000 - (int)(Math.random()*100));	
-		//----*/
+		//----
 	}
+	
+	public Runnable testFlowRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			boolean testFlowRunnableCancel = false;
+//			while(!testFlowRunnableCancel){
+				int repeatTimeChange = (int)(Math.random()*1000);
+	
+				PdBase.sendFloat("toneLevel", toneLevel);
+				PdBase.sendFloat("freqValue", freqValues[2]);
+				startCheckTime = java.lang.System.currentTimeMillis();
+				
+				//Log.d("toneLeveltimer", Integer.toString(toneLevel));
+				nextTestEventTime = 3000;
+				PdBase.sendFloat("toneLevel", toneLevel);
+				PdBase.sendFloat("freqValue", freqValues[2]);
+				startCheckTime = java.lang.System.currentTimeMillis();
+				
+					if(yesBtnClicked == true){
+						Log.d("yesBtnClicked", Boolean.toString(yesBtnClicked));
+						toneLevel -= 10;
+						startCheckTime = 0;
+						yesBtnClicked = false;
+//						testFlowRunnableCancel = true;
+//						testTimeHandler.postDelayed(this, nextTestEventTime+(int)(Math.random()*1000));
+						testTimeHandler.removeCallbacks(testFlowRunnable);
+					}		
+				
+//				if(yesBtnClicked == true)
+//					yesBtnClicked = false;
+				else
+					toneLevel += 5;
+		    	
+				//testFlowRunnableCancel = true;
+				Log.d("repeatTimeChange", Integer.toString(repeatTimeChange+nextTestEventTime));
+				testTimeHandler.postDelayed(this, nextTestEventTime+repeatTimeChange);	
+//			}
+		}};
+	
 	
 	//Initialize the PdAudio and it's parameters
 		private void initPd() throws IOException {
@@ -135,8 +153,6 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	private void initGui() {
 		yesButton = (Button) findViewById(R.id.btnYes);
 		yesButton.setOnClickListener(this);
-		noButton = (Button) findViewById(R.id.btnNo);
-		noButton.setOnClickListener(this);
 	}
 	
 	
@@ -146,10 +162,14 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnYes:
 			
-			 tmpCount += 1;
+			yesBtnClicked = true;
+			tmpCount += 1;
 			        	       	        		 
-			 if(tmpCount>=9){// number of tested frequencies
+			if(tmpCount>=9){// number of tested frequencies
+								
 				 tmpCount = 0;
+				 
+				 testTimeHandler.removeCallbacks(testFlowRunnable);
 				 
 				 for(int i=0; i<testDbResult.length;i++){
 					 testDbResult[i] = ((float)Math.random()*20)-20;
@@ -160,9 +180,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 			        query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 			          public void done(ParseObject userDataObject, ParseException e) {
 			            if (e == null) {
-			              // object will be your game score
 			            	userDataObject.put("HearingData", Arrays.toString(testDbResult));
-			            	//Log.d("arrtostr", Arrays.toString(testDbResult));
 			            	try {
 			            		userDataObject.save();
 							} catch (ParseException e1) {
@@ -183,9 +201,6 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 				 PdBase.release();
 			 }
 			 PdBase.sendBang("playTestTone");
-			 // 
-		break;
-		case R.id.btnNo:
 			 // 
 		break;
 		}
@@ -245,6 +260,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		PdAudio.release();
 		PdBase.release();
 	}
+	
 	
 	
 }

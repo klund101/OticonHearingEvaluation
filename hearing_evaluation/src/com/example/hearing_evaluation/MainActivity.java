@@ -32,6 +32,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	
 	Button toneButton;
 	Button proceedButton;
+	Button webViewButton;
 	
 	public int initialRingVolume;	
 	
@@ -68,6 +69,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	private void initGui() {
 		proceedButton = (Button) findViewById(R.id.btnProceed);
 		proceedButton.setOnClickListener(this);
+		webViewButton = (Button) findViewById(R.id.webViewMainBtn);
+		webViewButton.setOnClickListener(this);
 	}
 	
 	@Override
@@ -77,6 +80,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			Intent optA = new Intent(MainActivity.this, OptionsActivity.class);
 			optA.putExtra("parseDataObjectId", parseDataObjectId);
 	        startActivity(optA);
+		break;
+		case R.id.webViewMainBtn:
+			Intent webViewA = new Intent(MainActivity.this, WebViewResultActivity.class);
+	        startActivity(webViewA);
 		break;
 		}
 	}

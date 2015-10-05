@@ -138,25 +138,6 @@ public class IdentityActivity extends Activity implements OnClickListener {
 		}
 	}
 	
-//	public void onRadioButtonClicked(View view) {
-//	    // Is the button now checked?
-//	    boolean checked = ((RadioButton) view).isChecked();
-//	    
-//	    // Check which radio button was clicked
-//	    switch(view.getId()) {
-//	        case R.id.genderFemale:
-//	            if (checked)
-//	            	uGenderString = "F";
-//	            Log.d("uGenderString", uGenderString);
-//	            break;
-//	        case R.id.genderMale:
-//	            if (checked)
-//	            	uGenderString = "M";
-//	            	Log.d("uGenderString", uGenderString);
-//	            break;
-//	    }
-//	}
-	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN

@@ -13,27 +13,29 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="183dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="24dp"
         android:text="TEST" />
+
+    <TextView
+        android:id="@+id/didYouHear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Press &quot;YES&quot; when you hear a tone?"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btnYes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="93dp"
-        android:layout_toLeftOf="@+id/textView1"
+        android:layout_below="@+id/didYouHear"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
         android:text="YES" />
-
-    <Button
-        android:id="@+id/btnNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btnYes"
-        android:layout_alignBottom="@+id/btnYes"
-        android:layout_toRightOf="@+id/textView1"
-        android:text="NO" />
 
 </RelativeLayout>

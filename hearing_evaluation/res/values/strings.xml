@@ -11,5 +11,6 @@
     <string name="title_activity_archive">ArchiveActivity</string>
     <string name="title_activity_identity">IdentityActivity</string>
     <string name="title_activity_archive_result">ArchiveResultActivity</string>
+    <string name="title_activity_web_view_result">WebViewResultActivity</string>
 
 </resources>

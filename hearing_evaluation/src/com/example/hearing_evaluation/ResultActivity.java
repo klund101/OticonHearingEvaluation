@@ -165,7 +165,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		        }
 		        
 		     // create a dataset and give it a type
-		        LineDataSet set1 = new LineDataSet(yVals, "Normal hearing");
+		        LineDataSet set1 = new LineDataSet(yVals, "Left ear");
 		        // set1.setFillAlpha(110);
 		        // set1.setFillColor(Color.RED);
 
