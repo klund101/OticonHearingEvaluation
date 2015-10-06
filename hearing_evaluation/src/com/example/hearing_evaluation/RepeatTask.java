@@ -3,9 +3,10 @@ package com.example.hearing_evaluation;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.puredata.core.PdBase;
-
+import org.puredata.android.io.AudioParameters;
 import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.util.Log;
 
 
@@ -18,9 +19,39 @@ public class RepeatTask extends TimerTask {
 
 	public static Timer timer = new Timer();
 	
+	
+    public int duration = 2; // seconds
+    private final int sampleRate = AudioParameters.suggestSampleRate();
+    private final int numSamples = duration * sampleRate;
+    private final double sample[] = new double[numSamples];
+    public double freqOfTone = 1000; // Hz
+    private final byte generatedSnd[] = new byte[2 * numSamples];
+    public static AudioTrack audioTrack;
+    //Handler soundHandler = new Handler();
+    
+	
     @Override
     public void run() {
     	
+    	Log.d("--------","-------");
+
+		if(TestActivity.yesBtnClicked == true){
+			
+			
+			if(TestActivity.toneLevel > 10){
+				TestActivity.toneLevel -= 10;
+				System.out.println("-10");
+			}
+		}
+		else{
+			
+			if(TestActivity.toneLevel<= 60)
+				TestActivity.toneLevel += 5;
+			
+			System.out.println("+5");
+		}
+		TestActivity.yesBtnClicked = false;
+
     	for(int i = 0; i <= 4; i++){
     		TestActivity.hearingThreshold[i] = TestActivity.hearingThreshold[i+1];
     	}
@@ -30,7 +61,7 @@ public class RepeatTask extends TimerTask {
     		Log.d("TLarr",Integer.toString(TestActivity.hearingThreshold[i]));
     	}
     	
-    	if (TestActivity.hearingThreshold[5] < TestActivity.hearingThreshold[4] &&
+    	if (TestActivity.hearingThreshold[5] < TestActivity.hearingThreshold[4] && /// Check for repeating pattern
     		TestActivity.hearingThreshold[4] > TestActivity.hearingThreshold[3] &&
     		TestActivity.hearingThreshold[3] > TestActivity.hearingThreshold[2] &&
     		TestActivity.hearingThreshold[2] < TestActivity.hearingThreshold[1] &&
@@ -40,33 +71,53 @@ public class RepeatTask extends TimerTask {
     		System.out.println(Integer.toString(freqValues[TestActivity.currentFreq]));
     		TestActivity.toneLevel = 30;
     		
-        	for(int i = 0; i <= 4; i++){
+        	for(int i = 0; i <= 5; i++){
         		TestActivity.hearingThreshold[i] = 0;
         	}
-        	TestActivity.hearingThreshold[5] = TestActivity.toneLevel;
+        	        	
+			if(AudioTrack.PLAYSTATE_PLAYING == audioTrack.getPlayState())
+			audioTrack.stop();
+				
+			timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
     	}
-    	Log.d("--------","-------");
-
-		if(TestActivity.yesBtnClicked == true){
-			if(TestActivity.toneLevel >= 10){
-				TestActivity.toneLevel -= 10;
-				System.out.println("-10");
-			}
-		}
-		else{
-			if(TestActivity.toneLevel<= 60)
-			TestActivity.toneLevel += 5;
-			System.out.println("+5");
-		}
-		TestActivity.yesBtnClicked = false;
 		
+    	
+        genTone(freqValues[TestActivity.currentFreq%freqValues.length]);
+        
+        playSound();
+    	        
     	int repeatTimeChange = (int)(Math.random()*1000);
-    	
-    	PdBase.sendBang("stopPdTone");
-    	
-		PdBase.sendFloat("toneLevel", TestActivity.toneLevel);
-		PdBase.sendFloat("freqValue", freqValues[TestActivity.currentFreq]);
-
         timer.schedule(new RepeatTask(), nextTestEventTime+repeatTimeChange);
     }
+    
+    void genTone(double toneFreq){
+        // fill out the array
+        for (int i = 0; i < numSamples; ++i) {
+            sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/toneFreq));
+        }
+
+        // convert to 16 bit pcm sound array
+        // assumes the sample buffer is normalised.
+        int idx = 0;
+        for (final double dVal : sample) {
+            // scale to maximum amplitude DIVIDED WITH ?????????
+            final short val = (short) ((dVal * 32767)/((70-TestActivity.toneLevel)*200));
+            // in 16 bit wav PCM, first byte is the low order byte
+            generatedSnd[idx++] = (byte) (val & 0x00ff);
+            generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
+
+        }
+    }
+    
+    void playSound(){
+        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+                sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, generatedSnd.length,
+                AudioTrack.MODE_STATIC);
+        audioTrack.write(generatedSnd, 0, generatedSnd.length);
+    	audioTrack.stop();
+        audioTrack.play();
+    }
+    
+    
 }

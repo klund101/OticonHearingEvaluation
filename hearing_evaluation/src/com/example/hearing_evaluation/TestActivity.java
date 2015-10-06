@@ -22,6 +22,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -50,6 +52,9 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public int tmpCount = 0; 
 	float[] testDbResult = {0,0,0,0,0,0,0,0,0};
 	public static int toneLevel = 40;
+	//Temperary until unit is defined
+	public static int tmpToneLevel = 1000;
+	
 	public static boolean yesBtnClicked = false;
 	public static int[] hearingThreshold = {0, 0, 0, 0, 0, 0};
 	public static int currentFreq = 2;
@@ -67,7 +72,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		setContentView(R.layout.activity_test);
 		
         initGui();
-        
+                       
         //Parse
         Intent iin = getIntent();
         Bundle b = iin.getExtras();
@@ -116,18 +121,19 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnYes:
 			
-			Log.d("BUTTOOOON CLICKED", "");
-			
 			repeatTask.timer.cancel();
 			repeatTask.timer = new Timer();
 			//repeatTask.timer.purge();
 			tmpCount += 1;
 			Log.d("BUTTOOOON CLICKED", "");
 			
-			repeatTask = new RepeatTask();
+			if(AudioTrack.PLAYSTATE_PLAYING == repeatTask.audioTrack.getPlayState())
+			repeatTask.audioTrack.stop();
 			
+			repeatTask = new RepeatTask();
+						
 			yesBtnClicked = true;
-			repeatTask.timer.schedule(new RepeatTask(), 0);
+			repeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
 			
 						        	       	        		 
 			if(tmpCount>=100/*9*/){// number of tested frequencies
@@ -176,7 +182,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
     public void initAudio() throws IOException {
 		AudioParameters.init(this);
 		int srate = Math.max(MIN_SAMPLE_RATE, AudioParameters.suggestSampleRate());
-		PdAudio.initAudio(srate, 0, 2, 1, true);
+		PdAudio.initAudio(srate, 0, 2, 8, true);
 		PdAudio.startAudio(this);
 	}
 	
