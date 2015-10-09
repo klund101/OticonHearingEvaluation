@@ -55,7 +55,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static int tmpToneLevel = 1000;
 	
 	public static boolean yesBtnClicked = false;
-	public static int[] hearingThreshold = {0, 0, 0, 0, 0, 0};
+	public static int[] hearingThreshold = new int[6]; // history of hearing thresholds
 	public static int currentFreq;
 	public static final int testFlowEnd = RepeatTask.freqValues.length;
     private static Context testActivityContext;

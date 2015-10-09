@@ -101,7 +101,7 @@ public class ArchiveActivity extends ListActivity {
 	@Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d("position", publicParseObjectsList.get(publicParseObjectsList.size()-1-position).getObjectId().toString());
-		Intent archiveResultA = new Intent(ArchiveActivity.this, ArchiveResultActivity.class);
+		Intent archiveResultA = new Intent(ArchiveActivity.this, ResultActivity.class);
 		archiveResultA.putExtra("pressedObjectId", publicParseObjectsList.get(publicParseObjectsList.size()-1-position).getObjectId().toString());
         startActivity(archiveResultA);
     }

@@ -60,13 +60,14 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	private LineChart mChart;
 	public Date createdAt;
 	public String readUserName;
-	//public int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000};
-	ArrayList<String> lineList = new ArrayList<String>();
+	//ArrayList<String> lineList = new ArrayList<String>();
 	float[] dBValues = new float[RepeatTask.freqValues.length];
 	public String dBValuesString;
 	public String dBValuesStringSubS;
 	public String freqsAndData = "";
 	public String parseDataObjectId;
+	public String pressedObjectId;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,6 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		setContentView(R.layout.activity_result);
 		
         initGui();
-        
         
         uEmail = (EditText)findViewById(R.id.userEmail);
         uEmail.clearComposingText();
@@ -130,15 +130,22 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
     //////////MPchart
     private void setData(int count, float range) {
     	
+      	parseDataObjectId = null;
+    	pressedObjectId = null;
     	
         //Parse
         Intent iin = getIntent();
         Bundle b = iin.getExtras();
         if (b != null) {
         	parseDataObjectId  = (String) b.get("parseDataObjectId");
+        	pressedObjectId = (String) b.get("pressedObjectId");
         }
        
-        Log.d("d_result", parseDataObjectId);
+        //Log.d("d_result", parseDataObjectId);
+        
+        if(pressedObjectId != null){
+        	parseDataObjectId = pressedObjectId;
+        }
         
 		//Parse
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
@@ -221,6 +228,12 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP 
 	    		|| keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
 	    	return true;
+	    else if (keyCode == KeyEvent.KEYCODE_BACK){
+	    	if(pressedObjectId != null){
+	    		super.onBackPressed();
+	    	}
+	    	return true;
+	    }
 		else
 			return true;
 	}

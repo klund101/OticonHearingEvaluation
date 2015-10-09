@@ -1,9 +1,15 @@
 package com.example.hearing_evaluation;
 
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.puredata.android.io.AudioParameters;
+
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import android.content.Context;
 import android.media.AudioFormat;
@@ -24,7 +30,7 @@ public class RepeatTask extends TimerTask {
 	
 	
     public int duration = 2; // seconds
-    private final int sampleRate = AudioParameters.suggestSampleRate();
+    private final int sampleRate = 44100;
     private final int numSamples = duration * sampleRate;
     private final double sample[] = new double[numSamples];
     public double freqOfTone = 1000; // Hz
@@ -73,6 +79,24 @@ public class RepeatTask extends TimerTask {
     		TestActivity.hearingThreshold[1] > TestActivity.hearingThreshold[0]){
     		
     		TestActivity.testDbResult[freqOrder[TestActivity.currentFreq % freqValues.length]] = -(TestActivity.toneLevel + 10);
+    		
+    		//Parse
+	        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+	        query.getInBackground(TestActivity.parseDataObjectId, new GetCallback<ParseObject>() {
+	          public void done(ParseObject userDataObject, ParseException e) {
+	            if (e == null) {
+	            	userDataObject.put("HearingData", Arrays.toString(TestActivity.testDbResult));
+	            	try {
+	            		userDataObject.save();
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+	            } else {
+	              // something went wrong
+	            }
+	          }
+	        });
     		
     		TestActivity.currentFreq += 1;
     		System.out.println(Integer.toString(freqValues[freqOrder[TestActivity.currentFreq % freqValues.length]]));
