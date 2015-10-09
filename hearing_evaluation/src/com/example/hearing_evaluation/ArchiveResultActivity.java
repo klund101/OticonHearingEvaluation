@@ -53,12 +53,12 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
 	private LineChart mChart;
 	public Date createdAt;
 	public String pressedObjectId;
-	float[] dBValues = {0,0,0,0,0,0,0,0,0};
+	float[] dBValues = new float[RepeatTask.freqValues.length];
 	public String dBValuesString;
 	public String dBValuesStringSubS;
 	public String freqsAndData = "";
 	public String readUserName;
-	public int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000};
+	//public int[] freqValues = RepeatTask.freqValues;
 	ArrayList<String> lineList = new ArrayList<String>(); 
 	
 	@Override
@@ -72,8 +72,8 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
         uEmail.clearComposingText();
            
 		Log.d("user email", getEmailId(this));
-		uEmail.setText(getEmailId(this));	  
-        
+		uEmail.setText(getEmailId(this));	 
+		
         
 //////////MPchart
     	
@@ -113,7 +113,7 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
 //	mChart.setVisibleYRangeMaximum(8000);
 	
 
-	setData(freqValues.length,1);
+	setData(RepeatTask.freqValues.length,1);
 	
 	//////////	
 		
@@ -181,8 +181,8 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
       		        dataSets.add(set1); // add the datasets
       		        
 
-      		        for (int i = 0; i < freqValues.length; i++) {
-      		            xVals.add(Integer.toString(freqValues[i]));
+      		        for (int i = 0; i < RepeatTask.freqValues.length; i++) {
+      		            xVals.add(Integer.toString(RepeatTask.freqValues[i]));
       		            Log.d("xval", String.valueOf(xVals));
       		        }
 
@@ -238,7 +238,7 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
       		    
       		    
       		    for(int i=0; i<dBValues.length; i++){
-      		    	freqsAndData += "[" + Integer.toString(freqValues[i]) + "Hz, " + Float.toString(dBValues[i]) + "dB]; ";
+      		    	freqsAndData += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValues[i]) + "dB]; ";
       		    }
       		    
       		    

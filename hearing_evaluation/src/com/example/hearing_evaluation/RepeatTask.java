@@ -16,9 +16,10 @@ import android.util.Log;
 public class RepeatTask extends TimerTask {
 	
 	public long startCheckTime, stopCheckTime; 
-	public int nextTestEventTime = 3000;
-	public static int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000};
-
+	public final int nextTestEventTime = 3000;
+	public static int[] freqValues = {125, 250, 500, 1000, 2000, 4000, 8000};
+	public int[] freqOrder = {3,4,6,5,2,1,0};
+	
 	public static Timer timer = new Timer();
 	
 	
@@ -71,10 +72,10 @@ public class RepeatTask extends TimerTask {
     		TestActivity.hearingThreshold[2] < TestActivity.hearingThreshold[1] &&
     		TestActivity.hearingThreshold[1] > TestActivity.hearingThreshold[0]){
     		
-    		TestActivity.testDbResult[TestActivity.currentFreq % freqValues.length] = -(TestActivity.toneLevel + 10);
+    		TestActivity.testDbResult[freqOrder[TestActivity.currentFreq % freqValues.length]] = -(TestActivity.toneLevel + 10);
     		
     		TestActivity.currentFreq += 1;
-    		System.out.println(Integer.toString(freqValues[TestActivity.currentFreq % freqValues.length]));
+    		System.out.println(Integer.toString(freqValues[freqOrder[TestActivity.currentFreq % freqValues.length]]));
     		TestActivity.toneLevel = 30;
     		
         	for(int i = 0; i <= 5; i++){
@@ -86,7 +87,7 @@ public class RepeatTask extends TimerTask {
 			
 			
 			
-			if(TestActivity.currentFreq > 2){
+			if(TestActivity.currentFreq > TestActivity.testFlowEnd){
 				//TestActivity.currentFreq = 2;
 		    	timer.cancel();
 		    	//timer = new Timer();
@@ -96,8 +97,9 @@ public class RepeatTask extends TimerTask {
 				timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
     	}
 		
-    	if(TestActivity.currentFreq <= 2){
-	        genTone(freqValues[TestActivity.currentFreq % freqValues.length]);
+    	if(TestActivity.currentFreq <= TestActivity.testFlowEnd){
+    		
+	        genTone(freqValues[freqOrder[TestActivity.currentFreq % freqValues.length]]);
 	        
 	        playSound();
 	    	        

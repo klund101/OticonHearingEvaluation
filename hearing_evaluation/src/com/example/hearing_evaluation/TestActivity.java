@@ -49,14 +49,15 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static Button yesButton;
 	
 	public int tmpCount = 0; 
-	public static float[] testDbResult = {0,0,0,0,0,0,0,0,0};
+	public static float[] testDbResult = new float[RepeatTask.freqValues.length];
 	public static int toneLevel = 40;
 	//Temperary until unit is defined
 	public static int tmpToneLevel = 1000;
 	
 	public static boolean yesBtnClicked = false;
 	public static int[] hearingThreshold = {0, 0, 0, 0, 0, 0};
-	public static int currentFreq = 2;
+	public static int currentFreq;
+	public static final int testFlowEnd = RepeatTask.freqValues.length;
     private static Context testActivityContext;
 
 
@@ -92,11 +93,11 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		}
 		
 		/// TEST FLOW
-		
-		
+			currentFreq = 0;
+			repeatTask.timer = new Timer();
 			repeatTask.timer.schedule(new RepeatTask(), 3000);
 			System.out.println(Integer.toString(currentFreq));
-			if(currentFreq > 2){
+			if(currentFreq > testFlowEnd){
 				//repeatTask.timer.cancel();
 				goToResults();
 			}
@@ -214,9 +215,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static void goToResults(){
 			
 		
-			//RepeatTask.timer.cancel();
-		
-			//Parse
+		//Parse
 	        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
 	        query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 	          public void done(ParseObject userDataObject, ParseException e) {

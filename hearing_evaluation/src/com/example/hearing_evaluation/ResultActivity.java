@@ -60,9 +60,9 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	private LineChart mChart;
 	public Date createdAt;
 	public String readUserName;
-	public int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000};
+	//public int[] freqValues = {250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 8000};
 	ArrayList<String> lineList = new ArrayList<String>();
-	float[] dBValues = {0,0,0,0,0,0,0,0,0};
+	float[] dBValues = new float[RepeatTask.freqValues.length];
 	public String dBValuesString;
 	public String dBValuesStringSubS;
 	public String freqsAndData = "";
@@ -121,7 +121,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 //	mChart.setVisibleYRangeMaximum(8000);
 	
 
-	setData(freqValues.length,1);
+	setData(RepeatTask.freqValues.length,1);
 	
 	//////////	
 		
@@ -188,8 +188,8 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		        dataSets.add(set1); // add the datasets
 		        
 
-		        for (int i = 0; i < freqValues.length; i++) {
-		            xVals.add(Integer.toString(freqValues[i]));
+		        for (int i = 0; i < RepeatTask.freqValues.length; i++) {
+		            xVals.add(Integer.toString(RepeatTask.freqValues[i]));
 		            Log.d("xval", String.valueOf(xVals));
 		        }
 
@@ -249,7 +249,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		    
 		    
 		    for(int i=0; i<dBValues.length; i++){
-		    	freqsAndData += "[" + Integer.toString(freqValues[i]) + "Hz, " + Float.toString(dBValues[i]) + "dB]; ";
+		    	freqsAndData += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValues[i]) + "dB]; ";
 		    }
 		    
 		    
