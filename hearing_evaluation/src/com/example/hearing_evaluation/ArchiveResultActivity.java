@@ -138,6 +138,7 @@ public class ArchiveResultActivity extends IdentityActivity implements OnClickLi
       			@Override
       			public void done(ParseObject object, ParseException e) {
       			dBValuesString = (String) object.get("HearingData");
+      			System.out.println(dBValuesString);
       			readUserName = (String) object.get("Username");
       			createdAt = object.getCreatedAt();
       			Log.d("dBValuesString", dBValuesString);

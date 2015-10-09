@@ -4,6 +4,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.puredata.android.io.AudioParameters;
+
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -28,11 +30,13 @@ public class RepeatTask extends TimerTask {
     private final byte generatedSnd[] = new byte[2 * numSamples];
     public static AudioTrack audioTrack;
     //Handler soundHandler = new Handler();
+
     
 	
     @Override
     public void run() {
     	
+  	
     	Log.d("--------","-------");
 
 		if(TestActivity.yesBtnClicked == true){
@@ -85,24 +89,26 @@ public class RepeatTask extends TimerTask {
 			if(TestActivity.currentFreq > 2){
 				//TestActivity.currentFreq = 2;
 		    	timer.cancel();
-		    	timer = new Timer();
-				//TestActivity.clickYesButton();
+		    	//timer = new Timer();
+				TestActivity.goToResults();
 			}
-				
-			timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
+			else	
+				timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
     	}
 		
-    	
-        genTone(freqValues[TestActivity.currentFreq % freqValues.length]);
-        
-        playSound();
-    	        
-    	int repeatTimeChange = (int)(Math.random()*1000); 	
-    	
-    	
-    	timer.cancel();
-    	timer = new Timer();
-    	timer.schedule(new RepeatTask(), nextTestEventTime+repeatTimeChange);
+    	if(TestActivity.currentFreq <= 2){
+	        genTone(freqValues[TestActivity.currentFreq % freqValues.length]);
+	        
+	        playSound();
+	    	        
+	    	int repeatTimeChange = (int)(Math.random()*1000); 	
+	    	
+	    	
+	    	timer.cancel();
+	    	timer = new Timer();
+	    	
+	    	timer.schedule(new RepeatTask(), nextTestEventTime+repeatTimeChange);
+    	}
     }
     
     void genTone(double toneFreq){
@@ -134,6 +140,5 @@ public class RepeatTask extends TimerTask {
     	audioTrack.setStereoVolume(1, 0); // 
         audioTrack.play();
     }
-    
-    
+        
 }

@@ -108,7 +108,7 @@ public class IdentityActivity extends Activity implements OnClickListener {
 				ParseObject userDataObject = new ParseObject("hearingEvaluationData");
 		        userDataObject.put("Username", uNameString);
 		        userDataObject.put("DeviceId", androidId);
-		        userDataObject.put("HearingData", "");
+		        userDataObject.put("HearingData", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
 		        userDataObject.put("Age", uAgeString);
 		        userDataObject.put("Gender", uGenderString);
 		        Log.d("uGenderString", uGenderString);

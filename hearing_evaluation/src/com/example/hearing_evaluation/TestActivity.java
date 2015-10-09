@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioTrack;
 import android.os.Bundle;
@@ -56,9 +57,10 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static boolean yesBtnClicked = false;
 	public static int[] hearingThreshold = {0, 0, 0, 0, 0, 0};
 	public static int currentFreq = 2;
+    private static Context testActivityContext;
 
 
-	public String parseDataObjectId;
+	public static String parseDataObjectId;
 	
 	RepeatTask repeatTask = new RepeatTask();
 	
@@ -66,6 +68,8 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		TestActivity.testActivityContext = getApplicationContext();
 				
 		setContentView(R.layout.activity_test);
 		
@@ -207,11 +211,11 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		PdBase.release();
 	}
 	
-	public void goToResults(){
+	public static void goToResults(){
+			
 		
-		repeatTask.timer.cancel();
-		repeatTask.timer = new Timer();
-		 
+			//RepeatTask.timer.cancel();
+		
 			//Parse
 	        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
 	        query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
@@ -230,9 +234,10 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	          }
 	        });
 		 
-		 Intent resultA = new Intent(TestActivity.this, ResultActivity.class);
+		 Intent resultA = new Intent(TestActivity.getTestActivityContext(), ResultActivity.class);
 		 resultA.putExtra("parseDataObjectId", parseDataObjectId);
-         startActivity(resultA);
+		 resultA.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		 TestActivity.getTestActivityContext().startActivity(resultA);
 		 PdAudio.stopAudio();
 		 PdAudio.release();
 		 PdBase.release();
@@ -241,4 +246,8 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static void clickYesButton(){
 		yesButton.performClick();
 	}
+	
+	public static Context getTestActivityContext() {
+        return TestActivity.testActivityContext;
+    }
 }
