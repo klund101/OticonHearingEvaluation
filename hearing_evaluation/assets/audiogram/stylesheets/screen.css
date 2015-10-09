@@ -1,0 +1,378 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 5, ../../../../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+/* line 6, ../sass/screen.scss */
+html,
+body {
+  background-color: #fff;
+  margin: 0;
+  height: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* line 15, ../sass/screen.scss */
+.audiogram-wrapper {
+  width: 100%;
+  height: 100%;
+  display: table;
+  /*fonts*/
+  /*fonts*/
+}
+/* line 19, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-loadscreen {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+/* line 25, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-loadscreen .audiogram-load-progress-wrapper {
+  position: relative;
+  width: 50%;
+  height: 10%;
+  top: 40%;
+  left: 24%;
+  right: 24%;
+  z-index: 200;
+  padding-left: 1%;
+  padding-right: 1%;
+  background: #ececec;
+  text-align: center;
+}
+/* line 37, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-loadscreen .audiogram-load-progress-wrapper .audiogram-load-progress {
+  position: relative;
+  height: 20px;
+  background: #C6168D;
+  width: 0%;
+  top: 30%;
+}
+/* line 44, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-loadscreen .audiogram-load-progress-wrapper .audiogram-load-percentage {
+  position: relative;
+  color: black;
+  width: 100%;
+  top: 40%;
+}
+/* line 54, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-chart-speech-spectrum-label {
+  font-family: Soho-gothic-pro, arial,sans-serif;
+  font-size: 20px;
+  color: #404040;
+}
+/* line 59, ../sass/screen.scss */
+.audiogram-wrapper .dbhl {
+  font-family: Soho-gothic-pro, arial,sans-serif;
+  font-size: 15px;
+  color: #404040;
+}
+/* line 64, ../sass/screen.scss */
+.audiogram-wrapper g > text {
+  font-family: Soho-gothic-pro, arial,sans-serif;
+  font-size: 15px;
+  color: #b4b4b4;
+}
+/* line 71, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper {
+  width: 30%;
+  background-color: #404040;
+  color: white;
+  display: table-cell;
+  min-width: 300px;
+  vertical-align: top;
+  text-align: center;
+  padding-top: 5%;
+}
+/* line 80, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-selection-wrapper {
+  text-align: left;
+  width: 75%;
+  display: inline-block;
+}
+/* line 84, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-selection-wrapper table {
+  width: 100%;
+}
+/* line 86, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-selection-wrapper table tr {
+  height: 45px;
+  text-align: left;
+  vertical-align: middle;
+}
+/* line 90, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-selection-wrapper table tr button {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+/* line 96, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-selection-wrapper table tr .audiogram-selection-checkbox {
+  width: 15%;
+}
+/* line 98, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-selection-wrapper table tr .audiogram-selection-checkbox img {
+  position: relative;
+}
+/* line 101, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-selection-wrapper table tr .audiogram-selection-checkbox .checkmark {
+  position: absolute;
+  margin-left: -11px;
+  margin-top: -25px;
+}
+/* line 107, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-selection-wrapper table tr td {
+  vertical-align: middle;
+}
+/* line 109, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-selection-wrapper table tr td h3 {
+  vertical-align: middle;
+}
+/* line 116, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-speech-selection-wrapper {
+  text-align: center;
+  width: 75%;
+  display: inline-block;
+  padding-top: 45px;
+}
+/* line 121, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-speech-selection-wrapper table {
+  width: 100%;
+}
+/* line 123, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-speech-selection-wrapper table tr {
+  margin: 0 0 10px;
+}
+/* line 125, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-speech-selection-wrapper table tr td {
+  vertical-align: bottom;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  align: center;
+  width: 33%;
+}
+/* line 132, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-speech-selection-wrapper table tr td img.speech-actor {
+  opacity: 0.5;
+}
+/* line 135, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-speech-selection-wrapper table tr td img.activespeech {
+  opacity: 1;
+}
+/* line 138, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-speech-selection-wrapper table tr td .audiogram-speech-sound-button {
+  padding-top: 15px;
+}
+/* line 142, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-speech-selection-wrapper table tr td button {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+}
+/* line 152, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-reset-button {
+  border-style: solid;
+  border-width: medium;
+  border-color: #fff;
+  width: 70%;
+  background-color: inherit;
+  color: #fff;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  outline: none;
+}
+/* line 163, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-reset-button:active {
+  background-color: #fff;
+}
+/* line 165, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-reset-button:active h3 {
+  color: #404040;
+}
+/* line 169, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-navigation-wrapper .audiogram-navigation-divider {
+  width: 70%;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  height: 1px;
+}
+/* line 176, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-presentation-wrapper {
+  width: 80%;
+  display: table-cell;
+  background-color: #fff;
+  color: black;
+  text-align: center;
+  vertical-align: middle;
+  position: relative;
+  min-width: 650px;
+  padding: 40px 20px;
+}
+/* line 186, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-presentation-wrapper .audiogram-chart {
+  width: 100%;
+  overflow: hidden;
+  display: inline-block;
+}
+/* line 190, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-presentation-wrapper .audiogram-chart .audiogram-sound-button {
+  stroke: none;
+  fill: white;
+  filter: url("#drop-shadow");
+}
+/* line 195, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-presentation-wrapper .audiogram-chart .audiogram-sound-button.sound-button-clicked {
+  fill: #dddddd;
+}
+/* line 198, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-presentation-wrapper .audiogram-chart .audiogram-sound-button.sound-button-hearing-loss-active.sound-button-clicked {
+  fill: #ca1795;
+}
+/* line 201, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-presentation-wrapper .audiogram-chart .audiogram-chart-tooltip-container {
+  stroke: #404040;
+  fill: white;
+}
+/* line 205, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-presentation-wrapper .audiogram-chart .audiogram-chart-tooltip-text {
+  text-anchor: middle;
+}
+/* line 211, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-leftear-datapoint {
+  fill: #7de0ff;
+  stroke: #7de0ff;
+  stroke-width: 1;
+  font-size: 12pt;
+  filter: url("#drop-shadow");
+  cursor: pointer;
+}
+/* line 219, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-rightear-datapoint {
+  fill: white;
+  stroke: #ec5c91;
+  stroke-width: 2;
+  filter: url("#drop-shadow");
+  cursor: pointer;
+}
+/* line 226, ../sass/screen.scss */
+.audiogram-wrapper line.top-axis {
+  fill: none;
+  stroke: lightgrey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+/* line 232, ../sass/screen.scss */
+.audiogram-wrapper line.vertical-dotted {
+  fill: lightgrey;
+  stroke: lightgrey;
+  stroke-width: 2;
+}
+/* line 237, ../sass/screen.scss */
+.audiogram-wrapper .axis path,
+.audiogram-wrapper .axis line {
+  fill: none;
+  stroke: lightgrey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+/* line 244, ../sass/screen.scss */
+.audiogram-wrapper text {
+  stroke-width: 0.2;
+  fill: grey;
+  stroke: grey;
+  shape-rendering: crispEdges;
+}
+/* line 250, ../sass/screen.scss */
+.audiogram-wrapper .grid .tick {
+  stroke: lightgrey;
+  shape-rendering: crispEdges;
+}
+/* line 254, ../sass/screen.scss */
+.audiogram-wrapper .grid path {
+  stroke-width: 0;
+}
+/* line 257, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-leftear-area {
+  fill: rgba(125, 224, 255, 0.4);
+  stroke: #7de0ff;
+  stroke-width: 1;
+  filter: url("#drop-shadow");
+}
+/* line 263, ../sass/screen.scss */
+.audiogram-wrapper .audiogram-rightear-area {
+  fill: rgba(236, 92, 145, 0.4);
+  stroke: #ec5c91;
+  stroke-width: 1;
+  filter: url("#drop-shadow");
+}

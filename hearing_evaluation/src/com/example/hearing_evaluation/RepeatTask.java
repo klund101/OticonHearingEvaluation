@@ -45,10 +45,10 @@ public class RepeatTask extends TimerTask {
 		}
 		else{
 			
-			if(TestActivity.toneLevel<= 60)
+			if(TestActivity.toneLevel<= 60){
 				TestActivity.toneLevel += 5;
-			
-			System.out.println("+5");
+				System.out.println("+5");
+			}
 		}
 		TestActivity.yesBtnClicked = false;
 
@@ -58,7 +58,7 @@ public class RepeatTask extends TimerTask {
     	TestActivity.hearingThreshold[5] = TestActivity.toneLevel;
     	
     	for(int i = 0; i <= 5; i++){
-    		Log.d("TLarr",Integer.toString(TestActivity.hearingThreshold[i]));
+    		Log.d("TLarr",Integer.toString(-(TestActivity.hearingThreshold[i])));
     	}
     	
     	if (TestActivity.hearingThreshold[5] < TestActivity.hearingThreshold[4] && /// Check for repeating pattern
@@ -67,8 +67,10 @@ public class RepeatTask extends TimerTask {
     		TestActivity.hearingThreshold[2] < TestActivity.hearingThreshold[1] &&
     		TestActivity.hearingThreshold[1] > TestActivity.hearingThreshold[0]){
     		
+    		TestActivity.testDbResult[TestActivity.currentFreq % freqValues.length] = -(TestActivity.toneLevel + 10);
+    		
     		TestActivity.currentFreq += 1;
-    		System.out.println(Integer.toString(freqValues[TestActivity.currentFreq]));
+    		System.out.println(Integer.toString(freqValues[TestActivity.currentFreq % freqValues.length]));
     		TestActivity.toneLevel = 30;
     		
         	for(int i = 0; i <= 5; i++){
@@ -76,18 +78,31 @@ public class RepeatTask extends TimerTask {
         	}
         	        	
 			if(AudioTrack.PLAYSTATE_PLAYING == audioTrack.getPlayState())
-			audioTrack.stop();
+				audioTrack.stop();
+			
+			
+			
+			if(TestActivity.currentFreq > 2){
+				//TestActivity.currentFreq = 2;
+		    	timer.cancel();
+		    	timer = new Timer();
+				//TestActivity.clickYesButton();
+			}
 				
 			timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
     	}
 		
     	
-        genTone(freqValues[TestActivity.currentFreq%freqValues.length]);
+        genTone(freqValues[TestActivity.currentFreq % freqValues.length]);
         
         playSound();
     	        
-    	int repeatTimeChange = (int)(Math.random()*1000);
-        timer.schedule(new RepeatTask(), nextTestEventTime+repeatTimeChange);
+    	int repeatTimeChange = (int)(Math.random()*1000); 	
+    	
+    	
+    	timer.cancel();
+    	timer = new Timer();
+    	timer.schedule(new RepeatTask(), nextTestEventTime+repeatTimeChange);
     }
     
     void genTone(double toneFreq){
@@ -111,11 +126,12 @@ public class RepeatTask extends TimerTask {
     
     void playSound(){
         audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-                sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+                sampleRate, AudioFormat.CHANNEL_OUT_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT, generatedSnd.length,
                 AudioTrack.MODE_STATIC);
         audioTrack.write(generatedSnd, 0, generatedSnd.length);
     	audioTrack.stop();
+    	audioTrack.setStereoVolume(1, 0); // 
         audioTrack.play();
     }
     

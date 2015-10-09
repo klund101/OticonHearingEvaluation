@@ -1,0 +1,250 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+html,
+body {
+    background-color: #fff;
+    margin: 0;
+    height: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+.audiogram-wrapper {
+    width: 100%;
+    height: 100%;
+    display: table;
+    .audiogram-loadscreen {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        .audiogram-load-progress-wrapper {
+            position: relative;
+            width: 50%;
+            height: 10%;
+            top: 40%;
+            left: 24%;
+            right: 24%;
+            z-index: 200;
+            padding-left: 1%;
+            padding-right: 1%;
+            background: #ececec;
+            text-align: center;
+            .audiogram-load-progress {
+                position: relative;
+                height: 20px;
+                background: #C6168D;
+                width: 0%;
+                top: 30%;
+            }
+            .audiogram-load-percentage {
+                position: relative;
+                color: black;
+                width: 100%;
+                top: 40%;
+            }
+        }
+    }
+
+    .audiogram-navigation-wrapper {
+        width: 30%;
+        background-color: #404040;
+        color: white;
+        display: table-cell;
+        min-width: 300px;
+        vertical-align: top;
+        text-align: center;
+        padding-top: 5%;
+        .audiogram-selection-wrapper {
+            text-align: left;
+            width: 75%;
+            display: inline-block;
+            table {
+                width: 100%;
+                tr {
+                    height: 45px;
+                    text-align: left;
+                    vertical-align: middle;
+                    button {
+                        background: none;
+                        border: none;
+                        outline: none;
+                        padding: 0;
+                    }
+                    .audiogram-selection-checkbox {
+                        width: 15%;
+                        img {
+                            position: relative;
+                        }
+                        .checkmark {
+                            position: absolute;
+                            margin-left: -11px;
+                            margin-top: -25px;
+                        }
+                    }
+                    td {
+                        vertical-align: middle;
+                        h3 {
+                            vertical-align: middle;
+                        }
+                    }
+                }
+            }
+        }
+        .audiogram-speech-selection-wrapper {
+            text-align: center;
+            width: 75%;
+            display: inline-block;
+            padding-top: 45px;
+            table {
+                width: 100%;
+                tr {
+                    margin: 0 0 10px;
+                    td {
+                        vertical-align: bottom;
+                        text-align: center;
+                        margin-left: auto;
+                        margin-right: auto;
+                        align: center;
+                        width: 33%;
+                        img.speech-actor {
+                            opacity: 0.5;
+                        }
+                        img.activespeech {
+                            opacity: 1;
+                        }
+                        .audiogram-speech-sound-button {
+                            padding-top: 15px;
+
+                        }
+                        button {
+                            width: 100%;
+                            background: none;
+                            border: none;
+                            outline: none;
+                        }
+                    }
+                }
+            }
+        }
+        .audiogram-reset-button {
+            border-style: solid;
+            border-width: medium;
+            border-color: #fff;
+            width: 70%;
+            background-color: inherit;
+            color: #fff;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        .audiogram-reset-button:active {
+            background-color: #fff;
+            h3 {
+                color: #404040;
+            }
+        }
+        .audiogram-navigation-divider {
+            width: 70%;
+            margin-bottom: 15px;
+            margin-top: 10px;
+            height: 1px;
+        }
+    }
+    .audiogram-presentation-wrapper {
+        width: 80%;
+        display: table-cell;
+        background-color: #fff;
+        color: black;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        min-width: 650px;
+        padding: 40px 20px;
+        .audiogram-chart {
+            width: 100%;
+            overflow: hidden;
+            display: inline-block;
+            .audiogram-sound-button {
+                stroke: none;
+                fill: white;
+                filter:url("#drop-shadow");
+            }
+            .audiogram-sound-button.sound-button-clicked {
+                fill: rgba(221, 221, 221, 1);
+            }
+            .audiogram-sound-button.sound-button-hearing-loss-active.sound-button-clicked {
+                fill: rgba(202, 23, 149, 1);
+            }
+            .audiogram-chart-tooltip-container {
+                stroke: #404040;
+                fill: white;
+            }
+            .audiogram-chart-tooltip-text {
+                text-anchor: middle;
+            }
+        }
+    }
+
+    .audiogram-leftear-datapoint {
+        fill: rgba(125, 224, 255, 1);
+        stroke: rgba(125, 224, 255, 1);
+        stroke-width: 1;
+        font-size: 12pt;
+        filter:url("#drop-shadow");
+        cursor: pointer;
+    }
+    .audiogram-rightear-datapoint {
+        fill: white;
+        stroke: rgba(236, 92, 145, 1);
+        stroke-width: 2;
+        filter:url("#drop-shadow");
+        cursor: pointer;
+    }
+    line.top-axis {
+        fill: none;
+        stroke: lightgrey;
+        stroke-width: 1;
+        shape-rendering: crispEdges;
+    }
+    line.vertical-dotted {
+        fill: lightgrey;
+        stroke: lightgrey;
+        stroke-width: 2;
+    }
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: lightgrey;
+        stroke-width: 1;
+        shape-rendering: crispEdges;
+    }
+    text {
+        stroke-width: 0.2;
+        fill: grey;
+        stroke: grey;
+        shape-rendering: crispEdges;
+    }
+    .grid .tick {
+        stroke: lightgrey;
+        shape-rendering: crispEdges;
+    }
+    .grid path {
+        stroke-width: 0;
+    }
+    .audiogram-leftear-area {
+        fill: rgba(125, 224, 255, 0.4);
+        stroke: rgba(125, 224, 255, 1);
+        stroke-width: 1;
+        filter:url("#drop-shadow");
+    }
+    .audiogram-rightear-area {
+        fill: rgba(236, 92, 145, 0.4);
+        stroke: rgba(236, 92, 145, 1);
+        stroke-width: 1;
+        filter:url("#drop-shadow");
+    }
+}

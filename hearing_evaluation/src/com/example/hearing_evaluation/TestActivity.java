@@ -22,10 +22,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
-import android.os.Handler;
 
 public class TestActivity extends ActionBarActivity implements OnClickListener {
 	
@@ -47,10 +45,10 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	
 	private static final int MIN_SAMPLE_RATE = 44100;
 	
-	Button yesButton;
+	public static Button yesButton;
 	
 	public int tmpCount = 0; 
-	float[] testDbResult = {0,0,0,0,0,0,0,0,0};
+	public static float[] testDbResult = {0,0,0,0,0,0,0,0,0};
 	public static int toneLevel = 40;
 	//Temperary until unit is defined
 	public static int tmpToneLevel = 1000;
@@ -90,8 +88,14 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		}
 		
 		/// TEST FLOW
-
-		repeatTask.timer.schedule(new RepeatTask(), 3000);
+		
+		
+			repeatTask.timer.schedule(new RepeatTask(), 3000);
+			System.out.println(Integer.toString(currentFreq));
+			if(currentFreq > 2){
+				//repeatTask.timer.cancel();
+				goToResults();
+			}
 		
 	
 			//Log.d("toneLevel", Integer.toString(toneLevel));
@@ -124,11 +128,11 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 			repeatTask.timer.cancel();
 			repeatTask.timer = new Timer();
 			//repeatTask.timer.purge();
-			tmpCount += 1;
-			Log.d("BUTTOOOON CLICKED", "");
+			//tmpCount += 1;
+			//Log.d("BUTTOOOON CLICKED", "");
 			
 			if(AudioTrack.PLAYSTATE_PLAYING == repeatTask.audioTrack.getPlayState())
-			repeatTask.audioTrack.stop();
+				repeatTask.audioTrack.stop();
 			
 			repeatTask = new RepeatTask();
 						
@@ -136,45 +140,14 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 			repeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
 			
 						        	       	        		 
-			if(tmpCount>=100/*9*/){// number of tested frequencies
-				
-				repeatTask.timer.cancel();
-				repeatTask.timer = new Timer();
-				toneLevel = 40;
-				
-				 tmpCount = 0;
-				 
-				 for(int i=0; i<testDbResult.length;i++){
-					 testDbResult[i] = ((float)Math.random()*20)-20;
-				 }
-				 
-					//Parse
-			        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
-			        query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
-			          public void done(ParseObject userDataObject, ParseException e) {
-			            if (e == null) {
-			            	userDataObject.put("HearingData", Arrays.toString(testDbResult));
-			            	try {
-			            		userDataObject.save();
-							} catch (ParseException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-			            } else {
-			              // something went wrong
-			            }
-			          }
-			        });
-				 
-				 Intent resultA = new Intent(TestActivity.this, ResultActivity.class);
-				 resultA.putExtra("parseDataObjectId", parseDataObjectId);
-		         startActivity(resultA);
-				 PdAudio.stopAudio();
-				 PdAudio.release();
-				 PdBase.release();
-			 }
-			 //PdBase.sendBang("playTestTone");
-			 // 
+			//if(tmpCount>=100/*9*/){// number of tested frequencies
+//			if(currentFreq > 2){ //Testing 1000 Hz two times
+//				currentFreq = 2;
+////				
+//				goToResults();
+////				
+//			 }
+
 		break;
 		}
 	}
@@ -234,4 +207,38 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		PdBase.release();
 	}
 	
+	public void goToResults(){
+		
+		repeatTask.timer.cancel();
+		repeatTask.timer = new Timer();
+		 
+			//Parse
+	        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+	        query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
+	          public void done(ParseObject userDataObject, ParseException e) {
+	            if (e == null) {
+	            	userDataObject.put("HearingData", Arrays.toString(testDbResult));
+	            	try {
+	            		userDataObject.save();
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+	            } else {
+	              // something went wrong
+	            }
+	          }
+	        });
+		 
+		 Intent resultA = new Intent(TestActivity.this, ResultActivity.class);
+		 resultA.putExtra("parseDataObjectId", parseDataObjectId);
+         startActivity(resultA);
+		 PdAudio.stopAudio();
+		 PdAudio.release();
+		 PdBase.release();
+		
+	}
+	public static void clickYesButton(){
+		yesButton.performClick();
+	}
 }
