@@ -152,7 +152,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 			@Override
 			public void done(ParseObject object, ParseException e) {
-			dBValuesString = (String) object.get("HearingData");
+			dBValuesString = (String) object.get("HearingDataLeft");
 			readUserName = (String) object.get("Username");
 			createdAt = object.getCreatedAt();
 			Log.d("dBValuesString", dBValuesString);

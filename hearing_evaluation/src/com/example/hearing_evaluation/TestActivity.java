@@ -49,7 +49,8 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static Button yesButton;
 	
 	public int tmpCount = 0; 
-	public static float[] testDbResult = new float[RepeatTask.freqValues.length];
+	public static float[] testDbResultLeft = new float[RepeatTask.freqValues.length];
+	public static float[] testDbResultRight = new float[RepeatTask.freqValues.length];
 	public static int toneLevel = 40;
 	//Temperary until unit is defined
 	public static int tmpToneLevel = 1000;
@@ -58,6 +59,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static int[] hearingThreshold = new int[6]; // history of hearing thresholds
 	public static int currentFreq;
 	public static final int testFlowEnd = RepeatTask.freqValues.length;
+	public static boolean isLeftChannel = true;
     private static Context testActivityContext;
 
 
@@ -97,10 +99,10 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 			repeatTask.timer = new Timer();
 			repeatTask.timer.schedule(new RepeatTask(), 3000);
 			System.out.println(Integer.toString(currentFreq));
-			if(currentFreq > testFlowEnd){
-				//repeatTask.timer.cancel();
-				goToResults();
-			}
+//			if(currentFreq > RepeatTask.freqOrder.length && isLeftChannel == false){
+//				//repeatTask.timer.cancel();
+//				goToResults();
+//			}
 		
 	
 			//Log.d("toneLevel", Integer.toString(toneLevel));
@@ -220,7 +222,8 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	        query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 	          public void done(ParseObject userDataObject, ParseException e) {
 	            if (e == null) {
-	            	userDataObject.put("HearingData", Arrays.toString(testDbResult));
+	            	userDataObject.put("HearingDataLeft", Arrays.toString(testDbResultLeft));
+	            	userDataObject.put("HearingDataRight", Arrays.toString(testDbResultRight));
 	            	try {
 	            		userDataObject.save();
 					} catch (ParseException e1) {
@@ -241,9 +244,6 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		 PdAudio.release();
 		 PdBase.release();
 		
-	}
-	public static void clickYesButton(){
-		yesButton.performClick();
 	}
 	
 	public static Context getTestActivityContext() {

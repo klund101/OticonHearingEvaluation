@@ -24,7 +24,7 @@ public class RepeatTask extends TimerTask {
 	public long startCheckTime, stopCheckTime; 
 	public final int nextTestEventTime = 3000;
 	public static int[] freqValues = {125, 250, 500, 1000, 2000, 4000, 8000};
-	public int[] freqOrder = {3,4,6,5,2,1,0};
+	public static int[] freqOrder = {3,4,6,5,2,1,0,3};
 	
 	public static Timer timer = new Timer();
 	
@@ -68,9 +68,6 @@ public class RepeatTask extends TimerTask {
     	}
     	TestActivity.hearingThreshold[5] = TestActivity.toneLevel;
     	
-    	for(int i = 0; i <= 5; i++){
-    		Log.d("TLarr",Integer.toString(-(TestActivity.hearingThreshold[i])));
-    	}
     	
     	if (TestActivity.hearingThreshold[5] < TestActivity.hearingThreshold[4] && /// Check for repeating pattern
     		TestActivity.hearingThreshold[4] > TestActivity.hearingThreshold[3] &&
@@ -78,14 +75,18 @@ public class RepeatTask extends TimerTask {
     		TestActivity.hearingThreshold[2] < TestActivity.hearingThreshold[1] &&
     		TestActivity.hearingThreshold[1] > TestActivity.hearingThreshold[0]){
     		
-    		TestActivity.testDbResult[freqOrder[TestActivity.currentFreq % freqValues.length]] = -(TestActivity.toneLevel + 10);
+    		if(TestActivity.isLeftChannel)
+    			TestActivity.testDbResultLeft[freqOrder[TestActivity.currentFreq % freqOrder.length]] = -TestActivity.hearingThreshold[4];
+    		else
+    			TestActivity.testDbResultRight[freqOrder[TestActivity.currentFreq % freqOrder.length]] = -TestActivity.hearingThreshold[4];
     		
     		//Parse
 	        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
 	        query.getInBackground(TestActivity.parseDataObjectId, new GetCallback<ParseObject>() {
 	          public void done(ParseObject userDataObject, ParseException e) {
 	            if (e == null) {
-	            	userDataObject.put("HearingData", Arrays.toString(TestActivity.testDbResult));
+	            		userDataObject.put("HearingDataLeft", Arrays.toString(TestActivity.testDbResultLeft));
+	            		userDataObject.put("HearingDataRight", Arrays.toString(TestActivity.testDbResultRight));
 	            	try {
 	            		userDataObject.save();
 					} catch (ParseException e1) {
@@ -99,19 +100,24 @@ public class RepeatTask extends TimerTask {
 	        });
     		
     		TestActivity.currentFreq += 1;
-    		System.out.println(Integer.toString(freqValues[freqOrder[TestActivity.currentFreq % freqValues.length]]));
-    		TestActivity.toneLevel = 30;
+    		System.out.println(Integer.toString(freqValues[freqOrder[TestActivity.currentFreq % freqOrder.length]]));
+    		
+        	if(TestActivity.currentFreq >= freqOrder.length)
+        		TestActivity.isLeftChannel = false;
     		
         	for(int i = 0; i <= 5; i++){
         		TestActivity.hearingThreshold[i] = 0;
         	}
+    		TestActivity.toneLevel = 30;
+    		TestActivity.hearingThreshold[5] = TestActivity.toneLevel = 30;;
         	        	
 			if(AudioTrack.PLAYSTATE_PLAYING == audioTrack.getPlayState())
 				audioTrack.stop();
 			
 			
 			
-			if(TestActivity.currentFreq > TestActivity.testFlowEnd){
+			if(TestActivity.currentFreq >= freqOrder.length*2 && TestActivity.isLeftChannel == false){
+				TestActivity.isLeftChannel = true;
 				//TestActivity.currentFreq = 2;
 		    	timer.cancel();
 		    	//timer = new Timer();
@@ -121,9 +127,13 @@ public class RepeatTask extends TimerTask {
 				timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
     	}
 		
-    	if(TestActivity.currentFreq <= TestActivity.testFlowEnd){
+    	if(TestActivity.currentFreq < freqOrder.length*2){
     		
-	        genTone(freqValues[freqOrder[TestActivity.currentFreq % freqValues.length]]);
+        	for(int i = 0; i <= 5; i++){
+        		Log.d("TLarr",Integer.toString(-(TestActivity.hearingThreshold[i])));
+        	}
+    		
+	        genTone(freqValues[freqOrder[TestActivity.currentFreq % freqOrder.length]]);
 	        
 	        playSound();
 	    	        
@@ -135,6 +145,7 @@ public class RepeatTask extends TimerTask {
 	    	
 	    	timer.schedule(new RepeatTask(), nextTestEventTime+repeatTimeChange);
     	}
+    	
     }
     
     void genTone(double toneFreq){
@@ -163,7 +174,12 @@ public class RepeatTask extends TimerTask {
                 AudioTrack.MODE_STATIC);
         audioTrack.write(generatedSnd, 0, generatedSnd.length);
     	audioTrack.stop();
-    	audioTrack.setStereoVolume(1, 0); // 
+    	
+    	if(TestActivity.isLeftChannel)
+    		audioTrack.setStereoVolume(1, 0); // 
+    	else
+    		audioTrack.setStereoVolume(0, 1);
+    	
         audioTrack.play();
     }
         
