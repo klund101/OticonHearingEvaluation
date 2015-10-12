@@ -1,20 +1,16 @@
 package com.example.hearing_evaluation;
 
-import org.puredata.core.PdBase;
-
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class InstructionsActivity extends ActionBarActivity implements OnClickListener {
 	
-	Button newInstructionProceedButton;
+	Button instructionProceedButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +21,15 @@ public class InstructionsActivity extends ActionBarActivity implements OnClickLi
 	}
 	
 	private void initGui() {
-		newInstructionProceedButton = (Button) findViewById(R.id.btnInstructionProceed);
-		newInstructionProceedButton.setOnClickListener(this);
+		instructionProceedButton = (Button) findViewById(R.id.btnInstructionsProceed);
+		instructionProceedButton.setOnClickListener(this);
 	}
 	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btnInstructionProceed:
-			startActivity(new Intent(InstructionsActivity.this, IdentityActivity.class)); //
+		case R.id.btnInstructionsProceed:
+			startActivity(new Intent(InstructionsActivity.this, InstructionsTwoActivity.class)); //
 		break;
 		}
 	}

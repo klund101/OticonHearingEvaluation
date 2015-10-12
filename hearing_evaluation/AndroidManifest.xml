@@ -14,7 +14,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -56,12 +55,22 @@
             android:name=".WebViewResultActivity"
             android:label="@string/title_activity_web_view_result" >
         </activity>
+        <activity
+            android:name=".InstructionsTwoActivity"
+            android:label="@string/title_activity_instructions_two" >
+        </activity>
+        <activity
+            android:name=".InstructionsThreeActivity"
+            android:label="@string/title_activity_instructions_three" >
+        </activity>
+        <activity
+            android:name=".ChannelShifterActivity"
+            android:label="@string/title_activity_channel_shifter" >
+        </activity>
+    </application>
+    <application android:name="com.xyz.TestActivity" >
     </application>
 
-    <application android:name="com.xyz.TestActivity">
-
-	</application>
-    
     <!-- Required to access the Contacts Provider and user profile -->
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />

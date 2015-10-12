@@ -12,5 +12,8 @@
     <string name="title_activity_identity">IdentityActivity</string>
     <string name="title_activity_archive_result">ArchiveResultActivity</string>
     <string name="title_activity_web_view_result">WebViewResultActivity</string>
+    <string name="title_activity_instructions_two">InstructionsTwoActivity</string>
+    <string name="title_activity_instructions_three">InstructionsThreeActivity</string>
+    <string name="title_activity_channel_shifter">ChannelShifterActivity</string>
 
 </resources>

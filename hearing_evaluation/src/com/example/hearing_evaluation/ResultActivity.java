@@ -53,7 +53,7 @@ import android.widget.Toast;
 
 public class ResultActivity extends IdentityActivity implements OnClickListener {
 	
-	Button backToMenuButton;
+	Button closeResultsButton;
 	Button sendEmailButton;
 	EditText uEmail;
 	
@@ -62,11 +62,16 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	public String readUserName;
 	//ArrayList<String> lineList = new ArrayList<String>();
 	float[] dBValues = new float[RepeatTask.freqValues.length];
+	float[] dBValuesLeft = new float[RepeatTask.freqValues.length];
+	float[] dBValuesRight = new float[RepeatTask.freqValues.length];
 	public String dBValuesString;
 	public String dBValuesStringSubS;
-	public String freqsAndData = "";
+	public String freqsAndDataLeft = "";
+	public String freqsAndDataRight = "";
 	public String parseDataObjectId;
 	public String pressedObjectId;
+	
+    public ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
 
 	
 	@Override
@@ -120,15 +125,21 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 //	mChart.setVisibleYRangeMaximum(0f,leftAxis);
 //	mChart.setVisibleYRangeMaximum(8000);
 	
-
-	setData(RepeatTask.freqValues.length,1);
+    //ArrayList<Entry> yVals = new ArrayList<Entry>();
+//	LineDataSet set1 = new LineDataSet(yVals, "");
+//	LineDataSet set2 =  new LineDataSet(yVals, "");
 	
+
+	setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
+	//dBValuesLeft = dBValues;
+	setData(RepeatTask.freqValues.length,1,"HearingDataRight", "Right ear");
+	//dBValuesRight = dBValues;
 	//////////	
 		
 	}
 	
     //////////MPchart
-    private void setData(int count, float range) {
+    private void setData(int count, float range, final String dataChannel, final String channelLabel) {
     	
       	parseDataObjectId = null;
     	pressedObjectId = null;
@@ -152,10 +163,10 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 			@Override
 			public void done(ParseObject object, ParseException e) {
-			dBValuesString = (String) object.get("HearingDataLeft");
+			dBValuesString = (String) object.get(dataChannel);
 			readUserName = (String) object.get("Username");
 			createdAt = object.getCreatedAt();
-			Log.d("dBValuesString", dBValuesString);
+			//Log.d("dBValuesString", dBValuesString);
 		    dBValuesStringSubS = dBValuesString.substring(1);
 		    dBValuesStringSubS = dBValuesStringSubS.replace(']', ' ');
 		    dBValuesStringSubS = dBValuesStringSubS.trim();
@@ -171,29 +182,38 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		            Log.d("yVals", Float.toString(dBValues[i]));
 		        }
 		        
-		     // create a dataset and give it a type
-		        LineDataSet set1 = new LineDataSet(yVals, "Left ear");
-		        // set1.setFillAlpha(110);
-		        // set1.setFillColor(Color.RED);
-
-		        // set the line to be drawn like this "- - - - - -"
-		        set1.enableDashedLine(10f, 5f, 0f);
-		        set1.setColor(Color.RED);
-		        set1.setCircleColor(Color.RED);
-		        set1.setLineWidth(1f);
-		        set1.setCircleSize(3f);
-		        set1.setDrawCircleHole(false);
-		        set1.setValueTextSize(9f);
-		        set1.setDrawValues(false);
-		        set1.setFillAlpha(65);
-		        set1.setFillColor(Color.BLACK);
-//		        set1.setDrawFilled(true);
-		        // set1.setShader(new LinearGradient(0, 0, 0, mChart.getHeight(),
-		        // Color.BLACK, Color.WHITE, Shader.TileMode.MIRROR));
-
-		        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-		        dataSets.add(set1); // add the datasets
-		        
+		        if(dataChannel == "HearingDataLeft"){
+		        	dBValuesLeft = dBValues.clone();;
+		        	Log.d("dBValuesLeft", Float.toString(dBValuesLeft[0]));
+		        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
+			        set1.enableDashedLine(10f, 5f, 0f);
+			        set1.setColor(Color.RED);
+			        set1.setCircleColor(Color.RED);		        
+			        set1.setLineWidth(1f);
+			        set1.setCircleSize(3f);
+			        set1.setDrawCircleHole(false);
+			        set1.setValueTextSize(9f);
+			        set1.setDrawValues(false);
+			        set1.setFillAlpha(65);
+			        set1.setFillColor(Color.BLACK);
+			        dataSets.add(set1); // add the datasets
+		        }
+		        else if(dataChannel == "HearingDataRight"){
+		        	dBValuesRight = dBValues.clone();
+		        	Log.d("dBValuesRight", Float.toString(dBValuesRight[0]));
+		        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
+			        set1.enableDashedLine(10f, 5f, 0f);
+			        set1.setColor(Color.BLUE);
+			        set1.setCircleColor(Color.BLUE);		        
+			        set1.setLineWidth(1f);
+			        set1.setCircleSize(3f);
+			        set1.setDrawCircleHole(false);
+			        set1.setValueTextSize(9f);
+			        set1.setDrawValues(false);
+			        set1.setFillAlpha(65);
+			        set1.setFillColor(Color.BLACK);
+			        dataSets.add(set1); // add the datasets
+		        }
 
 		        for (int i = 0; i < RepeatTask.freqValues.length; i++) {
 		            xVals.add(Integer.toString(RepeatTask.freqValues[i]));
@@ -239,8 +259,8 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	}
 	
 	private void initGui() {
-		backToMenuButton = (Button) findViewById(R.id.btnBackToMenu);
-		backToMenuButton.setOnClickListener(this);
+		closeResultsButton = (Button) findViewById(R.id.btnCloseResults);
+		closeResultsButton.setOnClickListener(this);
 		sendEmailButton = (Button) findViewById(R.id.btnSendEmail);
 		sendEmailButton.setOnClickListener(this);
 	}
@@ -248,11 +268,16 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btnBackToMenu:
+		case R.id.btnCloseResults:
 			//startActivity(new Intent(ResultActivity.this, MainActivity.class)); // 
-			 Intent mainA = new Intent(ResultActivity.this, MainActivity.class);
-			 mainA.putExtra("parseDataObjectId", parseDataObjectId);
-	         startActivity(mainA);
+	    	if(pressedObjectId != null){
+	    		super.onBackPressed();
+	    	}
+	    	else{
+			Intent mainA = new Intent(ResultActivity.this, MainActivity.class);
+			mainA.putExtra("parseDataObjectId", parseDataObjectId);
+	        startActivity(mainA);
+	    	}
 		break;
 		case R.id.btnSendEmail:
 		    Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -261,13 +286,18 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
 		    
 		    
-		    for(int i=0; i<dBValues.length; i++){
-		    	freqsAndData += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValues[i]) + "dB]; ";
+		    for(int i=0; i<dBValuesLeft.length; i++){
+		    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
+		    	Log.d("DATA_LEFT",Float.toString(dBValuesLeft[i]));
+		    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesRight[i]) + "dB]; ";
+		    	Log.d("DATA_RIGHT",Float.toString(dBValuesRight[i]));
 		    }
 		    
 		    
-		    emailIntent.putExtra(Intent.EXTRA_TEXT   , "Oticon Mobile Hearing Evaluation data for " + readUserName + ", " + createdAt.toString() + ":" + "\n\n" + freqsAndData);
-			try {
+		    emailIntent.putExtra(Intent.EXTRA_TEXT   , "Oticon Mobile Hearing Evaluation data for " + readUserName + ", " + createdAt.toString() + ":" + "\n\n" + "Left ear" + "\n" + freqsAndDataLeft + "\n\n" + "Right ear" + "\n" + freqsAndDataRight);
+		    freqsAndDataLeft = "";
+		    freqsAndDataRight = "";
+		    try {
 			    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 			    Log.i("Finished sending email...", "");
 			} catch (android.content.ActivityNotFoundException ex) {

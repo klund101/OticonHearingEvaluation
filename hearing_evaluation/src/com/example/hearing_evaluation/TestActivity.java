@@ -21,7 +21,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioTrack;
 import android.os.Bundle;
@@ -54,6 +56,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static int toneLevel = 40;
 	//Temperary until unit is defined
 	public static int tmpToneLevel = 1000;
+	public final int startTestDelay = 3000;
 	
 	public static boolean yesBtnClicked = false;
 	public static int[] hearingThreshold = new int[6]; // history of hearing thresholds
@@ -61,7 +64,8 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static final int testFlowEnd = RepeatTask.freqValues.length;
 	public static boolean isLeftChannel = true;
     private static Context testActivityContext;
-
+    
+    public long initTime;
 
 	public static String parseDataObjectId;
 	
@@ -95,10 +99,19 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		}
 		
 		/// TEST FLOW
-			currentFreq = 0;
-			repeatTask.timer = new Timer();
-			repeatTask.timer.schedule(new RepeatTask(), 3000);
-			System.out.println(Integer.toString(currentFreq));
+		
+		initTime = System.currentTimeMillis();
+		
+		currentFreq = 0;
+		
+    	for(int i = 0; i <= 5; i++){
+    		hearingThreshold[i] = 0;
+    	}
+		toneLevel = 30;
+		
+		RepeatTask.timer = new Timer();
+		RepeatTask.timer.schedule(new RepeatTask(), startTestDelay);
+		System.out.println(Integer.toString(currentFreq));
 //			if(currentFreq > RepeatTask.freqOrder.length && isLeftChannel == false){
 //				//repeatTask.timer.cancel();
 //				goToResults();
@@ -132,19 +145,19 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnYes:
 			
-			repeatTask.timer.cancel();
-			repeatTask.timer = new Timer();
+			RepeatTask.timer.cancel();
+			RepeatTask.timer = new Timer(); 
 			//repeatTask.timer.purge();
 			//tmpCount += 1;
 			//Log.d("BUTTOOOON CLICKED", "");
 			
-			if(AudioTrack.PLAYSTATE_PLAYING == repeatTask.audioTrack.getPlayState())
-				repeatTask.audioTrack.stop();
+			if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
+				RepeatTask.audioTrack.stop();
 			
 			repeatTask = new RepeatTask();
 						
 			yesBtnClicked = true;
-			repeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
+			RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
 			
 						        	       	        		 
 			//if(tmpCount>=100/*9*/){// number of tested frequencies
@@ -181,6 +194,45 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP 
 	    		|| keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
 	    	return true;
+	    else if (keyCode == KeyEvent.KEYCODE_BACK){
+	    	
+			if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
+				RepeatTask.audioTrack.stop();
+				RepeatTask.timer.cancel();
+	    	
+			AlertDialog alertDialog = new AlertDialog.Builder(TestActivity.this)
+	        .setTitle("Leave test")
+	        .setMessage("Are you sure you want to leave the current hearing test?")
+	        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) { 
+	    			if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
+	    				RepeatTask.audioTrack.stop();
+	    				RepeatTask.timer.cancel();
+	    				onBackPressed();
+	            }
+	         })
+	        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) {
+	            	
+	    			RepeatTask.timer = new Timer();
+	    			toneLevel -= 5;
+	    			RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
+	            }
+	         })
+	         .setIcon(android.R.drawable.ic_dialog_alert)
+	         .show();
+	         
+			alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {         
+			    @Override
+			    public void onCancel(DialogInterface dialog) {
+	    			RepeatTask.timer = new Timer(); 
+	    			toneLevel -= 5;
+	    			RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
+			    }
+	         });
+	         
+	    	return true;
+	    }
 		else
 			return true;
 	}
@@ -198,12 +250,18 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}	
+		}
+		RepeatTask.timer = new Timer();
+		toneLevel -= 5;
+		RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
     }
 	
     @Override
     protected void onPause() {
     super.onPause();
+	if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
+		RepeatTask.audioTrack.stop();
+		RepeatTask.timer.cancel();
     
     }
     

@@ -33,20 +33,12 @@
         android:text="TextView" />
 
     <Button
-        android:id="@+id/btnBackToMenu"
+        android:id="@+id/btnCloseResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Back to menu" />
-
-    <Button
-        android:id="@+id/btnSendEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnBackToMenu"
-        android:layout_centerHorizontal="true"
-        android:text="Send data to email" />
+        android:text="Close" />
 
     <EditText
         android:id="@+id/userEmail"
@@ -59,5 +51,13 @@
         android:enabled="true"
         android:gravity="center_vertical"
         android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/btnSendEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnCloseResults"
+        android:layout_centerHorizontal="true"
+        android:text="Send data to email" />
 
 </RelativeLayout>

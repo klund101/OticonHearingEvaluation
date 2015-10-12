@@ -30,9 +30,10 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener {
 	
-	Button toneButton;
-	Button proceedButton;
 	Button webViewButton;
+	
+	Button newTestButton;
+	Button archiveButton;
 	
 	public int initialRingVolume;	
 	
@@ -67,23 +68,31 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	
 	private void initGui() {
-		proceedButton = (Button) findViewById(R.id.btnProceed);
-		proceedButton.setOnClickListener(this);
 		webViewButton = (Button) findViewById(R.id.webViewMainBtn);
 		webViewButton.setOnClickListener(this);
+		
+		newTestButton = (Button) findViewById(R.id.btnNewTest);
+		newTestButton.setOnClickListener(this);
+		archiveButton = (Button) findViewById(R.id.btnArchive);
+		archiveButton.setOnClickListener(this);
 	}
 	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btnProceed:
-			Intent optA = new Intent(MainActivity.this, OptionsActivity.class);
-			optA.putExtra("parseDataObjectId", parseDataObjectId);
-	        startActivity(optA);
-		break;
 		case R.id.webViewMainBtn:
 			Intent webViewA = new Intent(MainActivity.this, WebViewResultActivity.class);
 	        startActivity(webViewA);
+		break;
+		case R.id.btnNewTest:
+			Intent opA = new Intent(MainActivity.this, OptionsActivity.class);
+			opA.putExtra("parseDataObjectId", parseDataObjectId);
+	        startActivity(opA);			
+		break;
+		case R.id.btnArchive:
+			Intent archA = new Intent(MainActivity.this, ArchiveActivity.class);
+			archA.putExtra("parseDataObjectId", parseDataObjectId);
+	        startActivity(archA);	
 		break;
 		}
 	}

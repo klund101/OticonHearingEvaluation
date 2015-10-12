@@ -9,27 +9,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.hearing_evaluation.OptionsActivity" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Options" />
-
     <Button
-        android:id="@+id/btnNewTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="88dp"
-        android:text="New Test" />
-
-    <Button
-        android:id="@+id/btnArchive"
+        android:id="@+id/btnOptionsInstructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Archive" />
+        android:text="Instructions" />
+
+    <Button
+        android:id="@+id/btnOptionsProceed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnOptionsInstructions"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:text="Proceed" />
 
 </RelativeLayout>
