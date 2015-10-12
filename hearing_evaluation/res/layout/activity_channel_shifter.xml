@@ -9,38 +9,11 @@
     tools:context="com.example.hearing_evaluation.ChannelShifterActivity" >
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="124dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="In which ear do you hear the tone?"
-        android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/btnChannelShifterRight"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnChannelShifterLeft"
         android:layout_alignBottom="@+id/btnChannelShifterLeft"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_marginRight="35dp"
-        android:text="Right" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btnChannelShifterRight"
-        android:layout_alignBottom="@+id/btnChannelShifterRight"
         android:layout_centerHorizontal="true"
         android:text="or"
         android:textSize="20sp" />
@@ -49,11 +22,31 @@
         android:id="@+id/btnChannelShifterLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_below="@+id/textView1"
-        android:layout_marginRight="18dp"
-        android:layout_marginTop="57dp"
-        android:layout_marginLeft = "35dp"
+        android:layout_alignBaseline="@+id/btnChannelShifterRight"
+        android:layout_alignBottom="@+id/btnChannelShifterRight"
+        android:layout_marginRight="32dp"
+        android:layout_toLeftOf="@+id/textView3"
         android:text="Left" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="181dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="In which ear do you hear the tone?"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btnChannelShifterRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="57dp"
+        android:layout_toRightOf="@+id/textView3"
+        android:text="Right" />
 
 </RelativeLayout>

@@ -294,10 +294,10 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	          }
 	        });
 		 
-		 Intent resultA = new Intent(TestActivity.getTestActivityContext(), ResultActivity.class);
-		 resultA.putExtra("parseDataObjectId", parseDataObjectId);
-		 resultA.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		 TestActivity.getTestActivityContext().startActivity(resultA);
+		 Intent ChannelSA = new Intent(TestActivity.getTestActivityContext(), ChannelShifterActivity.class);
+		 ChannelSA.putExtra("parseDataObjectId", parseDataObjectId);
+		 ChannelSA.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		 TestActivity.getTestActivityContext().startActivity(ChannelSA);
 		 PdAudio.stopAudio();
 		 PdAudio.release();
 		 PdBase.release();

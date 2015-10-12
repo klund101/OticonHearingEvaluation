@@ -112,6 +112,7 @@ public class IdentityActivity extends Activity implements OnClickListener {
 		        userDataObject.put("HearingDataRight", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
 		        userDataObject.put("Age", uAgeString);
 		        userDataObject.put("Gender", uGenderString);
+		        userDataObject.put("invertedEarPhones", "false");
 		        Log.d("uGenderString", uGenderString);
 		        
 		        try {

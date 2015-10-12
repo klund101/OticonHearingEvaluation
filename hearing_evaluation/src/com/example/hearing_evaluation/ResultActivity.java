@@ -60,6 +60,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	private LineChart mChart;
 	public Date createdAt;
 	public String readUserName;
+	public static String readInvertedEars;
 	//ArrayList<String> lineList = new ArrayList<String>();
 	float[] dBValues = new float[RepeatTask.freqValues.length];
 	float[] dBValuesLeft = new float[RepeatTask.freqValues.length];
@@ -129,34 +130,49 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 //	LineDataSet set1 = new LineDataSet(yVals, "");
 //	LineDataSet set2 =  new LineDataSet(yVals, "");
 	
-
-	setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
-	//dBValuesLeft = dBValues;
-	setData(RepeatTask.freqValues.length,1,"HearingDataRight", "Right ear");
-	//dBValuesRight = dBValues;
-	//////////	
-		
+  	parseDataObjectId = null;
+	pressedObjectId = null;
+	
+    //Parse
+    Intent iin = getIntent();
+    Bundle b = iin.getExtras();
+    if (b != null) {
+    	parseDataObjectId  = (String) b.get("parseDataObjectId");
+    	pressedObjectId = (String) b.get("pressedObjectId");
+    }
+    if(pressedObjectId != null){
+    	parseDataObjectId = pressedObjectId;
+    }
+    
+	
+	//Parse
+	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+	query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
+		@Override
+		public void done(ParseObject object, ParseException e) {
+			readInvertedEars = (String) object.get("invertedEarPhones");
+			
+			Log.d("readInvertedEars", readInvertedEars);
+			if(readInvertedEars.equals("false")){
+				setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
+				setData(RepeatTask.freqValues.length,1,"HearingDataRight", "Right ear");
+			}
+			else if(readInvertedEars.equals("true")){
+				setData(RepeatTask.freqValues.length,1,"HearingDataRight", "Left ear");
+				setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Right ear");
+			}
+		}
+	});
+			
 	}
 	
     //////////MPchart
     private void setData(int count, float range, final String dataChannel, final String channelLabel) {
     	
-      	parseDataObjectId = null;
-    	pressedObjectId = null;
-    	
-        //Parse
-        Intent iin = getIntent();
-        Bundle b = iin.getExtras();
-        if (b != null) {
-        	parseDataObjectId  = (String) b.get("parseDataObjectId");
-        	pressedObjectId = (String) b.get("pressedObjectId");
-        }
+
        
         //Log.d("d_result", parseDataObjectId);
         
-        if(pressedObjectId != null){
-        	parseDataObjectId = pressedObjectId;
-        }
         
 		//Parse
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
@@ -165,6 +181,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 			public void done(ParseObject object, ParseException e) {
 			dBValuesString = (String) object.get(dataChannel);
 			readUserName = (String) object.get("Username");
+			//readInvertedEars = (String) object.get("invertedEarPhones");
 			createdAt = object.getCreatedAt();
 			//Log.d("dBValuesString", dBValuesString);
 		    dBValuesStringSubS = dBValuesString.substring(1);
@@ -183,12 +200,24 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		        }
 		        
 		        if(dataChannel == "HearingDataLeft"){
-		        	dBValuesLeft = dBValues.clone();;
-		        	Log.d("dBValuesLeft", Float.toString(dBValuesLeft[0]));
+		        	
+//		        	if(readInvertedEars == "true")
+//		        		dBValuesRight = dBValues.clone();
+//		        	else
+		        		dBValuesLeft = dBValues.clone();
+		        	
+		        	Log.d("dBValuesLeft", Float.toString(dBValuesLeft[1]));
 		        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
 			        set1.enableDashedLine(10f, 5f, 0f);
-			        set1.setColor(Color.RED);
-			        set1.setCircleColor(Color.RED);		        
+			        if(readInvertedEars.equals("true")){
+				        set1.setColor(Color.RED);
+				        set1.setCircleColor(Color.RED);	
+			        }
+			        else{
+			        	set1.setColor(Color.BLUE);
+				        set1.setCircleColor(Color.BLUE);
+			        }
+			        	
 			        set1.setLineWidth(1f);
 			        set1.setCircleSize(3f);
 			        set1.setDrawCircleHole(false);
@@ -199,12 +228,23 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 			        dataSets.add(set1); // add the datasets
 		        }
 		        else if(dataChannel == "HearingDataRight"){
-		        	dBValuesRight = dBValues.clone();
-		        	Log.d("dBValuesRight", Float.toString(dBValuesRight[0]));
+		        	
+//		        	if(readInvertedEars == "true")
+//		        		dBValuesLeft = dBValues.clone();
+//		        	else
+		        		dBValuesRight = dBValues.clone();
+		        	
+		        	Log.d("dBValuesRight", Float.toString(dBValuesRight[1]));
 		        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
 			        set1.enableDashedLine(10f, 5f, 0f);
-			        set1.setColor(Color.BLUE);
-			        set1.setCircleColor(Color.BLUE);		        
+			        if(readInvertedEars.equals("true")){
+				        set1.setColor(Color.BLUE);
+				        set1.setCircleColor(Color.BLUE);	
+			        }
+			        else{
+			        	set1.setColor(Color.RED);
+				        set1.setCircleColor(Color.RED);
+			        }
 			        set1.setLineWidth(1f);
 			        set1.setCircleSize(3f);
 			        set1.setDrawCircleHole(false);
@@ -285,12 +325,21 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{uEmail.getText().toString()});
 		    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
 		    
-		    
-		    for(int i=0; i<dBValuesLeft.length; i++){
-		    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
-		    	Log.d("DATA_LEFT",Float.toString(dBValuesLeft[i]));
-		    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesRight[i]) + "dB]; ";
-		    	Log.d("DATA_RIGHT",Float.toString(dBValuesRight[i]));
+		    if(readInvertedEars == "false"){
+			    for(int i=0; i<dBValuesLeft.length; i++){
+			    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
+			    	Log.d("DATA_LEFT",Float.toString(dBValuesLeft[i]));
+			    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesRight[i]) + "dB]; ";
+			    	Log.d("DATA_RIGHT",Float.toString(dBValuesRight[i]));
+			    }
+		    }
+			else{
+				for(int i=0; i<dBValuesLeft.length; i++){
+			    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
+			    	Log.d("DATA_RIGHT",Float.toString(dBValuesLeft[i]));
+			    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesRight[i]) + "dB]; ";
+			    	Log.d("DATA_LEFT",Float.toString(dBValuesRight[i]));
+			    }
 		    }
 		    
 		    
