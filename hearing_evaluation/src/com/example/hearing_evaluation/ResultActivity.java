@@ -325,7 +325,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{uEmail.getText().toString()});
 		    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
 		    
-		    if(readInvertedEars == "false"){
+		    if(readInvertedEars.equals("false")){
 			    for(int i=0; i<dBValuesLeft.length; i++){
 			    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
 			    	Log.d("DATA_LEFT",Float.toString(dBValuesLeft[i]));
@@ -333,7 +333,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 			    	Log.d("DATA_RIGHT",Float.toString(dBValuesRight[i]));
 			    }
 		    }
-			else{
+			else if(readInvertedEars.equals("true")){
 				for(int i=0; i<dBValuesLeft.length; i++){
 			    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
 			    	Log.d("DATA_RIGHT",Float.toString(dBValuesLeft[i]));
