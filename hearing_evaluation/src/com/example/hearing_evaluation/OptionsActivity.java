@@ -3,6 +3,7 @@ package com.example.hearing_evaluation;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,28 +36,32 @@ public class OptionsActivity extends Activity implements OnClickListener{
 	        startActivity(instrA);
 		break;
 		case R.id.btnOptionsProceed:
-			Intent idA = new Intent(OptionsActivity.this, IdentityActivity.class);
-	        startActivity(idA);			
+			Intent pIdA = new Intent(OptionsActivity.this, ProfileIdActivity.class);
+	        startActivity(pIdA);			
 		break;
 		}
 	}
 
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.options, menu);
-//		return true;
-//	}
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		// Handle action bar item clicks here. The action bar will
-//		// automatically handle clicks on the Home/Up button, so long
-//		// as you specify a parent activity in AndroidManifest.xml.
-//		int id = item.getItemId();
-//		if (id == R.id.action_settings) {
-//			return true;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+	            || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+	        return true;
+	    else
+	        return true;
+	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP 
+	    		|| keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+	    	return true;
+	    else if (keyCode == KeyEvent.KEYCODE_BACK){
+
+	        finish();    	
+	    	return true;
+	    }
+	    else
+	    	return true;
+	}
 }

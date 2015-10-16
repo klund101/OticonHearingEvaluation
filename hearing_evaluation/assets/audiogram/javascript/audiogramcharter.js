@@ -1,5 +1,8 @@
-var AudiogramCharter = function(element) {
+console.log("Hola Mr. K Lund");
+
+var AudiogramCharter = (function(element) {
     this.chart = element;
+	console.log(this.chart);
     this.xAxisTickValues = [125, 250, 500, 1000, 2000, 4000, 8000];
     this.yAxisTickValues = [0, 20, 40, 60, 80, 100, 120];
     this.yAxisGridTickValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
@@ -65,7 +68,7 @@ var AudiogramCharter = function(element) {
         .on("mouseleave", this.mouseup())
         .on("touchend", this.mouseup())
         .on('click', this.event_killer());
-};
+})();
 
 AudiogramCharter.prototype.update = function() {
     var self = this;

@@ -14,14 +14,6 @@
         android:layout_height="wrap_content"
         android:text="Identity" />
 
-    <Button
-        android:id="@+id/btnStartTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Start test" />
-
     <TextView
         android:id="@+id/introText"
         android:layout_width="wrap_content"
@@ -91,5 +83,14 @@
             android:layout_alignLeft="@+id/radio1"
             android:text="Male" />
     </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSaveProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/genderGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="Save profile" />
 
 </RelativeLayout>

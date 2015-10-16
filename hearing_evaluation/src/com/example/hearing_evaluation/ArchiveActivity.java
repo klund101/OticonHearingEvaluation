@@ -14,12 +14,17 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import android.support.v7.app.ActionBarActivity;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ListActivity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -49,10 +54,8 @@ public class ArchiveActivity extends ListActivity {
 		
 		//Parse
 		
-		String androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
-		query.whereEqualTo("DeviceId", androidId);
+		query.whereEqualTo("GoogleId", getEmailId(this));
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
         setListAdapter(adapter);
 		query.findInBackground(new FindCallback<ParseObject>() {	        
@@ -106,22 +109,44 @@ public class ArchiveActivity extends ListActivity {
         startActivity(archiveResultA);
     }
 
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.archive, menu);
-//		return true;
-//	}
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		// Handle action bar item clicks here. The action bar will
-//		// automatically handle clicks on the Home/Up button, so long
-//		// as you specify a parent activity in AndroidManifest.xml.
-//		int id = item.getItemId();
-//		if (id == R.id.action_settings) {
-//			return true;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
+    static String getEmailId(Context context) {
+
+        Cursor CR=null;
+        CR=getOwner(context);
+        String id="",email="";
+        while (CR.moveToNext()) {
+            id = CR.getString(CR
+                    .getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
+            email = CR
+                    .getString(CR
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+        }
+        return email;
+    }
+	
+	static Cursor getOwner(Context context) {
+
+        String accountName = null;
+        Cursor emailCur=null;
+        AccountManager accountManager = AccountManager.get(context);
+        Account[] accounts = accountManager.getAccountsByType("com.google");
+        if (accounts[0].name != null) {
+            accountName = accounts[0].name;
+            String where = ContactsContract.CommonDataKinds.Email.DATA + " = ?";
+            ArrayList<String> what = new ArrayList<String>();
+            what.add(accountName);
+            Log.v("Got account", "Account " + accountName);
+            for (int i = 1; i < accounts.length; i++) {
+                where += " or " + ContactsContract.CommonDataKinds.Email.DATA + " = ?";
+                what.add(accounts[i].name);
+                Log.v("Got account", "Account " + accounts[i].name);
+            }
+            String[] whatarr = (String[]) what.toArray(new String[what.size()]);
+            ContentResolver cr = context.getContentResolver();
+            emailCur = cr.query(
+                    ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, where, whatarr, null);
+        }
+        //return emailCur;
+        return emailCur;
+    }
 }

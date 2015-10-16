@@ -67,6 +67,10 @@
             android:name=".ChannelShifterActivity"
             android:label="@string/title_activity_channel_shifter" >
         </activity>
+        <activity
+            android:name=".ProfileIdActivity"
+            android:label="@string/title_activity_profile_id" >
+        </activity>
     </application>
     <application android:name="com.xyz.TestActivity" >
     </application>

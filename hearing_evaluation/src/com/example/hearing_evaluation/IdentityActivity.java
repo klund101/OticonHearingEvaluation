@@ -44,7 +44,7 @@ import android.widget.RadioGroup;
 
 public class IdentityActivity extends Activity implements OnClickListener {
 	
-	Button newStartTestButton;
+	Button saveProfileButton;
 	EditText uName;
 	EditText uAge;
 	RadioButton radioButtonF;
@@ -55,6 +55,10 @@ public class IdentityActivity extends Activity implements OnClickListener {
 	public String uAgeString = "";
 	public String uGenderString = "";
 	public String date;
+	
+	public static String profileName = "";
+	public static String profileAge = "";
+	public static String profileGender = "";
 	
 	public String dataFile = "OticonAppData.txt";
 	
@@ -68,14 +72,12 @@ public class IdentityActivity extends Activity implements OnClickListener {
 		uAge = (EditText)findViewById(R.id.userAge);
 		uName = (EditText)findViewById(R.id.userName);
 		uName.clearComposingText();
-		Log.d("username", getName(this));
-		uName.setText(getName(this));
 		
 	}       
 	
 	private void initGui() {
-		newStartTestButton = (Button) findViewById(R.id.btnStartTest);
-		newStartTestButton.setOnClickListener(this);
+		saveProfileButton = (Button) findViewById(R.id.btnSaveProfile);
+		saveProfileButton.setOnClickListener(this);
 		
 		radioGenderGroup = (RadioGroup) findViewById(R.id.genderGroup);
 		
@@ -89,45 +91,41 @@ public class IdentityActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btnStartTest:
-				uNameString = uName.getText().toString();
-				uAgeString = uAge.getText().toString();
-
-				 boolean isInt = true;
-
-				 try { 
-				      Integer.parseInt(uAgeString);
-				 } catch (NumberFormatException e) {
-				     isInt = false;
-				 }
+		case R.id.btnSaveProfile:
 			
-		if(uNameString.length() >= 1 && uGenderString != "" && isInt){	
-				//Parse
-		        
-				String androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-				ParseObject userDataObject = new ParseObject("hearingEvaluationData");
-		        userDataObject.put("Username", uNameString);
-		        userDataObject.put("DeviceId", androidId);
-		        userDataObject.put("HearingDataLeft", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
-		        userDataObject.put("HearingDataRight", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
-		        userDataObject.put("Age", uAgeString);
-		        userDataObject.put("Gender", uGenderString);
-		        userDataObject.put("invertedEarPhones", "false");
-		        Log.d("uGenderString", uGenderString);
-		        
-		        try {
-					userDataObject.save();
-				} catch (ParseException e1) {
+			 boolean isInt = true;
+
+			 try { 
+			      Integer.parseInt(uAge.getText().toString());
+			 } catch (NumberFormatException e) {
+			     isInt = false;
+			 }
+			
+			if(uName.getText().toString().length() >= 1 && uGenderString != "" && isInt){	
+				
+				profileName = uName.getText().toString();
+				profileAge = uAge.getText().toString();
+				profileGender = uGenderString;
+				
+				ProfileIdActivity.newProfileObject = new ParseObject("hearingEvaluationData");
+				ProfileIdActivity.newProfileObject.put("Username", profileName);
+				ProfileIdActivity.newProfileObject.put("GoogleId", getEmailId(this));
+				ProfileIdActivity.newProfileObject.put("HearingDataLeft", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
+				ProfileIdActivity.newProfileObject.put("HearingDataRight", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
+				ProfileIdActivity.newProfileObject.put("Age", profileAge);
+				ProfileIdActivity.newProfileObject.put("Gender", profileGender);
+				ProfileIdActivity.newProfileObject.put("invertedEarPhones", "false");
+				
+				try {
+					ProfileIdActivity.newProfileObject.save();
+				} catch (ParseException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e.printStackTrace();
 				}
-							
-				Intent testA = new Intent(IdentityActivity.this, TestActivity.class);
-				PdBase.sendBang("playTestTone");
-				testA.putExtra("parseDataObjectId", userDataObject.getObjectId());
-				Log.d("parseDataObjectId idAct", userDataObject.getObjectId());
-				startActivity(testA);
-		}
+				
+				Intent saveP = new Intent(IdentityActivity.this, ProfileIdActivity.class);
+				startActivity(saveP);
+			}
 		break;
 		case R.id.genderFemale:
         	uGenderString = "F";
@@ -174,6 +172,21 @@ public class IdentityActivity extends Activity implements OnClickListener {
         }
 
         return name;
+    }
+	
+    static String getEmailId(Context context) {
+
+        Cursor CR=null;
+        CR=getOwner(context);
+        String id="",email="";
+        while (CR.moveToNext()) {
+            id = CR.getString(CR
+                    .getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
+            email = CR
+                    .getString(CR
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+        }
+        return email;
     }
 	
 	static Cursor getOwner(Context context) {

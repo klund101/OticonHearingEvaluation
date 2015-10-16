@@ -196,7 +196,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	    	return true;
 	    else if (keyCode == KeyEvent.KEYCODE_BACK){
 	    	
-			if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
+			if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState()){
 				RepeatTask.audioTrack.stop();
 				RepeatTask.timer.cancel();
 	    	
@@ -230,7 +230,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	    			RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
 			    }
 	         });
-	         
+			}
 	    	return true;
 	    }
 		else
