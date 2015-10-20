@@ -159,7 +159,10 @@ public class RepeatTask extends TimerTask {
         int idx = 0;
         for (final double dVal : sample) {
             // scale to maximum amplitude DIVIDED WITH ?????????
-            final short val = (short) ((dVal * 32767)/((70-TestActivity.toneLevel)*200));
+            //final short val = (short) ((dVal * 32767)/((70-TestActivity.toneLevel)*50) - 10);
+        	final short val = (short) ((dVal * 32767)*Math.pow((-TestActivity.toneLevel),2)/800000);
+            //(1 * 32767)*((-5)^2)/800000
+            //Log.d("amp", Short.toString(val));
             // in 16 bit wav PCM, first byte is the low order byte
             generatedSnd[idx++] = (byte) (val & 0x00ff);
             generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);

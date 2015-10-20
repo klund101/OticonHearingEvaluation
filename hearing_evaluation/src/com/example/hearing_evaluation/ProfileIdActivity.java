@@ -2,16 +2,10 @@ package com.example.hearing_evaluation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-
-import org.puredata.core.PdBase;
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -21,7 +15,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.AudioTrack;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -53,6 +46,7 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 	public ParseObject userDataObject;
 	
 	public boolean arrDuplicate = false;
+	public int spinnerPosition;
 	
 	public String profileNameSpinner;
 	public String profileAgeSpinner;
@@ -93,14 +87,16 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
-				publicParseObjectsList = objects;
-				profileNameSpinner = objects.get((objects.size()-1)-((objects.size()-1)-arraySpinnerPosition.get(position))).get("Username").toString();
-				Log.d("arraySpinnerPosition", profileNameSpinner);
-				profileAgeSpinner = objects.get((objects.size()-1)-((objects.size()-1)-arraySpinnerPosition.get(position))).get("Age").toString();
-				profileGenderSpinner = objects.get((objects.size()-1)-((objects.size()-1)-arraySpinnerPosition.get(position))).get("Gender").toString();
 
+				publicParseObjectsList = objects;
+				profileNameSpinner = objects.get((objects.size()-1)-((objects.size()-1)-arraySpinnerPosition.get(position-deleteCount))).get("Username").toString();
+				Log.d("arraySpinnerPosition", profileNameSpinner);
+				profileAgeSpinner = objects.get((objects.size()-1)-((objects.size()-1)-arraySpinnerPosition.get(position-deleteCount))).get("Age").toString();
+				profileGenderSpinner = objects.get((objects.size()-1)-((objects.size()-1)-arraySpinnerPosition.get(position-deleteCount))).get("Gender").toString();
+				
 			}
 		});
+		spinnerPosition = position;		
 		
 	}
 
@@ -147,31 +143,49 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 			
 			//Parse
 			
-			ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
-			query.findInBackground(new FindCallback<ParseObject>() {	        
-				@Override
-				public void done(List<ParseObject> objects, ParseException e) {
-					for(int i = objects.size()-1; i>=0; i--){
-						if(objects.get(i).get("Username").toString().equals(profileNameSpinner)){
-							try {
-								objects.get(i).delete();
-								Log.d("Delete Object", Integer.toString(i));
-							} catch (ParseException e2) {
-								// TODO Auto-generated catch block
-								e2.printStackTrace();
-							}
-							try {
-								objects.get(i).save();
-							} catch (ParseException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							
-						}
-					}
-					//updateProfileSpinner();
-				}
-			});
+			AlertDialog alertDialog = new AlertDialog.Builder(ProfileIdActivity.this)
+	        .setTitle("Delete profile")
+	        .setMessage("Are you sure you want to delete this profile?")
+	        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) { 
+	            	
+	            	
+	    			ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+	    			query.findInBackground(new FindCallback<ParseObject>() {	        
+	    				@Override
+	    				public void done(List<ParseObject> objects, ParseException e) {
+	    					for(int i = objects.size()-1; i>=0; i--){
+	    						if(objects.get(i).get("Username").toString().equals(profileNameSpinner)){
+	    							objects.get(i).deleteInBackground();
+									objects.get(i).saveInBackground();
+									Log.d("Delete Object", Integer.toString(i));
+									Intent loadAct =new Intent(ProfileIdActivity.this, LoadingActivity.class);
+									startActivity(loadAct);
+	    								    							
+	    						}
+	    														
+	    					}
+	    					
+	    				}
+	    			});
+	            	
+	    				
+	            }
+	         })
+	        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) {
+	            	
+	            }
+	         })
+	         .setIcon(android.R.drawable.ic_dialog_alert)
+	         .show();
+	         
+			alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {         
+			    @Override
+			    public void onCancel(DialogInterface dialog) {
+
+			    }
+	         });
 			
 		break;
 		}
