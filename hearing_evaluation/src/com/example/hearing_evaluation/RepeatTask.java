@@ -130,7 +130,7 @@ public class RepeatTask extends TimerTask {
     	if(TestActivity.currentFreq < freqOrder.length*2){
     		
         	for(int i = 0; i <= 5; i++){
-        		Log.d("TLarr",Integer.toString(-(TestActivity.hearingThreshold[i])));
+        		Log.d("TLarr",Integer.toString((TestActivity.hearingThreshold[i])));
         	}
     		
 	        genTone(freqValues[freqOrder[TestActivity.currentFreq % freqOrder.length]]);

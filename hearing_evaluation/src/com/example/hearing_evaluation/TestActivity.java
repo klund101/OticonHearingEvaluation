@@ -201,17 +201,28 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 				RepeatTask.timer.cancel();
 	    	
 			AlertDialog alertDialog = new AlertDialog.Builder(TestActivity.this)
-	        .setTitle("Leave test")
-	        .setMessage("Are you sure you want to leave the current hearing test?")
-	        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+	        .setTitle("Leave test?")
+	        .setMessage("Are you sure you want to leave the current hearing test? The incomplete test result will be discarded.")
+	        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int which) { 
 	    			if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
 	    				RepeatTask.audioTrack.stop();
 	    				RepeatTask.timer.cancel();
-	    				onBackPressed();
+	    				
+		            	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+		            	try {
+							Log.d("PARSE", parseDataObjectId);
+		            	    query.get(parseDataObjectId).deleteInBackground();
+		            	    query.get(parseDataObjectId).saveInBackground();
+						} 
+		            	catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		            	onBackPressed();
 	            }
 	         })
-	        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+	        .setNegativeButton("No", new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int which) {
 	            	
 	    			RepeatTask.timer = new Timer();
@@ -290,7 +301,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 					}
 	            } else {
 	              // something went wrong
-	            }
+	          }
 	          }
 	        });
 		 

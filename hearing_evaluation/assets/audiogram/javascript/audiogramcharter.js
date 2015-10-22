@@ -1,4 +1,4 @@
-console.log("Hola Mr. K Lund");
+console.log("javascript initialized...");
 
 var AudiogramCharter = (function(element) {
     this.chart = element;

@@ -1,5 +1,6 @@
 package com.example.hearing_evaluation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.parse.FindCallback;
@@ -15,6 +16,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.AudioManager;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -52,6 +55,8 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 	public String profileAgeSpinner;
 	public String profileGenderSpinner;
 	
+	public MediaRecorder mRecorder = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,6 +65,10 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 		initGui();
 		
 		updateProfileSpinner();
+		
+		startCheckAmbientSoundLevel();
+		getAmplitudeCheckAmbientSoundLevel();
+		startCheckAmbientSoundLevel();
 	}
 
 	private void initGui() {
@@ -106,6 +115,7 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -113,40 +123,81 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 			startActivity(new Intent(ProfileIdActivity.this, IdentityActivity.class)); //
 		break;
 		case R.id.btnStartTestProfileAct:
-
-			//Parse
-				userDataObject = new ParseObject("hearingEvaluationData");
-		        userDataObject.put("Username", profileNameSpinner);
-		        userDataObject.put("GoogleId", getEmailId(this));
-		        userDataObject.put("HearingDataLeft", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
-		        userDataObject.put("HearingDataRight", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
-		        userDataObject.put("Age", profileAgeSpinner);
-		        userDataObject.put("Gender", profileGenderSpinner);
-		        userDataObject.put("invertedEarPhones", "false");
-
-		        if(newProfileObject != null)
-		        	newProfileObject.deleteInBackground();
-		        
-	        try {
-				userDataObject.save();
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			
-			Intent testA = new Intent(ProfileIdActivity.this, TestActivity.class);
-			testA.putExtra("parseDataObjectId", userDataObject.getObjectId());
-			Log.d("parseDataObjectId idAct", userDataObject.getObjectId());
-			startActivity(testA);
+			AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+			if(audioManager.isWiredHeadsetOn()) {
+				
+				int ambientAmp = (int)getAmplitudeCheckAmbientSoundLevel();
+				Log.d("ambientAmp", Integer.toString(ambientAmp));
+				
+				if(ambientAmp < 20000) {
+					//Parse
+					userDataObject = new ParseObject("hearingEvaluationData");
+			        userDataObject.put("Username", profileNameSpinner);
+			        userDataObject.put("GoogleId", getEmailId(this));
+			        userDataObject.put("HearingDataLeft", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
+			        userDataObject.put("HearingDataRight", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
+			        userDataObject.put("Age", profileAgeSpinner);
+			        userDataObject.put("Gender", profileGenderSpinner);
+			        userDataObject.put("invertedEarPhones", "false");
+
+			        if(newProfileObject != null)
+			        	newProfileObject.deleteInBackground();
+			        
+			        try {
+						userDataObject.save();
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					Intent testA = new Intent(ProfileIdActivity.this, TestActivity.class);
+					testA.putExtra("parseDataObjectId", userDataObject.getObjectId());
+					Log.d("parseDataObjectId idAct", userDataObject.getObjectId());
+					startActivity(testA);
+				}
+				else{
+					//Log.d("ambientAmp",Integer.toString(ambientAmp));
+					AlertDialog alertDialog = new AlertDialog.Builder(ProfileIdActivity.this)
+			        .setTitle("Ambient noise is too loud!")
+			        .setMessage("Please relocate to a quieter area.")
+			        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            Log.d("mRecorder.toString", mRecorder.toString());
+			        	startCheckAmbientSoundLevel();
+			    				
+			            }
+			         })
+			         .setIcon(android.R.drawable.ic_dialog_alert)
+			         .show();
+				}
+			}
+			else{
+				
+				AlertDialog alertDialog = new AlertDialog.Builder(ProfileIdActivity.this)
+		        .setTitle("Insert earphones!")
+		        .setMessage("Please insert the supplied Sennheiser earphones to start the test")
+		        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            	
+		    				
+		            }
+		         })
+		         .setIcon(android.R.drawable.ic_dialog_alert)
+		         .show();
+				
+			
+			
+		}
 		break;
 		case R.id.btnDeleteProfile:
 			
 			//Parse
 			
 			AlertDialog alertDialog = new AlertDialog.Builder(ProfileIdActivity.this)
-	        .setTitle("Delete profile")
+	        .setTitle("Delete profile?")
 	        .setMessage("Are you sure you want to delete this profile?")
-	        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+	        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int which) { 
 	            	
 	            	
@@ -172,7 +223,7 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 	    				
 	            }
 	         })
-	        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+	        .setNegativeButton("No", new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int which) {
 	            	
 	            }
@@ -308,5 +359,42 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 		});
 		return;
 	}
+	
+    public void startCheckAmbientSoundLevel() {
+        if (mRecorder == null) {
+                mRecorder = new MediaRecorder();
+                mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                mRecorder.setOutputFile("/dev/null"); 
+                try {
+					mRecorder.prepare();
+					Log.d("prepare",".....");
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                mRecorder.start();
+        }
+}
+
+public void stopCheckAmbientSoundLevel() {
+        if (mRecorder != null) {
+                mRecorder.stop();       
+                mRecorder.release();
+                mRecorder = null;
+        }
+}
+
+public double getAmplitudeCheckAmbientSoundLevel() {
+        if (mRecorder != null)
+                return  mRecorder.getMaxAmplitude();
+        else
+                return 0;
+
+}
 
 }

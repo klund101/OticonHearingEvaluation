@@ -48,8 +48,12 @@ public class InstructionsTwoActivity extends Activity implements OnClickListener
 	    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP 
 	    		|| keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
 	    	return true;
-	    else
+	    else if (keyCode == KeyEvent.KEYCODE_BACK){
+	    	super.onBackPressed();
 	    	return true;
+	    }
+		else
+			return true;
 	}
 
 }
