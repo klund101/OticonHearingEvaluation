@@ -19,18 +19,12 @@
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/introText"
+        android:layout_above="@+id/btnInterpretation"
         android:layout_below="@+id/results" >
 
     </com.github.mikephil.charting.charts.LineChart>
 
-    <TextView
-        android:id="@+id/introText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="TextView" />
+
 
     <Button
         android:id="@+id/btnCloseResults"
@@ -59,5 +53,14 @@
         android:layout_above="@+id/btnCloseResults"
         android:layout_centerHorizontal="true"
         android:text="Send data to email" />
+
+    <Button
+        android:id="@+id/btnInterpretation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/userEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="39dp"
+        android:text="Interpretation" />
 
 </RelativeLayout>

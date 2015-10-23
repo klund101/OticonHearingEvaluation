@@ -130,7 +130,7 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 				int ambientAmp = (int)getAmplitudeCheckAmbientSoundLevel();
 				Log.d("ambientAmp", Integer.toString(ambientAmp));
 				
-				if(ambientAmp < 20000) {
+				if(ambientAmp < 14000) {
 					//Parse
 					userDataObject = new ParseObject("hearingEvaluationData");
 			        userDataObject.put("Username", profileNameSpinner);
@@ -141,8 +141,8 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 			        userDataObject.put("Gender", profileGenderSpinner);
 			        userDataObject.put("invertedEarPhones", "false");
 
-			        if(newProfileObject != null)
-			        	newProfileObject.deleteInBackground();
+			        //if(newProfileObject != null)
+			        	//newProfileObject.deleteInBackground();
 			        
 			        try {
 						userDataObject.save();
@@ -207,8 +207,12 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 	    				public void done(List<ParseObject> objects, ParseException e) {
 	    					for(int i = objects.size()-1; i>=0; i--){
 	    						if(objects.get(i).get("Username").toString().equals(profileNameSpinner)){
-	    							objects.get(i).deleteInBackground();
-									objects.get(i).saveInBackground();
+	    							try {
+										objects.get(i).delete();
+									} catch (ParseException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
 									Log.d("Delete Object", Integer.toString(i));
 									Intent loadAct =new Intent(ProfileIdActivity.this, LoadingActivity.class);
 									startActivity(loadAct);
@@ -216,6 +220,12 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 	    						}
 	    														
 	    					}
+							try {
+								ParseObject.saveAll(objects);
+							} catch (ParseException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 	    					
 	    				}
 	    			});
@@ -369,6 +379,7 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
                 mRecorder.setOutputFile("/dev/null"); 
                 try {
 					mRecorder.prepare();
+					mRecorder.start();
 					Log.d("prepare",".....");
 				} catch (IllegalStateException e) {
 					// TODO Auto-generated catch block
@@ -377,8 +388,7 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-                mRecorder.start();
-        }
+         }
 }
 
 public void stopCheckAmbientSoundLevel() {

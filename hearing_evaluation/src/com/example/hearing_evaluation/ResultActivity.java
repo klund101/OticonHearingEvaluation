@@ -33,6 +33,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	
 	Button closeResultsButton;
 	Button sendEmailButton;
+	Button interpretationButton;
 	EditText uEmail;
 	
 	private LineChart mChart;
@@ -122,6 +123,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
     	parseDataObjectId = pressedObjectId;
     }
     
+    mChart.animateXY(1000, 1000); // Animation
 	
 	//Parse
 	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
@@ -154,6 +156,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
         
 		//Parse
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+		query.whereEqualTo("GoogleId", getEmailId(this));
 		query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 			@Override
 			public void done(ParseObject object, ParseException e) {
@@ -281,6 +284,8 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		closeResultsButton.setOnClickListener(this);
 		sendEmailButton = (Button) findViewById(R.id.btnSendEmail);
 		sendEmailButton.setOnClickListener(this);
+		interpretationButton= (Button) findViewById(R.id.btnInterpretation);
+		interpretationButton.setOnClickListener(this);
 	}
 	
 	@Override
@@ -330,6 +335,11 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 			} catch (android.content.ActivityNotFoundException ex) {
 			    Toast.makeText(ResultActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
 			}
+		break;
+		case R.id.btnInterpretation:
+			Intent interpA = new Intent(ResultActivity.this, InterpretationActivity.class);
+			interpA.putExtra("parseDataObjectId", parseDataObjectId);
+	        startActivity(interpA);
 		break;
 		}
 	}

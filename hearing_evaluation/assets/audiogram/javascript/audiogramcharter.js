@@ -1,7 +1,9 @@
 console.log("javascript initialized...");
 
-var AudiogramCharter = (function(element) {
-    this.chart = element;
+	
+var AudiogramCharter = function(element) {
+
+    this.chart = 'div.charter';
 	console.log(this.chart);
     this.xAxisTickValues = [125, 250, 500, 1000, 2000, 4000, 8000];
     this.yAxisTickValues = [0, 20, 40, 60, 80, 100, 120];
@@ -10,7 +12,7 @@ var AudiogramCharter = (function(element) {
     this.snapInterval = 5;
     this.xPadding = 50;
     this.yPadding = 50;
-    this.chartWidth = 600;
+    this.chartWidth = 600; // set resolution
     this.chartHeight = 500;
     this.dragged = this.selected = null;
     this.xScale = d3.scale.log().base(2)
@@ -58,17 +60,17 @@ var AudiogramCharter = (function(element) {
     this.hearingLossActive = false;
     this.activeButtonId = '';
     this.leftEarDataPointImage = '';
-    d3.select(element)
-        .on("mousemove.drag", this.mousemove())
-        .on("touchmove.drag", this.mousemove())
-        .on("mouseup.drag", this.mouseup())
-        .on("touchend.drag", this.mouseup())
-        .on("mousedown", this.mousedown())
-        .on("touchstart", this.mousedown())
-        .on("mouseleave", this.mouseup())
-        .on("touchend", this.mouseup())
-        .on('click', this.event_killer());
-})();
+    // d3.select(element)
+        // .on("mousemove.drag", this.mousemove())
+        // .on("touchmove.drag", this.mousemove())
+        // .on("mouseup.drag", this.mouseup())
+        // .on("touchend.drag", this.mouseup())
+        // .on("mousedown", this.mousedown())
+        // .on("touchstart", this.mousedown())
+        // .on("mouseleave", this.mouseup())
+        // .on("touchend", this.mouseup())
+        // .on('click', this.event_killer());
+};
 
 AudiogramCharter.prototype.update = function() {
     var self = this;
@@ -415,6 +417,7 @@ AudiogramCharter.prototype.event_killer = function () {
 
 AudiogramCharter.prototype.redraw = function() {
     var self = this;
+	console.log("redraw_init");
     /** RECALULATE SCALES **/
     self.xScale = d3.scale.log().base(2)
         .domain([100, 10000])
@@ -687,3 +690,8 @@ AudiogramCharter.prototype.apply_shadows = function(svg, blurDeviation, offsetX,
     feMerge.append("feMergeNode")
         .attr("in", "SourceGraphic");
 };
+
+var charter = new AudiogramCharter();
+charter.redraw();
+//console.log("redraw success!");
+window.alert("chart javascript finalized");
