@@ -4,15 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.puredata.android.io.AudioParameters;
-import org.puredata.android.io.PdAudio;
-import org.puredata.core.PdBase;
-import org.puredata.core.utils.IoUtils;
-
 import com.parse.Parse;
 import com.parse.ParseObject;
-
-//import com.xxmassdeveloper.mpchartexample.R;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Context;
@@ -118,18 +111,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	
     protected void onResume() {
     super.onResume();
-//    PdAudio.startAudio(this);
-//    
-//		Log.d("PdAudio.isRunning()", String.valueOf(PdAudio.isRunning()));
-//		if(!PdAudio.isRunning()){
-//			try {
-//				initAudio();
-//				Log.d("PdAudio.isRunning()", String.valueOf(PdAudio.isRunning()));
-//			} catch (IOException e) {
-//				// 
-//				e.printStackTrace();
-//			}
-//		}	
+	
     }
     
 

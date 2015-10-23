@@ -4,14 +4,11 @@ import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.puredata.android.io.AudioParameters;
-
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -36,8 +33,6 @@ public class RepeatTask extends TimerTask {
     public double freqOfTone = 1000; // Hz
     private final byte generatedSnd[] = new byte[2 * numSamples];
     public static AudioTrack audioTrack;
-    //Handler soundHandler = new Handler();
-
     
 	
     @Override

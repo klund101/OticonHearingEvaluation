@@ -25,6 +25,6 @@
         android:layout_below="@+id/btnOptionsInstructions"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
-        android:text="Proceed" />
+        android:text="Proceed to test" />
 
 </RelativeLayout>

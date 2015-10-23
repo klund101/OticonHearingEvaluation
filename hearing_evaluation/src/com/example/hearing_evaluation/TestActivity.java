@@ -1,14 +1,7 @@
 package com.example.hearing_evaluation;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Timer;
-
-import org.puredata.android.io.AudioParameters;
-import org.puredata.android.io.PdAudio;
-import org.puredata.core.PdBase;
-import org.puredata.core.utils.IoUtils;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -20,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,22 +22,6 @@ import android.os.Bundle;
 
 public class TestActivity extends ActionBarActivity implements OnClickListener {
 	
-	private Toast toast = null;	
-	private static final String TAG = "hearing_evaluation";
-
-	private void toast(final String msg) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (toast == null) {
-					toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
-				}
-				toast.setText(TAG + ": " + msg);
-				toast.show();
-			}
-		});
-	}
-	
 	private static final int MIN_SAMPLE_RATE = 44100;
 	
 	public static Button yesButton;
@@ -54,7 +30,7 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static float[] testDbResultLeft = new float[RepeatTask.freqValues.length];
 	public static float[] testDbResultRight = new float[RepeatTask.freqValues.length];
 	public static int toneLevel = 40;
-	//Temperary until unit is defined
+	
 	public static int tmpToneLevel = 1000;
 	public final int startTestDelay = 3000;
 	
@@ -91,12 +67,6 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
        
         Log.d("d", parseDataObjectId);
         
-		try {
-			initPd();
-		} catch (IOException e) {
-			toast(e.toString());
-			finish();
-		}
 		
 		/// TEST FLOW
 		
@@ -112,26 +82,9 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		RepeatTask.timer = new Timer();
 		RepeatTask.timer.schedule(new RepeatTask(), startTestDelay);
 		System.out.println(Integer.toString(currentFreq));
-//			if(currentFreq > RepeatTask.freqOrder.length && isLeftChannel == false){
-//				//repeatTask.timer.cancel();
-//				goToResults();
-//			}
-		
-	
-			//Log.d("toneLevel", Integer.toString(toneLevel));
-			
-		//----
+
 	}
 	
-	//Initialize the PdAudio and it's parameters
-		private void initPd() throws IOException {
-			Log.d("Initializing...", "PureData Patch");
-			File dir = getFilesDir();
-			IoUtils.extractZipResource(getResources().openRawResource(R.raw.patch), dir, true);
-			Log.d("extracted","");
-			File patchFile = new File(dir, "patch_test.pd");
-			PdBase.openPatch(patchFile.getAbsolutePath());
-		}
 	
 	private void initGui() {
 		yesButton = (Button) findViewById(R.id.btnYes);
@@ -171,14 +124,6 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		break;
 		}
 	}
-
-    public void initAudio() throws IOException {
-		AudioParameters.init(this);
-		int srate = Math.max(MIN_SAMPLE_RATE, AudioParameters.suggestSampleRate());
-		PdAudio.initAudio(srate, 0, 2, 8, true);
-		PdAudio.startAudio(this);
-	}
-	
     
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -250,21 +195,9 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	
     protected void onResume() {
     super.onResume();
-    PdAudio.startAudio(this);
-    
-		Log.d("PdAudio.isRunning()", String.valueOf(PdAudio.isRunning()));
-		if(!PdAudio.isRunning()){
-			try {
-				initAudio();
-				Log.d("PdAudio.isRunning()", String.valueOf(PdAudio.isRunning()));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		RepeatTask.timer = new Timer();
-		toneLevel -= 5;
-		RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
+	RepeatTask.timer = new Timer();
+	toneLevel -= 5;
+	RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
     }
 	
     @Override
@@ -276,12 +209,19 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
     
     }
     
-	public void onDestroy() {
-		super.onDestroy();
-		PdAudio.stopAudio();
-		PdAudio.release();
-		PdBase.release();
-	}
+    @Override
+    protected void onStop() {
+        Log.d("", "Application stopped");
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.w("", "Application destroyed");
+
+        super.onDestroy();
+    }
 	
 	public static void goToResults(){
 			
@@ -309,9 +249,6 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 		 ChannelSA.putExtra("parseDataObjectId", parseDataObjectId);
 		 ChannelSA.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		 TestActivity.getTestActivityContext().startActivity(ChannelSA);
-		 PdAudio.stopAudio();
-		 PdAudio.release();
-		 PdBase.release();
 		
 	}
 	
