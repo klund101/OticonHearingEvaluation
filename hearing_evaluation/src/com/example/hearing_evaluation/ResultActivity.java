@@ -1,8 +1,11 @@
 package com.example.hearing_evaluation;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -19,8 +22,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.ContactsContract;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -51,6 +57,8 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	public String parseDataObjectId;
 	public String pressedObjectId;
 	
+	public String chartJpgName;
+	
     public ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
 
 	
@@ -68,7 +76,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		uEmail.setText(getEmailId(this));	  
         
         
-//////////MPchart
+//////////MPchart 
     	
 	//LineChart chart = (LineChart) findViewById(R.id.chart);
 	mChart = (LineChart) findViewById(R.id.chart);
@@ -86,28 +94,69 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
  
  	YAxis leftAxis = mChart.getAxisLeft();
  	YAxis rightAxis = mChart.getAxisRight();
+ 	
+ 	rightAxis.setEnabled(false);
  
  	leftAxis.setAxisMaxValue(10f);
- 	rightAxis.setAxisMaxValue(10f);
+ 	//rightAxis.setAxisMaxValue(10f);
  	leftAxis.setStartAtZero(false);
- 	rightAxis.setStartAtZero(false);
+ 	//rightAxis.setStartAtZero(false);
  	leftAxis.setAxisMinValue(-120f);
- 	rightAxis.setAxisMinValue(-120f);
- 
-	// XAxis xAxis = mChart.getXAxis();
- 
- 	// xAxis.setAxisMaxValue(120f);
-	// xAxis.setAxisMinValue(0f);
+ 	//rightAxis.setAxisMinValue(-120f);
+ 	
+ 	leftAxis.setValueFormatter(new YvalueCustomFormatter());
+ 	//rightAxis.setValueFormatter(new YvalueCustomFormatter());
+ 	
+	XAxis xAxis = mChart.getXAxis(); 
+	xAxis.setLabelsToSkip(0);
+	//xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
 	//	
 	
-	mChart.setVisibleXRangeMinimum(0);
-	mChart.setVisibleXRangeMaximum(8000);
+	mChart.setVisibleXRangeMinimum(1.03f);
+	//mChart.setVisibleXRangeMaximum(8000);
 //	mChart.setVisibleYRangeMaximum(0f,leftAxis);
 //	mChart.setVisibleYRangeMaximum(8000);
 	
     //ArrayList<Entry> yVals = new ArrayList<Entry>();
 //	LineDataSet set1 = new LineDataSet(yVals, "");
 //	LineDataSet set2 =  new LineDataSet(yVals, "");
+	
+
+	//Hearing Loss Limit Lines
+	leftAxis.removeAllLimitLines();
+
+	LimitLine l_mild = new LimitLine(-20, "Mild Hearing Loss");
+	l_mild.setLineColor(Color.argb(127, 255, 255, 48));
+	l_mild.setLineWidth(3f);
+	l_mild.setTextColor(Color.BLACK);
+	l_mild.setTextSize(10f);
+
+	leftAxis.addLimitLine(l_mild);
+	//
+	LimitLine l_mod = new LimitLine(-40, "Moderate Hearing Loss");
+	l_mod.setLineColor(Color.argb(127, 255, 186, 48));
+	l_mod.setLineWidth(3f);
+	l_mod.setTextColor(Color.BLACK);
+	l_mod.setTextSize(10f);
+
+	leftAxis.addLimitLine(l_mod);
+	//
+	LimitLine l_sev = new LimitLine(-70, "Severe Hearing Loss");
+	l_sev.setLineColor(Color.argb(127, 255, 117, 48));
+	l_sev.setLineWidth(3f);
+	l_sev.setTextColor(Color.BLACK);
+	l_sev.setTextSize(10f);
+
+	leftAxis.addLimitLine(l_sev);
+	//
+	LimitLine l_prof = new LimitLine(-90, "Profound Hearing Loss");
+	l_prof.setLineColor(Color.argb(127, 255, 48, 48));
+	l_prof.setLineWidth(3f);
+	l_prof.setTextColor(Color.BLACK);
+	l_prof.setTextSize(10f);
+
+	leftAxis.addLimitLine(l_prof);
+	//
 	
   	parseDataObjectId = null;
 	pressedObjectId = null;
@@ -123,7 +172,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
     	parseDataObjectId = pressedObjectId;
     }
     
-    mChart.animateXY(1000, 1000); // Animation
+    //mChart.animateXY(1000, 1000); // ANIMATION
 	
 	//Parse
 	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
@@ -237,7 +286,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		        }
 
 		        for (int i = 0; i < RepeatTask.freqValues.length; i++) {
-		            xVals.add(Integer.toString(RepeatTask.freqValues[i]));
+		            xVals.add(Integer.toString(RepeatTask.freqValues[i]) + " Hz");
 		            Log.d("xval", String.valueOf(xVals));
 		        }
 
@@ -248,6 +297,9 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		        mChart.setData(data);
 		    	mChart.setDescription(readUserName + ", " + createdAt.toString()); // set user name on audiogram
 		    	mChart.invalidate();
+		    	
+		    	chartJpgName = readUserName + "_" + object.getObjectId();
+		    	mChart.saveToGallery(chartJpgName, 100);
 		    	
 			}
 		});
@@ -328,7 +380,25 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		    
 		    emailIntent.putExtra(Intent.EXTRA_TEXT   , "Oticon Mobile Hearing Evaluation data for " + readUserName + ", " + createdAt.toString() + ":" + "\n\n" + "Left ear" + "\n" + freqsAndDataLeft + "\n\n" + "Right ear" + "\n" + freqsAndDataRight);
 		    freqsAndDataLeft = "";
-		    freqsAndDataRight = "";
+		    freqsAndDataRight = ""; 
+		    
+		    emailIntent.setType("image/jpeg");
+	        File bitmapFile = new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
+		    chartJpgName + ".jpg");
+	        
+	        Log.d("", Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
+	    		    chartJpgName + ".jpg");
+	        
+	        Uri myUri = Uri.fromFile(bitmapFile);
+//	        Uri myUri = FileProvider.getUriForFile(this, "com.mydomain.fileprovider", bitmapFile);
+//	        
+//	        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//	        emailIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//	        emailIntent.setData(myUri);
+	        emailIntent.putExtra(Intent.EXTRA_STREAM, myUri);
+	        
+
+		    
 		    try {
 			    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 			    Log.i("Finished sending email...", "");
