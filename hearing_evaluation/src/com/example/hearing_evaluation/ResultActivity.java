@@ -298,8 +298,11 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		    	mChart.setDescription(readUserName + ", " + createdAt.toString()); // set user name on audiogram
 		    	mChart.invalidate();
 		    	
-		    	chartJpgName = readUserName + "_" + object.getObjectId();
+		    	chartJpgName = readUserName + "_" + object.getObjectId() + ".jpg";
 		    	mChart.saveToGallery(chartJpgName, 100);
+		    	//mChart.saveToPath(chartJpgName, Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/");
+		    	//Log.d("saved", Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/");
+		    	Log.d("saved", Boolean.toString(mChart.saveToGallery(chartJpgName, 100)));
 		    	
 			}
 		});
@@ -362,9 +365,9 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		    
 		    if(readInvertedEars.equals("false")){
 			    for(int i=0; i<dBValuesLeft.length; i++){
-			    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
+			    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Integer.toString(-(int)dBValuesLeft[i]) + "dB]; ";
 			    	Log.d("DATA_LEFT",Float.toString(dBValuesLeft[i]));
-			    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesRight[i]) + "dB]; ";
+			    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Integer.toString(-(int)dBValuesRight[i]) + "dB]; ";
 			    	Log.d("DATA_RIGHT",Float.toString(dBValuesRight[i]));
 			    }
 		    }
@@ -384,17 +387,12 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		    
 		    emailIntent.setType("image/jpeg");
 	        File bitmapFile = new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
-		    chartJpgName + ".jpg");
+	    		    chartJpgName);
 	        
 	        Log.d("", Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
-	    		    chartJpgName + ".jpg");
+	    		    chartJpgName);
 	        
 	        Uri myUri = Uri.fromFile(bitmapFile);
-//	        Uri myUri = FileProvider.getUriForFile(this, "com.mydomain.fileprovider", bitmapFile);
-//	        
-//	        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//	        emailIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-//	        emailIntent.setData(myUri);
 	        emailIntent.putExtra(Intent.EXTRA_STREAM, myUri);
 	        
 
