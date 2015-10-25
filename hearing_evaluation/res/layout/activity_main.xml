@@ -2,29 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/genericwhitebackground"
+    android:background="@drawable/genericgreywhitebackgroundwlogosmall"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.hearing_evaluation.MainActivity" >
-
-    <Button
-        android:id="@+id/webViewMainBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="webView" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/oticonwhitesmall" />
 
     <TextView
         android:id="@+id/introText"
@@ -32,7 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Introduction..." />
+        android:textStyle="normal" 
+        android:text="Introduction..."
+        android:textColor="@android:color/white" />
 
     <TextView
         android:id="@+id/textView1"
@@ -42,28 +27,40 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="28dp"
         android:text="@string/hello_world"
-        android:textColor="@android:color/widget_edittext_dark"
+        android:textColor="@android:color/white"
         android:textColorHint="@android:color/darker_gray"
         android:textSize="18sp"
         android:textStyle="normal"
         android:typeface="normal" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnNewTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnArchive"
+        android:layout_below="@+id/introText"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:text="New Test" />
+        android:layout_marginTop="51dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:maxHeight="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/btnnewtest" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnArchive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/webViewMainBtn"
-        android:layout_alignBottom="@+id/webViewMainBtn"
-        android:layout_centerHorizontal="true"
-        android:text="Archive" />
+        android:layout_alignLeft="@+id/btnNewTest"
+        android:layout_below="@+id/btnNewTest"
+        android:layout_marginTop="29dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:cropToPadding="true"
+        android:fitsSystemWindows="true"
+        android:maxHeight="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/btnarchive" />
+
+
 
 </RelativeLayout>

@@ -13,54 +13,67 @@
         android:id="@+id/results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Results" />
+        android:text="Audiogram" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btnInterpretation"
-        android:layout_below="@+id/results" >
+        android:layout_below="@+id/results"
+        android:minHeight="10sp" >
 
     </com.github.mikephil.charting.charts.LineChart>
 
-
-
-    <Button
+    <ImageButton
         android:id="@+id/btnCloseResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/userEmail"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Close" />
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:maxHeight="60dp"
+        android:scaleType="fitXY"
+        android:layout_marginTop="1dp"
+        android:src="@drawable/btnclose" />
 
     <EditText
         android:id="@+id/userEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnSendEmail"
-        android:layout_alignLeft="@+id/chart"
-        android:layout_alignRight="@+id/chart"
+        android:layout_centerHorizontal="true"
         android:ems="10"
         android:enabled="true"
         android:gravity="center_vertical"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress" >
 
-    <Button
+        <requestFocus />
+    </EditText>
+
+    <ImageButton
         android:id="@+id/btnSendEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnCloseResults"
-        android:layout_centerHorizontal="true"
-        android:text="Send data to email" />
+        android:layout_alignLeft="@+id/btnCloseResults"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:maxHeight="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/btnemail" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnInterpretation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/userEmail"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="39dp"
-        android:text="Interpretation" />
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:maxHeight="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/btninterpretation" />
 
 </RelativeLayout>

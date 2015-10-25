@@ -2,15 +2,19 @@ package com.example.hearing_evaluation;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 
-public class InstructionsActivity extends ActionBarActivity implements OnClickListener {
+public class InstructionsActivity extends ActionBarActivity implements OnTouchListener {
 	
-	Button instructionProceedButton;
+	ImageButton instructionProceedButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,17 +25,24 @@ public class InstructionsActivity extends ActionBarActivity implements OnClickLi
 	}
 	
 	private void initGui() {
-		instructionProceedButton = (Button) findViewById(R.id.btnInstructionsProceed);
-		instructionProceedButton.setOnClickListener(this);
+		instructionProceedButton = (ImageButton) findViewById(R.id.btnInstructionsProceed);
+		instructionProceedButton.setOnTouchListener(this);
 	}
 	
 	@Override
-	public void onClick(View v) {
+	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
 		case R.id.btnInstructionsProceed:
-			startActivity(new Intent(InstructionsActivity.this, InstructionsTwoActivity.class)); //
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				instructionProceedButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				instructionProceedButton.setColorFilter(Color.argb(0, 0, 0, 0));
+				startActivity(new Intent(InstructionsActivity.this, InstructionsTwoActivity.class)); //
+			}
 		break;
 		}
+		return false;
 	}
 	
 	@Override
@@ -55,6 +66,8 @@ public class InstructionsActivity extends ActionBarActivity implements OnClickLi
 		else
 			return true;
 	}
+
+
 
 //	@Override
 //	public boolean onCreateOptionsMenu(Menu menu) {

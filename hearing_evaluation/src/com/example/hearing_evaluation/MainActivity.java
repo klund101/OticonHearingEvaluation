@@ -15,18 +15,21 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity implements OnClickListener {
+public class MainActivity extends ActionBarActivity implements OnTouchListener {
 	
 	Button webViewButton;
 	
-	Button newTestButton;
-	Button archiveButton;
+	ImageButton newTestButton;
+	ImageButton archiveButton;
 	
 	public int initialRingVolume;	
 	
@@ -61,33 +64,46 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	
 	private void initGui() {
-		webViewButton = (Button) findViewById(R.id.webViewMainBtn);
-		webViewButton.setOnClickListener(this);
+//		webViewButton = (Button) findViewById(R.id.webViewMainBtn);
+//		webViewButton.setOnClickListener(this);
 		
-		newTestButton = (Button) findViewById(R.id.btnNewTest);
-		newTestButton.setOnClickListener(this);
-		archiveButton = (Button) findViewById(R.id.btnArchive);
-		archiveButton.setOnClickListener(this);
+		newTestButton = (ImageButton) findViewById(R.id.btnNewTest);
+		newTestButton.setOnTouchListener(this);
+		archiveButton = (ImageButton) findViewById(R.id.btnArchive);
+		archiveButton.setOnTouchListener(this);
 	}
 	
 	@Override
-	public void onClick(View v) {
+	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
-		case R.id.webViewMainBtn:
-			Intent webViewA = new Intent(MainActivity.this, WebViewResultActivity.class);
-	        startActivity(webViewA);
-		break;
+//		case R.id.webViewMainBtn:
+//			Intent webViewA = new Intent(MainActivity.this, WebViewResultActivity.class);
+//	        startActivity(webViewA);
+//		break;
 		case R.id.btnNewTest:
-			Intent opA = new Intent(MainActivity.this, OptionsActivity.class);
-			opA.putExtra("parseDataObjectId", parseDataObjectId);
-	        startActivity(opA);			
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				newTestButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				newTestButton.setColorFilter(Color.argb(0, 0, 0, 0));
+				Intent opA = new Intent(MainActivity.this, OptionsActivity.class);
+				opA.putExtra("parseDataObjectId", parseDataObjectId);
+				startActivity(opA);		
+			}
 		break;
 		case R.id.btnArchive:
-			Intent archA = new Intent(MainActivity.this, ArchiveActivity.class);
-			archA.putExtra("parseDataObjectId", parseDataObjectId);
-	        startActivity(archA);	
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				archiveButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				archiveButton.setColorFilter(Color.argb(0, 0, 0, 0));
+				Intent archA = new Intent(MainActivity.this, ArchiveActivity.class);
+				archA.putExtra("parseDataObjectId", parseDataObjectId);
+				startActivity(archA);	
+			}
 		break;
 		}
+		return false;
 	}
 	
 	@Override
@@ -113,6 +129,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
     super.onResume();
 	
     }
+
+
+	
     
 
 }

@@ -10,21 +10,25 @@ import com.parse.ParseQuery;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.AudioTrack;
 import android.os.Bundle;
 
-public class TestActivity extends ActionBarActivity implements OnClickListener {
+public class TestActivity extends ActionBarActivity implements OnTouchListener {
 	
 	private static final int MIN_SAMPLE_RATE = 44100;
 	
-	public static Button yesButton;
+	public static ImageButton yesButton;
 	
 	public int tmpCount = 0; 
 	public static float[] testDbResultLeft = new float[RepeatTask.freqValues.length];
@@ -87,16 +91,22 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	
 	
 	private void initGui() {
-		yesButton = (Button) findViewById(R.id.btnYes);
-		yesButton.setOnClickListener(this);
+		yesButton = (ImageButton) findViewById(R.id.btnYes);
+		yesButton.setOnTouchListener(this);
 	}
 	
 	
 	
 	@Override
-	public void onClick(View v) {
+	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
 		case R.id.btnYes:
+			
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				yesButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				yesButton.setColorFilter(Color.argb(0, 0, 0, 0));
 			
 			RepeatTask.timer.cancel();
 			RepeatTask.timer = new Timer(); 
@@ -120,9 +130,10 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 //				goToResults();
 ////				
 //			 }
-
+			}
 		break;
 		}
+		return false;
 	}
     
 	@Override
@@ -221,6 +232,21 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
         Log.w("", "Application destroyed");
 
         super.onDestroy();
+        
+		if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
+			RepeatTask.audioTrack.stop();
+			RepeatTask.timer.cancel();
+			
+        	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+        	try {
+				Log.d("PARSE", parseDataObjectId);
+        	    query.get(parseDataObjectId).deleteInBackground();
+        	    query.get(parseDataObjectId).saveInBackground();
+			} 
+        	catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     }
 	
 	public static void goToResults(){
@@ -255,4 +281,5 @@ public class TestActivity extends ActionBarActivity implements OnClickListener {
 	public static Context getTestActivityContext() {
         return TestActivity.testActivityContext;
     }
+
 }

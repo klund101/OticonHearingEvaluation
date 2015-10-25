@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/genericwhitebackground"
+    android:background="@drawable/genericgreywhitebackgroundsmall"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -24,22 +24,28 @@
         android:layout_marginTop="18dp"
         android:src="@drawable/oticoniconsmall" />
 
-    <Button
+    <TextView
+        android:id="@+id/introText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/imageView1"
+        android:text="Insert the appertaining ear phones. To ensure an accurate evaluation it is important that the left and right ear phones are correctly utilized. The left earphones is marked &quot;L&quot;, while the right ear phone is marked &quot;R&quot;."
+        android:textColor="@android:color/white" />
+
+    <ImageButton
         android:id="@+id/btnInstructionsProceed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:text="Proceed" />
-
-    <TextView
-        android:id="@+id/introText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnInstructionsProceed"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_marginBottom="20dp"
-        android:text="Insert the appertaining ear phones. To ensure an accurate evaluation it is important that the left and right ear phones are correctly utilized. The left earphones is marked &quot;L&quot;, while the right ear phone is marked &quot;R&quot;." />
+        android:layout_marginBottom="28dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:cropToPadding="true"
+        android:fitsSystemWindows="true"
+        android:maxHeight="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/btnproceed" />
 
 </RelativeLayout>

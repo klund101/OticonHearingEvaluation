@@ -2,16 +2,20 @@ package com.example.hearing_evaluation;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 
-public class OptionsActivity extends Activity implements OnClickListener{
+public class OptionsActivity extends Activity implements OnTouchListener{
 	
-	Button optionsInstructionsButton;
-	Button optionsProceedButton;
+	ImageButton optionsInstructionsButton;
+	ImageButton optionsProceedButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,25 +25,38 @@ public class OptionsActivity extends Activity implements OnClickListener{
 	}
 	
 	private void initGui() {
-		optionsInstructionsButton = (Button) findViewById(R.id.btnOptionsInstructions);
-		optionsInstructionsButton.setOnClickListener(this);
+		optionsInstructionsButton = (ImageButton) findViewById(R.id.btnOptionsInstructions);
+		optionsInstructionsButton.setOnTouchListener(this);
 		
-		optionsProceedButton = (Button) findViewById(R.id.btnOptionsProceed);
-		optionsProceedButton.setOnClickListener(this);
+		optionsProceedButton = (ImageButton) findViewById(R.id.btnOptionsProceed);
+		optionsProceedButton.setOnTouchListener(this);
 	}
 	
 	@Override
-	public void onClick(View v) {
+	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
 		case R.id.btnOptionsInstructions:
-			Intent instrA = new Intent(OptionsActivity.this, InstructionsActivity.class);
-	        startActivity(instrA);
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				optionsInstructionsButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				optionsInstructionsButton.setColorFilter(Color.argb(0, 0, 0, 0));
+				Intent instrA = new Intent(OptionsActivity.this, InstructionsActivity.class);
+				startActivity(instrA);
+			}
 		break;
 		case R.id.btnOptionsProceed:
-			Intent pIdA = new Intent(OptionsActivity.this, ProfileIdActivity.class);
-	        startActivity(pIdA);			
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				optionsProceedButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				optionsProceedButton.setColorFilter(Color.argb(0, 0, 0, 0));
+				Intent pIdA = new Intent(OptionsActivity.this, ProfileIdActivity.class);
+				startActivity(pIdA);
+			}
 		break;
 		}
+		return false;
 	}
 
 	@Override
@@ -64,4 +81,5 @@ public class OptionsActivity extends Activity implements OnClickListener{
 	    else
 	    	return true;
 	}
+
 }

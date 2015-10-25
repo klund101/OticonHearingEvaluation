@@ -11,20 +11,24 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-public class IdentityActivity extends Activity implements OnClickListener {
+public class IdentityActivity extends Activity implements OnTouchListener {
 	
-	Button saveProfileButton;
+	ImageButton saveProfileButton;
 	EditText uName;
 	EditText uAge;
 	RadioButton radioButtonF;
@@ -56,22 +60,27 @@ public class IdentityActivity extends Activity implements OnClickListener {
 	}       
 	
 	private void initGui() {
-		saveProfileButton = (Button) findViewById(R.id.btnSaveProfile);
-		saveProfileButton.setOnClickListener(this);
+		saveProfileButton = (ImageButton) findViewById(R.id.btnSaveProfile);
+		saveProfileButton.setOnTouchListener(this);
 		
 		radioGenderGroup = (RadioGroup) findViewById(R.id.genderGroup);
 		
 		radioButtonF = (RadioButton) findViewById(R.id.genderFemale);
-		radioButtonF.setOnClickListener(this);
+		radioButtonF.setOnTouchListener(this);
 		radioButtonM = (RadioButton) findViewById(R.id.genderMale);
-		radioButtonM.setOnClickListener(this);
+		radioButtonM.setOnTouchListener(this);
 		
 	}
 	
 	@Override
-	public void onClick(View v) {
+	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
 		case R.id.btnSaveProfile:
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				saveProfileButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				saveProfileButton.setColorFilter(Color.argb(0, 0, 0, 0));
 			
 			 boolean isInt = true;
 
@@ -106,16 +115,22 @@ public class IdentityActivity extends Activity implements OnClickListener {
 				Intent saveP = new Intent(IdentityActivity.this, ProfileIdActivity.class);
 				startActivity(saveP);
 			}
+			}
 		break;
 		case R.id.genderFemale:
-        	uGenderString = "F";
-        	Log.d("uGenderString", uGenderString);
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+	        	uGenderString = "F";
+	        	Log.d("uGenderString", uGenderString);
+			}
 		break;
 		case R.id.genderMale:
-        	uGenderString = "M";
-        	Log.d("uGenderString", uGenderString);
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+	        	uGenderString = "M";
+	        	Log.d("uGenderString", uGenderString);
+			}
 		break;
 		}
+		return false;
 	}
 	
 	@Override

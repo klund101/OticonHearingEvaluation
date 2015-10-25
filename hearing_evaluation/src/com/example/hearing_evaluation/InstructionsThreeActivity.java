@@ -2,15 +2,19 @@ package com.example.hearing_evaluation;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 
-public class InstructionsThreeActivity extends Activity implements OnClickListener{
+public class InstructionsThreeActivity extends Activity implements OnTouchListener{
 
-	Button instructionThreeProceedButton;
+	ImageButton instructionThreeProceedButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,17 +25,24 @@ public class InstructionsThreeActivity extends Activity implements OnClickListen
 	}
 
 	private void initGui() {
-		instructionThreeProceedButton = (Button) findViewById(R.id.btnInstructionsThreeProceed);
-		instructionThreeProceedButton.setOnClickListener(this);
+		instructionThreeProceedButton = (ImageButton) findViewById(R.id.btnInstructionsThreeProceed);
+		instructionThreeProceedButton.setOnTouchListener(this);
 	}
 	
 	@Override
-	public void onClick(View v) {
+	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
-		case R.id.btnInstructionsThreeProceed:
-			startActivity(new Intent(InstructionsThreeActivity.this, ProfileIdActivity.class)); //
-		break;
-		}
+				case R.id.btnInstructionsThreeProceed:
+					if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+						instructionThreeProceedButton.setColorFilter(Color.argb(100, 0, 0, 0));
+					}
+					else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+						instructionThreeProceedButton.setColorFilter(Color.argb(0, 0, 0, 0));
+						startActivity(new Intent(InstructionsThreeActivity.this, ProfileIdActivity.class)); //
+					}
+				break;
+				}
+		return false;
 	}
 	
 	@Override
@@ -55,4 +66,5 @@ public class InstructionsThreeActivity extends Activity implements OnClickListen
 		else
 			return true;
 	}
+
 }

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
@@ -56,7 +57,7 @@ public class ArchiveActivity extends ListActivity {
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
 		query.whereEqualTo("GoogleId", getEmailId(this));
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+		adapter = new ArrayAdapter<String>(this, R.layout.custom_textview, listItems);
         setListAdapter(adapter);
 		query.findInBackground(new FindCallback<ParseObject>() {	        
 			@Override

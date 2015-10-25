@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,17 +30,20 @@ import android.provider.ContactsContract;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class ResultActivity extends IdentityActivity implements OnClickListener {
+public class ResultActivity extends IdentityActivity implements OnTouchListener {
 	
-	Button closeResultsButton;
-	Button sendEmailButton;
-	Button interpretationButton;
+	ImageButton closeResultsButton;
+	ImageButton sendEmailButton;
+	ImageButton interpretationButton;
 	EditText uEmail;
 	
 	private LineChart mChart;
@@ -121,40 +125,99 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 //	LineDataSet set1 = new LineDataSet(yVals, "");
 //	LineDataSet set2 =  new LineDataSet(yVals, "");
 	
+	mChart.setDrawGridBackground(false);
 
 	//Hearing Loss Limit Lines
 	leftAxis.removeAllLimitLines();
 
-	LimitLine l_mild = new LimitLine(-20, "Mild Hearing Loss");
-	l_mild.setLineColor(Color.argb(127, 255, 255, 48));
-	l_mild.setLineWidth(3f);
+	int LimitLineAlpha = 60;
+	
+	LimitLine l_mild = new LimitLine(-23, "");
+	l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
+	l_mild.setLineWidth(12f);
+	leftAxis.addLimitLine(l_mild);
+	l_mild = new LimitLine(-29, "");
+	l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
+	l_mild.setLineWidth(12f);
+	leftAxis.addLimitLine(l_mild);
+	l_mild = new LimitLine(-35, "Mild Hearing Loss");
+	l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
+	l_mild.setLineWidth(12f);
 	l_mild.setTextColor(Color.BLACK);
 	l_mild.setTextSize(10f);
-
+	leftAxis.addLimitLine(l_mild);
+	l_mild = new LimitLine(-38.9f, "");
+	l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
+	l_mild.setLineWidth(3.4f);
 	leftAxis.addLimitLine(l_mild);
 	//
-	LimitLine l_mod = new LimitLine(-40, "Moderate Hearing Loss");
-	l_mod.setLineColor(Color.argb(127, 255, 186, 48));
-	l_mod.setLineWidth(3f);
+	LimitLine l_mod = new LimitLine(-43, "");
+	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
+	l_mod.setLineWidth(12f);
+	leftAxis.addLimitLine(l_mod);
+	l_mod = new LimitLine(-49.05f, "");
+	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
+	l_mod.setLineWidth(12f);
+	leftAxis.addLimitLine(l_mod);
+	l_mod = new LimitLine(-55.1f, "Moderate Hearing Loss");
+	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
+	l_mod.setLineWidth(12f);
 	l_mod.setTextColor(Color.BLACK);
 	l_mod.setTextSize(10f);
-
+	leftAxis.addLimitLine(l_mod);
+	l_mod = new LimitLine(-61.15f, "");
+	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
+	l_mod.setLineWidth(12f);
+	leftAxis.addLimitLine(l_mod);
+	l_mod = new LimitLine(-67.2f, "");
+	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
+	l_mod.setLineWidth(12f);
+	leftAxis.addLimitLine(l_mod);
+	l_mod = new LimitLine(-70.20f, "");
+	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
+	l_mod.setLineWidth(0.5f);
 	leftAxis.addLimitLine(l_mod);
 	//
-	LimitLine l_sev = new LimitLine(-70, "Severe Hearing Loss");
-	l_sev.setLineColor(Color.argb(127, 255, 117, 48));
-	l_sev.setLineWidth(3f);
+	LimitLine l_sev = new LimitLine(-73.5f, "");
+	l_sev.setLineColor(Color.argb(LimitLineAlpha, 255, 117, 48));
+	l_sev.setLineWidth(12f);
+	leftAxis.addLimitLine(l_sev);
+	l_sev = new LimitLine(-79.55f, "");
+	l_sev.setLineColor(Color.argb(LimitLineAlpha, 255, 117, 48));
+	l_sev.setLineWidth(12f);
+	leftAxis.addLimitLine(l_sev);
+	l_sev = new LimitLine(-85.6f, "Severe Hearing Loss");
+	l_sev.setLineColor(Color.argb(LimitLineAlpha, 255, 117, 48));
+	l_sev.setLineWidth(12f);
 	l_sev.setTextColor(Color.BLACK);
 	l_sev.setTextSize(10f);
-
+	leftAxis.addLimitLine(l_sev);
+	l_sev = new LimitLine(-89.15f, "");
+	l_sev.setLineColor(Color.argb(LimitLineAlpha, 255, 117, 48));
+	l_sev.setLineWidth(2.1f);
 	leftAxis.addLimitLine(l_sev);
 	//
-	LimitLine l_prof = new LimitLine(-90, "Profound Hearing Loss");
-	l_prof.setLineColor(Color.argb(127, 255, 48, 48));
-	l_prof.setLineWidth(3f);
+	LimitLine l_prof = new LimitLine(-92.75f, "");
+	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
+	l_prof.setLineWidth(12f);
+	leftAxis.addLimitLine(l_prof);
+	l_prof = new LimitLine(-98.8f, "");
+	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
+	l_prof.setLineWidth(12f);
+	leftAxis.addLimitLine(l_prof);
+	l_prof = new LimitLine(-104.85f, "Profound Hearing Loss");
+	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
+	l_prof.setLineWidth(12f);
 	l_prof.setTextColor(Color.BLACK);
 	l_prof.setTextSize(10f);
-
+	leftAxis.addLimitLine(l_prof);
+	l_prof = new LimitLine(-110.9f, "");
+	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
+	l_prof.setLineWidth(12f);
+	leftAxis.addLimitLine(l_prof);
+	l_prof = new LimitLine(-116.95f, "");
+	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
+	l_prof.setLineWidth(12f);
 	leftAxis.addLimitLine(l_prof);
 	//
 	
@@ -172,7 +235,7 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
     	parseDataObjectId = pressedObjectId;
     }
     
-    //mChart.animateXY(1000, 1000); // ANIMATION
+    //mChart.animateXY(2000, 2000); // ANIMATION
 	
 	//Parse
 	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
@@ -300,9 +363,6 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 		    	
 		    	chartJpgName = readUserName + "_" + object.getObjectId() + ".jpg";
 		    	mChart.saveToGallery(chartJpgName, 100);
-		    	//mChart.saveToPath(chartJpgName, Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/");
-		    	//Log.d("saved", Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/");
-		    	Log.d("saved", Boolean.toString(mChart.saveToGallery(chartJpgName, 100)));
 		    	
 			}
 		});
@@ -335,81 +395,99 @@ public class ResultActivity extends IdentityActivity implements OnClickListener 
 	}
 	
 	private void initGui() {
-		closeResultsButton = (Button) findViewById(R.id.btnCloseResults);
-		closeResultsButton.setOnClickListener(this);
-		sendEmailButton = (Button) findViewById(R.id.btnSendEmail);
-		sendEmailButton.setOnClickListener(this);
-		interpretationButton= (Button) findViewById(R.id.btnInterpretation);
-		interpretationButton.setOnClickListener(this);
+		closeResultsButton = (ImageButton) findViewById(R.id.btnCloseResults);
+		closeResultsButton.setOnTouchListener(this);
+		sendEmailButton = (ImageButton) findViewById(R.id.btnSendEmail);
+		sendEmailButton.setOnTouchListener(this);
+		interpretationButton= (ImageButton) findViewById(R.id.btnInterpretation);
+		interpretationButton.setOnTouchListener(this);
 	}
 	
-	@Override
-	public void onClick(View v) {
+	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
 		case R.id.btnCloseResults:
-			//startActivity(new Intent(ResultActivity.this, MainActivity.class)); // 
-	    	if(pressedObjectId != null){
-	    		super.onBackPressed();
-	    	}
-	    	else{
-			Intent mainA = new Intent(ResultActivity.this, MainActivity.class);
-			mainA.putExtra("parseDataObjectId", parseDataObjectId);
-	        startActivity(mainA);
-	    	}
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+					closeResultsButton.setColorFilter(Color.argb(100, 0, 0, 0));
+				}
+				else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+					closeResultsButton.setColorFilter(Color.argb(0, 0, 0, 0));
+				//startActivity(new Intent(ResultActivity.this, MainActivity.class)); // 
+		    	if(pressedObjectId != null){
+		    		super.onBackPressed();
+		    	}
+		    	else{
+				Intent mainA = new Intent(ResultActivity.this, MainActivity.class);
+				mainA.putExtra("parseDataObjectId", parseDataObjectId);
+		        startActivity(mainA);
+		    	}
+			}
 		break;
 		case R.id.btnSendEmail:
-		    Intent emailIntent = new Intent(Intent.ACTION_SEND);
-		    emailIntent.setType("message/rfc822");
-		    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{uEmail.getText().toString()});
-		    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
-		    
-		    if(readInvertedEars.equals("false")){
-			    for(int i=0; i<dBValuesLeft.length; i++){
-			    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Integer.toString(-(int)dBValuesLeft[i]) + "dB]; ";
-			    	Log.d("DATA_LEFT",Float.toString(dBValuesLeft[i]));
-			    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Integer.toString(-(int)dBValuesRight[i]) + "dB]; ";
-			    	Log.d("DATA_RIGHT",Float.toString(dBValuesRight[i]));
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				sendEmailButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				sendEmailButton.setColorFilter(Color.argb(0, 0, 0, 0));
+			    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+			    emailIntent.setType("message/rfc822");
+			    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{uEmail.getText().toString()});
+			    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
+			    
+			    if(readInvertedEars.equals("false")){
+				    for(int i=0; i<dBValuesLeft.length; i++){
+				    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Integer.toString(-(int)dBValuesLeft[i]) + "dB]; ";
+				    	Log.d("DATA_LEFT",Float.toString(dBValuesLeft[i]));
+				    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Integer.toString(-(int)dBValuesRight[i]) + "dB]; ";
+				    	Log.d("DATA_RIGHT",Float.toString(dBValuesRight[i]));
+				    }
 			    }
-		    }
-			else if(readInvertedEars.equals("true")){
-				for(int i=0; i<dBValuesLeft.length; i++){
-			    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
-			    	Log.d("DATA_RIGHT",Float.toString(dBValuesLeft[i]));
-			    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesRight[i]) + "dB]; ";
-			    	Log.d("DATA_LEFT",Float.toString(dBValuesRight[i]));
+				else if(readInvertedEars.equals("true")){
+					for(int i=0; i<dBValuesLeft.length; i++){
+				    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
+				    	Log.d("DATA_RIGHT",Float.toString(dBValuesLeft[i]));
+				    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesRight[i]) + "dB]; ";
+				    	Log.d("DATA_LEFT",Float.toString(dBValuesRight[i]));
+				    }
 			    }
-		    }
-		    
-		    
-		    emailIntent.putExtra(Intent.EXTRA_TEXT   , "Oticon Mobile Hearing Evaluation data for " + readUserName + ", " + createdAt.toString() + ":" + "\n\n" + "Left ear" + "\n" + freqsAndDataLeft + "\n\n" + "Right ear" + "\n" + freqsAndDataRight);
-		    freqsAndDataLeft = "";
-		    freqsAndDataRight = ""; 
-		    
-		    emailIntent.setType("image/jpeg");
-	        File bitmapFile = new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
-	    		    chartJpgName);
-	        
-	        Log.d("", Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
-	    		    chartJpgName);
-	        
-	        Uri myUri = Uri.fromFile(bitmapFile);
-	        emailIntent.putExtra(Intent.EXTRA_STREAM, myUri);
-	        
-
-		    
-		    try {
-			    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-			    Log.i("Finished sending email...", "");
-			} catch (android.content.ActivityNotFoundException ex) {
-			    Toast.makeText(ResultActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+			    
+			    
+			    emailIntent.putExtra(Intent.EXTRA_TEXT   , "Oticon Mobile Hearing Evaluation data for " + readUserName + ", " + createdAt.toString() + ":" + "\n\n" + "Left ear" + "\n" + freqsAndDataLeft + "\n\n" + "Right ear" + "\n" + freqsAndDataRight);
+			    freqsAndDataLeft = "";
+			    freqsAndDataRight = ""; 
+			    
+			    emailIntent.setType("image/jpeg");
+		        File bitmapFile = new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
+		    		    chartJpgName);
+		        
+		        Log.d("", Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
+		    		    chartJpgName);
+		        
+		        Uri myUri = Uri.fromFile(bitmapFile);
+		        emailIntent.putExtra(Intent.EXTRA_STREAM, myUri);
+		        
+	
+			    
+			    try {
+				    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+				    Log.i("Finished sending email...", "");
+				} catch (android.content.ActivityNotFoundException ex) {
+				    Toast.makeText(ResultActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+				}
 			}
 		break;
 		case R.id.btnInterpretation:
-			Intent interpA = new Intent(ResultActivity.this, InterpretationActivity.class);
-			interpA.putExtra("parseDataObjectId", parseDataObjectId);
-	        startActivity(interpA);
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				interpretationButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				interpretationButton.setColorFilter(Color.argb(0, 0, 0, 0));
+				Intent interpA = new Intent(ResultActivity.this, InterpretationActivity.class);
+				interpA.putExtra("parseDataObjectId", parseDataObjectId);
+	        	startActivity(interpA);
+			}
 		break;
 		}
+		return false;
 	}
 	
 	// Get user details
