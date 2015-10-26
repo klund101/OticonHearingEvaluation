@@ -1,7 +1,9 @@
 package com.example.hearing_evaluation;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -155,7 +157,11 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 				        userDataObject.put("Age", profileAgeSpinner);
 				        userDataObject.put("Gender", profileGenderSpinner);
 				        userDataObject.put("invertedEarPhones", "false");
-	
+				        
+				        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+				        String currentDateandTime = sdf.format(new Date());
+				        userDataObject.put("timeAndDate", currentDateandTime);
+				        
 				        //if(newProfileObject != null)
 				        	//newProfileObject.deleteInBackground();
 				        

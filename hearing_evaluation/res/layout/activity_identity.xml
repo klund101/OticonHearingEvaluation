@@ -62,7 +62,8 @@
             android:layout_above="@+id/btnStartTest"
             android:layout_alignLeft="@+id/radioGroup1"
             android:layout_marginBottom="16dp"
-            android:text="Female" />
+            android:text="Female" 
+            android:textColor="@android:color/white"/>
 
         <RadioButton
             android:id="@+id/genderMale"
@@ -70,7 +71,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/radio1"
             android:layout_alignLeft="@+id/radio1"
-            android:text="Male" />
+            android:text="Male" 
+            android:textColor="@android:color/white"/>
     </RadioGroup>
 
     <ImageButton

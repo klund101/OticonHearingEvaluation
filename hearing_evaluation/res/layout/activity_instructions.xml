@@ -9,37 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.hearing_evaluation.InstructionsActivity" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Instructions" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:src="@drawable/oticoniconsmall" />
-
-    <TextView
-        android:id="@+id/introText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/imageView1"
-        android:text="Insert the appertaining ear phones. To ensure an accurate evaluation it is important that the left and right ear phones are correctly utilized. The left earphones is marked &quot;L&quot;, while the right ear phone is marked &quot;R&quot;."
-        android:textColor="@android:color/white" />
-
     <ImageButton
         android:id="@+id/btnInstructionsProceed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="28dp"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:cropToPadding="true"
@@ -47,5 +22,25 @@
         android:maxHeight="60dp"
         android:scaleType="fitXY"
         android:src="@drawable/btnproceed" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView1"
+        android:layout_below="@+id/imageView1"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/instructionsonetxtlarge" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/instructionsonesmall" />
 
 </RelativeLayout>

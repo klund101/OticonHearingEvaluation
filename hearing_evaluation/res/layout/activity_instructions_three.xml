@@ -9,38 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.hearing_evaluation.InstructionsThreeActivity" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:src="@drawable/oticoniconsmall" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Instructions three..."
-        android:textColor="@android:color/white" />
-
     <ImageButton
         android:id="@+id/btnInstructionsThreeProceed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="28dp"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:cropToPadding="true"
@@ -48,5 +22,25 @@
         android:maxHeight="60dp"
         android:scaleType="fitXY"
         android:src="@drawable/btnproceed" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/instructionsthreesmall" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView1"
+        android:layout_below="@+id/imageView1"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/instructionsthreetxtlarge" />
 
 </RelativeLayout>

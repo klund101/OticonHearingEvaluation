@@ -9,43 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.hearing_evaluation.MainActivity" >
 
-    <TextView
-        android:id="@+id/introText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textStyle="normal" 
-        android:text="Introduction..."
-        android:textColor="@android:color/white" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/introText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="28dp"
-        android:text="@string/hello_world"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/darker_gray"
-        android:textSize="18sp"
-        android:textStyle="normal"
-        android:typeface="normal" />
-
-    <ImageButton
-        android:id="@+id/btnNewTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/introText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp"
-        android:adjustViewBounds="true"
-        android:background="@android:color/transparent"
-        android:maxHeight="60dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/btnnewtest" />
-
     <ImageButton
         android:id="@+id/btnArchive"
         android:layout_width="wrap_content"
@@ -61,6 +24,29 @@
         android:scaleType="fitXY"
         android:src="@drawable/btnarchive" />
 
+    <ImageButton
+        android:id="@+id/btnNewTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:maxHeight="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/btnnewtest" />
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="209dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="300dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/mainintrotxt" />
 
 </RelativeLayout>

@@ -47,7 +47,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 	EditText uEmail;
 	
 	private LineChart mChart;
-	public Date createdAt;
+	public String createdAt;
 	public String readUserName;
 	public static String readInvertedEars;
 	//ArrayList<String> lineList = new ArrayList<String>();
@@ -275,7 +275,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			dBValuesString = (String) object.get(dataChannel);
 			readUserName = (String) object.get("Username");
 			//readInvertedEars = (String) object.get("invertedEarPhones");
-			createdAt = object.getCreatedAt();
+			createdAt = (String) object.get("timeAndDate");
 			//Log.d("dBValuesString", dBValuesString);
 		    dBValuesStringSubS = dBValuesString.substring(1);
 		    dBValuesStringSubS = dBValuesStringSubS.replace(']', ' ');
@@ -358,7 +358,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		        
 		        // set data
 		        mChart.setData(data);
-		    	mChart.setDescription(readUserName + ", " + createdAt.toString()); // set user name on audiogram
+		    	mChart.setDescription(readUserName + ", " + createdAt); // set user name on audiogram
 		    	mChart.invalidate();
 		    	
 		    	chartJpgName = readUserName + "_" + object.getObjectId() + ".jpg";

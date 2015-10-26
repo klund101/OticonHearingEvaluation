@@ -66,7 +66,7 @@ public class ArchiveActivity extends ListActivity {
 				if (e == null) {
 					publicParseObjectsList = objects;
 					for(int i = objects.size()-1; i>=0; i--){
-			        listItems.add(objects.get(i).get("Username").toString() + ", " + objects.get(i).getCreatedAt().toString());
+			        listItems.add("\n" + objects.get(i).get("Username").toString() + ", " + objects.get(i).get("timeAndDate").toString() + "\n");
 					Log.d("object", objects.get(i).get("Username").toString());
 			        adapter.notifyDataSetChanged();
 					}
