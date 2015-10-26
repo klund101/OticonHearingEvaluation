@@ -25,44 +25,22 @@
 
     </com.github.mikephil.charting.charts.LineChart>
 
-    <ImageButton
-        android:id="@+id/btnCloseResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/userEmail"
-        android:layout_alignParentBottom="true"
-        android:adjustViewBounds="true"
-        android:background="@android:color/transparent"
-        android:maxHeight="60dp"
-        android:scaleType="fitXY"
-        android:layout_marginTop="1dp"
-        android:src="@drawable/btnclose" />
-
     <EditText
         android:id="@+id/userEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnSendEmail"
-        android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@+id/chart"
+        android:layout_alignRight="@+id/chart"
         android:ems="10"
         android:enabled="true"
-        android:gravity="center_vertical"
-        android:inputType="textEmailAddress" >
+        android:gravity="center"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:textColor="#c5178b" >
 
         <requestFocus />
     </EditText>
-
-    <ImageButton
-        android:id="@+id/btnSendEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnCloseResults"
-        android:layout_alignLeft="@+id/btnCloseResults"
-        android:adjustViewBounds="true"
-        android:background="@android:color/transparent"
-        android:maxHeight="60dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/btnemail" />
 
     <ImageButton
         android:id="@+id/btnInterpretation"
@@ -75,5 +53,29 @@
         android:maxHeight="60dp"
         android:scaleType="fitXY"
         android:src="@drawable/btninterpretation" />
+
+    <ImageButton
+        android:id="@+id/btnSendEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnCloseResults"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:maxHeight="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/btnemail" />
+
+    <ImageButton
+        android:id="@+id/btnCloseResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnSendEmail"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:maxHeight="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/btnclose" />
 
 </RelativeLayout>

@@ -13,27 +13,28 @@
         android:id="@+id/btnYes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/didYouHear"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp"
+        android:layout_marginBottom="91dp"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
+        android:baselineAlignBottom="true"
         android:cropToPadding="true"
         android:fitsSystemWindows="true"
-        android:maxHeight="60dp"
+        android:maxHeight="150dp"
         android:scaleType="fitXY"
         android:src="@drawable/btnyes" />
 
-    <TextView
-        android:id="@+id/didYouHear"
+    <ImageView
+        android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/btnYes"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="Press &quot;YES&quot; when you hear a tone"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
-        android:textSize="20sp" />
+        android:layout_marginBottom="70dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="270dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/pressyestxt" />
 
 </RelativeLayout>
