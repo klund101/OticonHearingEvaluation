@@ -13,18 +13,22 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.AudioTrack;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 
-public class ChannelShifterActivity extends Activity implements OnClickListener {
+public class ChannelShifterActivity extends Activity implements OnTouchListener {
 	
-	Button channelShifterLeftButton;
-	Button channelShifterRightButton;
+	ImageButton channelShifterLeftButton;
+	ImageButton channelShifterRightButton;
 	
 	public static String parseDataObjectIdChannelShifter;
 	
@@ -51,58 +55,72 @@ public class ChannelShifterActivity extends Activity implements OnClickListener 
 	}
 
 	private void initGui() {
-		channelShifterLeftButton = (Button) findViewById(R.id.btnChannelShifterLeft);
-		channelShifterLeftButton.setOnClickListener(this);
-		channelShifterRightButton = (Button) findViewById(R.id.btnChannelShifterRight);
-		channelShifterRightButton.setOnClickListener(this);
+		channelShifterLeftButton = (ImageButton) findViewById(R.id.btnChannelShifterLeft);
+		channelShifterLeftButton.setOnTouchListener(this);
+		channelShifterRightButton = (ImageButton) findViewById(R.id.btnChannelShifterRight);
+		channelShifterRightButton.setOnTouchListener(this);
 		
 	}
 
 	@Override
-	public void onClick(View v) {
+	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
 		case R.id.btnChannelShifterLeft:
-			
-			if(System.currentTimeMillis() > oneEarTestToneInitTime + startOneEarTestTestDelay && AudioTrack.PLAYSTATE_PLAYING == OneEarTestTone.oneEarTestToneAudioTrack.getPlayState()){
-				OneEarTestTone.oneEarTestToneAudioTrack.stop();
-				OneEarTestTone.oneEarTestToneTimer.cancel();
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				channelShifterLeftButton.setColorFilter(Color.argb(100, 0, 0, 0));
 			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				channelShifterLeftButton.setColorFilter(Color.argb(0, 0, 0, 0));
 			
-			Intent resultALeft = new Intent(ChannelShifterActivity.this, ResultActivity.class);
-			resultALeft.putExtra("parseDataObjectId", parseDataObjectIdChannelShifter);
-			startActivity(resultALeft); //
+				if(System.currentTimeMillis() > oneEarTestToneInitTime + startOneEarTestTestDelay && AudioTrack.PLAYSTATE_PLAYING == OneEarTestTone.oneEarTestToneAudioTrack.getPlayState()){
+					OneEarTestTone.oneEarTestToneAudioTrack.stop();
+					OneEarTestTone.oneEarTestToneTimer.cancel();
+				}
+				
+				Intent resultALeft = new Intent(ChannelShifterActivity.this, ResultActivity.class);
+				resultALeft.putExtra("parseDataObjectId", parseDataObjectIdChannelShifter);
+				startActivity(resultALeft); //
+				
+			}
 		break;
 		case R.id.btnChannelShifterRight:
-			
-			if(System.currentTimeMillis() > oneEarTestToneInitTime + startOneEarTestTestDelay && AudioTrack.PLAYSTATE_PLAYING == OneEarTestTone.oneEarTestToneAudioTrack.getPlayState()){
-				OneEarTestTone.oneEarTestToneAudioTrack.stop();
-				OneEarTestTone.oneEarTestToneTimer.cancel();
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				channelShifterRightButton.setColorFilter(Color.argb(100, 0, 0, 0));
 			}
-			
-    		//Parse
-	        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
-	        query.getInBackground(TestActivity.parseDataObjectId, new GetCallback<ParseObject>() {
-	          public void done(ParseObject userDataObject, ParseException e) {
-	            if (e == null) {
-	            		userDataObject.put("invertedEarPhones", "true");
-	            	try {
-	            		userDataObject.save();
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-	            } else {
-	              // something went wrong
-	            }
-	          }
-	        });
-			
-			Intent resultARight = new Intent(ChannelShifterActivity.this, ResultActivity.class);
-			resultARight.putExtra("parseDataObjectId", parseDataObjectIdChannelShifter);
-			startActivity(resultARight);
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				channelShifterRightButton.setColorFilter(Color.argb(0, 0, 0, 0));
+
+				if(System.currentTimeMillis() > oneEarTestToneInitTime + startOneEarTestTestDelay && AudioTrack.PLAYSTATE_PLAYING == OneEarTestTone.oneEarTestToneAudioTrack.getPlayState()){
+					OneEarTestTone.oneEarTestToneAudioTrack.stop();
+					OneEarTestTone.oneEarTestToneTimer.cancel();
+				}
+				
+	    		//Parse
+		        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+		        query.getInBackground(TestActivity.parseDataObjectId, new GetCallback<ParseObject>() {
+		          public void done(ParseObject userDataObject, ParseException e) {
+		            if (e == null) {
+		            		userDataObject.put("invertedEarPhones", "true");
+		            	try {
+		            		userDataObject.save();
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+		            } else {
+		              // something went wrong
+		            }
+		          }
+		        });
+				
+				Intent resultARight = new Intent(ChannelShifterActivity.this, ResultActivity.class);
+				resultARight.putExtra("parseDataObjectId", parseDataObjectIdChannelShifter);
+				startActivity(resultARight);
+		}
 		break;
 		}
 		
+		return false;
 	}
 	
 	protected void onResume() {

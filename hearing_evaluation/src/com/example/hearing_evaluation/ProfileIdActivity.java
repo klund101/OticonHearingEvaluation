@@ -68,6 +68,8 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile_id);
 		
+		Log.d("staticEmailId", MainActivity.staticEmailId);
+		
 		initGui();
 		
 		updateProfileSpinner();
@@ -98,6 +100,7 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 		//Parse
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+		query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
 		query.findInBackground(new FindCallback<ParseObject>() {	        
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
@@ -148,10 +151,10 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 					Log.d("ambientAmp", Integer.toString(ambientAmp));
 					
 					if(ambientAmp < 14000) {
-						//Parse
+						//Parse 
 						userDataObject = new ParseObject("hearingEvaluationData");
-				        userDataObject.put("Username", profileNameSpinner);
-				        userDataObject.put("GoogleId", getEmailId(this));
+				        userDataObject.put("Username", profileNameSpinner);				        
+				        userDataObject.put("GoogleId", MainActivity.staticEmailId);
 				        userDataObject.put("HearingDataLeft", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
 				        userDataObject.put("HearingDataRight", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
 				        userDataObject.put("Age", profileAgeSpinner);
@@ -229,6 +232,7 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 	            	
 	            	
 	    			ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+	    			query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
 	    			query.findInBackground(new FindCallback<ParseObject>() {	        
 	    				@Override
 	    				public void done(List<ParseObject> objects, ParseException e) {
@@ -304,67 +308,11 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 			return true;
 	}
 	
-	// Get user details
-	private String getName(Context context) {
-        Cursor CR=null;
-        CR=getOwner(context);
-        String id="",name="";
-        while (CR.moveToNext()) {
-            name = CR
-                    .getString(CR
-                            .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        }
-
-        return name;
-    }
-	
-    static String getEmailId(Context context) {
-
-        Cursor CR=null;
-        CR=getOwner(context);
-        String id="",email="";
-        while (CR.moveToNext()) {
-            id = CR.getString(CR
-                    .getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
-            email = CR
-                    .getString(CR
-                            .getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-        }
-        return email;
-    }
-	
-	static Cursor getOwner(Context context) {
-
-        String accountName = null;
-        Cursor emailCur=null;
-        AccountManager accountManager = AccountManager.get(context);
-        Account[] accounts = accountManager.getAccountsByType("com.google");
-        if (accounts[0].name != null) {
-            accountName = accounts[0].name;
-            String where = ContactsContract.CommonDataKinds.Email.DATA + " = ?";
-            ArrayList<String> what = new ArrayList<String>();
-            what.add(accountName);
-            Log.v("Got account", "Account " + accountName);
-            for (int i = 1; i < accounts.length; i++) {
-                where += " or " + ContactsContract.CommonDataKinds.Email.DATA + " = ?";
-                what.add(accounts[i].name);
-                Log.v("Got account", "Account " + accounts[i].name);
-            }
-            String[] whatarr = (String[]) what.toArray(new String[what.size()]);
-            ContentResolver cr = context.getContentResolver();
-            emailCur = cr.query(
-                    ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
-                    where,
-                    whatarr, null);
-        }
-        return emailCur;
-    }
-	
 	public void updateProfileSpinner(){
 		//Parse
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
-		query.whereEqualTo("GoogleId", getEmailId(this));
+		query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
 	    //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arraySpinner);
 		query.findInBackground(new FindCallback<ParseObject>() {	        
 			@Override

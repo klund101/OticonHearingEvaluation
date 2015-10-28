@@ -18,5 +18,6 @@
     <string name="title_activity_profile_id">ProfileIdActivity</string>
     <string name="title_activity_loading">LoadingActivity</string>
     <string name="title_activity_interpretation">InterpretationActivity</string>
+    <string name="title_activity_pure_tone_db_test">PureToneDbTestActivity</string>
 
 </resources>

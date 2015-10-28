@@ -44,7 +44,7 @@ public class OneEarTestTone extends TimerTask {
         int idx = 0;
         for (final double dVal : sample) {
             // scale to maximum amplitude DIVIDED WITH ?????????
-            final short val = (short) ((dVal * 32767)/((70-oneEarTestToneLevel)*200));
+        	final short val = (short) ((dVal * 32767)*Math.pow((-TestActivity.toneLevel),2)/800000);
             // in 16 bit wav PCM, first byte is the low order byte
             generatedSnd[idx++] = (byte) (val & 0x00ff);
             generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);

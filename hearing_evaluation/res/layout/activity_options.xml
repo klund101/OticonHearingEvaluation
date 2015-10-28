@@ -22,7 +22,7 @@
 	    android:fitsSystemWindows="true"
 	    android:maxHeight="60dp"
 	    android:scaleType="fitXY"
-	    android:src="@drawable/btninstructions" />
+	    android:src="@drawable/btninstructionssmall" />
 
 	<ImageButton
 	    android:id="@+id/btnOptionsProceed"
@@ -37,6 +37,6 @@
 	    android:fitsSystemWindows="true"
 	    android:maxHeight="60dp"
 	    android:scaleType="fitXY"
-	    android:src="@drawable/btnproceedtotest" />
+	    android:src="@drawable/btnproceedtotestsmall" />
 
 </RelativeLayout>

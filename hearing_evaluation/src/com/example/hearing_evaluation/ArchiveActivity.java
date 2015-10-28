@@ -1,10 +1,5 @@
 package com.example.hearing_evaluation;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,23 +8,11 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import android.support.v7.app.ActionBarActivity;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.ListActivity;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -39,8 +22,6 @@ public class ArchiveActivity extends ListActivity {
 	//LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
     ArrayList<String> listItems = new ArrayList<String>();
 	ArrayList<String> lineList = new ArrayList<String>();
-	private String readDataName;
-	private String dBValues;
 	
 	public List<ParseObject> publicParseObjectsList;
 	public String parseListObjectId;
@@ -56,7 +37,7 @@ public class ArchiveActivity extends ListActivity {
 		//Parse
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
-		query.whereEqualTo("GoogleId", getEmailId(this));
+		query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
 		adapter = new ArrayAdapter<String>(this, R.layout.custom_textview, listItems);
         setListAdapter(adapter);
 		query.findInBackground(new FindCallback<ParseObject>() {	        
@@ -110,44 +91,4 @@ public class ArchiveActivity extends ListActivity {
         startActivity(archiveResultA);
     }
 
-    static String getEmailId(Context context) {
-
-        Cursor CR=null;
-        CR=getOwner(context);
-        String id="",email="";
-        while (CR.moveToNext()) {
-            id = CR.getString(CR
-                    .getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
-            email = CR
-                    .getString(CR
-                            .getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-        }
-        return email;
-    }
-	
-	static Cursor getOwner(Context context) {
-
-        String accountName = null;
-        Cursor emailCur=null;
-        AccountManager accountManager = AccountManager.get(context);
-        Account[] accounts = accountManager.getAccountsByType("com.google");
-        if (accounts[0].name != null) {
-            accountName = accounts[0].name;
-            String where = ContactsContract.CommonDataKinds.Email.DATA + " = ?";
-            ArrayList<String> what = new ArrayList<String>();
-            what.add(accountName);
-            Log.v("Got account", "Account " + accountName);
-            for (int i = 1; i < accounts.length; i++) {
-                where += " or " + ContactsContract.CommonDataKinds.Email.DATA + " = ?";
-                what.add(accounts[i].name);
-                Log.v("Got account", "Account " + accounts[i].name);
-            }
-            String[] whatarr = (String[]) what.toArray(new String[what.size()]);
-            ContentResolver cr = context.getContentResolver();
-            emailCur = cr.query(
-                    ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, where, whatarr, null);
-        }
-        //return emailCur;
-        return emailCur;
-    }
 }

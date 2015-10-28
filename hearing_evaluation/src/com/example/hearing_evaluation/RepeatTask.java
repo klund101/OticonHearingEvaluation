@@ -1,5 +1,6 @@
 package com.example.hearing_evaluation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,9 +10,15 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 
@@ -77,6 +84,7 @@ public class RepeatTask extends TimerTask {
     		
     		//Parse
 	        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+	        query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
 	        query.getInBackground(TestActivity.parseDataObjectId, new GetCallback<ParseObject>() {
 	          public void done(ParseObject userDataObject, ParseException e) {
 	            if (e == null) {
@@ -146,7 +154,7 @@ public class RepeatTask extends TimerTask {
     void genTone(double toneFreq){
         // fill out the array
         for (int i = 0; i < numSamples; ++i) {
-            sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/toneFreq));
+            sample[i] = Math.sin(2 * Math.PI * ((toneFreq/2)/sampleRate) * i);
         }
 
         // convert to 16 bit pcm sound array

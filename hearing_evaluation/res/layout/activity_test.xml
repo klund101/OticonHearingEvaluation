@@ -9,22 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.hearing_evaluation.TestActivity" >
 
-    <ImageButton
-        android:id="@+id/btnYes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="91dp"
-        android:adjustViewBounds="true"
-        android:background="@android:color/transparent"
-        android:baselineAlignBottom="true"
-        android:cropToPadding="true"
-        android:fitsSystemWindows="true"
-        android:maxHeight="150dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/btnyes" />
-
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
@@ -36,5 +20,21 @@
         android:maxWidth="270dp"
         android:scaleType="fitXY"
         android:src="@drawable/pressyestxt" />
+
+    <ImageButton
+        android:id="@+id/btnYes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="107dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:baselineAlignBottom="true"
+        android:cropToPadding="true"
+        android:duplicateParentState="true"
+        android:fitsSystemWindows="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/btnyessmall" />
 
 </RelativeLayout>

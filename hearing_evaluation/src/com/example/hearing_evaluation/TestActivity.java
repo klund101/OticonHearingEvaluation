@@ -1,5 +1,6 @@
 package com.example.hearing_evaluation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 
@@ -16,13 +17,18 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.media.AudioTrack;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 
 public class TestActivity extends ActionBarActivity implements OnTouchListener {
 	
@@ -166,6 +172,7 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 	    				RepeatTask.timer.cancel();
 	    				
 		            	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+		            	query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
 		            	try {
 							Log.d("PARSE", parseDataObjectId);
 		            	    query.get(parseDataObjectId).deleteInBackground();
@@ -175,7 +182,11 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-		            	onBackPressed();
+		            	
+		            	Intent mainA = new Intent(TestActivity.getTestActivityContext(), MainActivity.class);
+		            	mainA.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		            	TestActivity.getTestActivityContext().startActivity(mainA);		            	
+		            	
 	            }
 	         })
 	        .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -229,6 +240,7 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 
     @Override
     protected void onDestroy() {
+    	
         Log.w("", "Application destroyed");
 
         super.onDestroy();
@@ -238,6 +250,7 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 			RepeatTask.timer.cancel();
 			
         	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+        	query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
         	try {
 				Log.d("PARSE", parseDataObjectId);
         	    query.get(parseDataObjectId).deleteInBackground();
@@ -254,6 +267,7 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 		
 		//Parse
 	        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+	        query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
 	        query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 	          public void done(ParseObject userDataObject, ParseException e) {
 	            if (e == null) {

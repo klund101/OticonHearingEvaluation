@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/genericgreywhitebackgroundsmall"
+    android:background="@drawable/chooseprofilebg"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -32,11 +32,12 @@
         android:layout_alignParentLeft="true"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
+        android:baselineAlignBottom="true"
         android:cropToPadding="true"
         android:fitsSystemWindows="true"
         android:maxHeight="50dp"
         android:scaleType="fitXY"
-        android:src="@drawable/btndeleteprofile" />
+        android:src="@drawable/btndeleteprofilesmall" />
 
     <ImageButton
         android:id="@+id/btnNewUser"
@@ -52,28 +53,16 @@
         android:fitsSystemWindows="true"
         android:maxHeight="50dp"
         android:scaleType="fitXY"
-        android:src="@drawable/btnnewprofile" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:adjustViewBounds="true"
-        android:maxHeight="30dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/chooseprofiletxt" />
+        android:src="@drawable/btnnewprofilesmall" />
 
     <Spinner
         android:id="@+id/spinnerProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imageView1"
-        android:layout_alignRight="@+id/imageView1"
-        android:layout_below="@+id/imageView1"
-        android:layout_marginTop="17dp"
+        android:layout_alignLeft="@+id/btnDeleteProfile"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/btnNewUser"
+        android:layout_marginTop="168dp"
         android:gravity="center_vertical|center_horizontal|center"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"

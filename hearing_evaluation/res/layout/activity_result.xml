@@ -52,7 +52,7 @@
         android:background="@android:color/transparent"
         android:maxHeight="60dp"
         android:scaleType="fitXY"
-        android:src="@drawable/btninterpretation" />
+        android:src="@drawable/btninterpretationsmall" />
 
     <ImageButton
         android:id="@+id/btnSendEmail"
@@ -64,7 +64,7 @@
         android:background="@android:color/transparent"
         android:maxHeight="60dp"
         android:scaleType="fitXY"
-        android:src="@drawable/btnemail" />
+        android:src="@drawable/btnemailsmall" />
 
     <ImageButton
         android:id="@+id/btnCloseResults"
@@ -76,6 +76,6 @@
         android:background="@android:color/transparent"
         android:maxHeight="60dp"
         android:scaleType="fitXY"
-        android:src="@drawable/btnclose" />
+        android:src="@drawable/btnclosesmall" />
 
 </RelativeLayout>

@@ -76,8 +76,8 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
         uEmail = (EditText)findViewById(R.id.userEmail);
         uEmail.clearComposingText();
            
-		Log.d("user email", getEmailId(this));
-		uEmail.setText(getEmailId(this));	  
+		Log.d("user email", MainActivity.staticEmailId);
+		uEmail.setText(MainActivity.staticEmailId);	  
         
         
 //////////MPchart 
@@ -239,6 +239,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 	
 	//Parse
 	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+	query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
 	query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 		@Override
 		public void done(ParseObject object, ParseException e) {
@@ -268,7 +269,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
         
 		//Parse
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
-		query.whereEqualTo("GoogleId", getEmailId(this));
+		query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
 		query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 			@Override
 			public void done(ParseObject object, ParseException e) {
@@ -443,9 +444,9 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			    }
 				else if(readInvertedEars.equals("true")){
 					for(int i=0; i<dBValuesLeft.length; i++){
-				    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesLeft[i]) + "dB]; ";
+				    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(-(int)dBValuesLeft[i]) + "dB]; ";
 				    	Log.d("DATA_RIGHT",Float.toString(dBValuesLeft[i]));
-				    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(dBValuesRight[i]) + "dB]; ";
+				    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(-(int)dBValuesRight[i]) + "dB]; ";
 				    	Log.d("DATA_LEFT",Float.toString(dBValuesRight[i]));
 				    }
 			    }

@@ -1,0 +1,106 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.hearing_evaluation.PureToneDbTestActivity" >
+
+    <EditText
+        android:id="@+id/txtFieldPureToneTestFreq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtFieldPureToneTestAmp"
+        android:layout_alignRight="@+id/txtFieldPureToneTestAmp"
+        android:layout_below="@+id/textView2"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:textSize="35dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtFieldPureToneTestFreq"
+        android:layout_below="@+id/txtFieldPureToneTestFreq"
+        android:layout_marginTop="16dp"
+        android:text="Digital Amplitude (0 - 32767)"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/txtFieldPureToneTestAmp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnStartTestTone"
+        android:layout_alignRight="@+id/btnStopTestTone"
+        android:layout_below="@+id/textView3"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:textSize="35sp" />
+
+    <Button
+        android:id="@+id/btnStartTestTone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtFieldPureToneTestAmp"
+        android:minHeight="70dip"
+        android:minWidth="120dip"
+        android:text="Start" />
+
+    <Button
+        android:id="@+id/btnStopTestTone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnStartTestTone"
+        android:layout_alignBottom="@+id/btnStartTestTone"
+        android:layout_alignParentRight="true"
+        android:minHeight="70dip"
+        android:minWidth="120dip"
+        android:text="Stop" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/btnStartTestTone"
+        android:layout_marginTop="33dp"
+        android:text="dB-SPL"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/txtFieldPureToneTestDBSPL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView4"
+        android:layout_below="@+id/textView4"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:textSize="35sp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtFieldPureToneTestFreq"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="23dp"
+        android:text="Frequency"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btnSaveTestTone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtFieldPureToneTestDBSPL"
+        android:layout_below="@+id/txtFieldPureToneTestDBSPL"
+        android:minHeight="70dp"
+        android:minWidth="120dp"
+        android:text="Save" />
+
+</RelativeLayout>

@@ -8,11 +8,16 @@ import com.parse.Parse;
 import com.parse.ParseObject;
 
 import android.support.v7.app.ActionBarActivity;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -27,6 +32,7 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity implements OnTouchListener {
 	
 	Button webViewButton;
+	Button pureToneTestButton;
 	
 	ImageButton newTestButton;
 	ImageButton archiveButton;
@@ -35,10 +41,14 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
 	
 	public String parseDataObjectId = "";
 	
+	static String staticEmailId;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+		getOwner(this);
         
         initGui();
         
@@ -71,6 +81,10 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
 		newTestButton.setOnTouchListener(this);
 		archiveButton = (ImageButton) findViewById(R.id.btnArchive);
 		archiveButton.setOnTouchListener(this);
+		
+		pureToneTestButton = (Button) findViewById(R.id.btnPureToneTestActivity);
+		pureToneTestButton.setOnTouchListener(this);
+		
 	}
 	
 	@Override
@@ -102,6 +116,16 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
 				startActivity(archA);	
 			}
 		break;
+		case R.id.btnPureToneTestActivity:
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+
+				Intent pureToneA = new Intent(MainActivity.this, PureToneDbTestActivity.class);
+				startActivity(pureToneA);	
+			}
+		break;
 		}
 		return false;
 	}
@@ -130,7 +154,62 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
 	
     }
 
+	// Get user details
+	private String getName(Context context) {
+        Cursor CR=null;
+        CR=getOwner(context);
+        String id="",name="";
+        while (CR.moveToNext()) {
+            name = CR
+                    .getString(CR
+                            .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+        }
 
+        return name;
+    }
+	
+    static String getEmailId(Context context) {
+
+        Cursor CR=null;
+        CR=getOwner(context);
+        String id="",email="";
+        while (CR.moveToNext()) {
+            id = CR.getString(CR
+                    .getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
+            email = CR
+                    .getString(CR
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+        }
+        return email;
+    }
+	
+	static Cursor getOwner(Context context) {
+
+        String accountName = null;
+        Cursor emailCur=null;
+        AccountManager accountManager = AccountManager.get(context);
+        Account[] accounts = accountManager.getAccountsByType("com.google");
+        if (accounts[0].name != null) {
+            accountName = accounts[0].name;
+            String where = ContactsContract.CommonDataKinds.Email.DATA + " = ?";
+            ArrayList<String> what = new ArrayList<String>();
+            what.add(accountName);
+            staticEmailId = accountName;
+            Log.v("Got account", "Account " + accountName);
+            for (int i = 1; i < accounts.length; i++) {
+                where += " or " + ContactsContract.CommonDataKinds.Email.DATA + " = ?";
+                what.add(accounts[i].name);
+                Log.v("Got account", "Account " + accounts[i].name);
+            }
+            String[] whatarr = (String[]) what.toArray(new String[what.size()]);
+            ContentResolver cr = context.getContentResolver();
+            emailCur = cr.query(
+                    ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
+                    where,
+                    whatarr, null);
+        }
+        return emailCur;
+    }
 	
     
 
