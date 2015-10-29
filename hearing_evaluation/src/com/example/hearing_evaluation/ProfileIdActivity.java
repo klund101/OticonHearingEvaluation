@@ -144,74 +144,73 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 			}
 			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
 				startTestProfileActButton.setColorFilter(Color.argb(0, 0, 0, 0));
-				AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-				if(audioManager.isWiredHeadsetOn()) {
-					
-					int ambientAmp = (int)getAmplitudeCheckAmbientSoundLevel();
-					Log.d("ambientAmp", Integer.toString(ambientAmp));
-					
-					if(ambientAmp < 14000) {
-						//Parse 
-						userDataObject = new ParseObject("hearingEvaluationData");
-				        userDataObject.put("Username", profileNameSpinner);				        
-				        userDataObject.put("GoogleId", MainActivity.staticEmailId);
-				        userDataObject.put("HearingDataLeft", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
-				        userDataObject.put("HearingDataRight", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
-				        userDataObject.put("Age", profileAgeSpinner);
-				        userDataObject.put("Gender", profileGenderSpinner);
-				        userDataObject.put("invertedEarPhones", "false");
-				        
-				        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
-				        String currentDateandTime = sdf.format(new Date());
-				        userDataObject.put("timeAndDate", currentDateandTime);
-				        
-				        //if(newProfileObject != null)
-				        	//newProfileObject.deleteInBackground();
-				        
-				        try {
-							userDataObject.save();
-						} catch (ParseException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+				if(arraySpinner.isEmpty() != true){
+					AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+					if(audioManager.isWiredHeadsetOn()) {
 						
-						Intent testA = new Intent(ProfileIdActivity.this, TestActivity.class);
-						testA.putExtra("parseDataObjectId", userDataObject.getObjectId());
-						Log.d("parseDataObjectId idAct", userDataObject.getObjectId());
-						startActivity(testA);
+						int ambientAmp = (int)getAmplitudeCheckAmbientSoundLevel();
+						Log.d("ambientAmp", Integer.toString(ambientAmp));
+						
+						if(ambientAmp < 14000) {
+							//Parse 
+							userDataObject = new ParseObject("hearingEvaluationData");
+					        userDataObject.put("Username", profileNameSpinner);				        
+					        userDataObject.put("GoogleId", MainActivity.staticEmailId);
+					        userDataObject.put("HearingDataLeft", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
+					        userDataObject.put("HearingDataRight", "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]");
+					        userDataObject.put("Age", profileAgeSpinner);
+					        userDataObject.put("Gender", profileGenderSpinner);
+					        userDataObject.put("invertedEarPhones", "false");
+					        
+					        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+					        String currentDateandTime = sdf.format(new Date());
+					        userDataObject.put("timeAndDate", currentDateandTime);
+					        
+					        //if(newProfileObject != null)
+					        	//newProfileObject.deleteInBackground();
+					        
+					        try {
+								userDataObject.save();
+							} catch (ParseException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							Intent testA = new Intent(ProfileIdActivity.this, TestActivity.class);
+							testA.putExtra("parseDataObjectId", userDataObject.getObjectId());
+							Log.d("parseDataObjectId idAct", userDataObject.getObjectId());
+							startActivity(testA);
+						}
+						else{
+							//Log.d("ambientAmp",Integer.toString(ambientAmp));
+							AlertDialog alertDialog = new AlertDialog.Builder(ProfileIdActivity.this)
+					        .setTitle("Ambient noise is too loud!")
+					        .setMessage("Please relocate to a quieter area.")
+					        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					        public void onClick(DialogInterface dialog, int which) { 
+					            Log.d("mRecorder.toString", mRecorder.toString());
+					        	startCheckAmbientSoundLevel();
+					    				
+					            }
+					         })
+					         .setIcon(android.R.drawable.ic_dialog_alert)
+					         .show();
+						}
 					}
 					else{
-						//Log.d("ambientAmp",Integer.toString(ambientAmp));
+						
 						AlertDialog alertDialog = new AlertDialog.Builder(ProfileIdActivity.this)
-				        .setTitle("Ambient noise is too loud!")
-				        .setMessage("Please relocate to a quieter area.")
+				        .setTitle("Insert earphones!")
+				        .setMessage("Please insert the supplied Sennheiser earphones to start the test")
 				        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				        public void onClick(DialogInterface dialog, int which) { 
-				            Log.d("mRecorder.toString", mRecorder.toString());
-				        	startCheckAmbientSoundLevel();
+				            	
 				    				
 				            }
 				         })
 				         .setIcon(android.R.drawable.ic_dialog_alert)
 				         .show();
-					}
 				}
-				else{
-					
-					AlertDialog alertDialog = new AlertDialog.Builder(ProfileIdActivity.this)
-			        .setTitle("Insert earphones!")
-			        .setMessage("Please insert the supplied Sennheiser earphones to start the test")
-			        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-			        public void onClick(DialogInterface dialog, int which) { 
-			            	
-			    				
-			            }
-			         })
-			         .setIcon(android.R.drawable.ic_dialog_alert)
-			         .show();
-					
-				
-				
 			}
 		}
 		break;

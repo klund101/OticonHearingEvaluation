@@ -88,7 +88,7 @@
         android:fitsSystemWindows="true"
         android:maxHeight="60dp"
         android:scaleType="fitXY"
-        android:src="@drawable/btnsaveprofilesmall" />
+        android:src="@drawable/btnsaveprofile" />
 
     <TextView
         android:id="@+id/textView2"

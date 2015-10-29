@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class PureToneDbTestActivity extends Activity implements OnClickListener {
@@ -22,10 +23,15 @@ public class PureToneDbTestActivity extends Activity implements OnClickListener 
 	public EditText pureToneFreqTxt;
 	public EditText pureToneAmpTxt;
 	public EditText pureToneDBSPLTxt;
+	public CheckBox pureToneCheckBoxLeft;
+	public CheckBox pureToneCheckBoxRight;
 	
 	public double pureToneFreq;
 	public double pureToneAmp;
 	public String pureToneDBSPL;
+	
+	public int leftChannelState = 0;
+	public int rightChannelState = 0;
 	
 	public ParseObject ampToDbSplObject;
 	
@@ -59,12 +65,26 @@ public class PureToneDbTestActivity extends Activity implements OnClickListener 
 		pureToneFreqTxt = (EditText)findViewById(R.id.txtFieldPureToneTestFreq);
 		pureToneAmpTxt = (EditText)findViewById(R.id.txtFieldPureToneTestAmp);
 		pureToneDBSPLTxt = (EditText)findViewById(R.id.txtFieldPureToneTestDBSPL);
+		pureToneCheckBoxLeft = (CheckBox) findViewById(R.id.leftEarphoneCheckBox);
+		pureToneCheckBoxLeft.setOnClickListener(this);
+		pureToneCheckBoxRight = (CheckBox) findViewById(R.id.rightEarphoneCheckBox);
+		pureToneCheckBoxRight.setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) throws RuntimeException {
 		switch (v.getId()) {
 		case R.id.btnStartTestTone:
+			
+	         if (pureToneCheckBoxLeft.isChecked())
+	        	 leftChannelState = 1;
+	         else
+	        	 leftChannelState = 0;
+	         
+	         if (pureToneCheckBoxRight.isChecked())
+	        	 rightChannelState = 1;
+	         else
+	        	 rightChannelState = 0;
 			
 			if(pureToneFreqTxt.getText().toString().length() >= 1 && pureToneAmpTxt.getText().toString().length() >= 1){
 			
@@ -132,7 +152,7 @@ public class PureToneDbTestActivity extends Activity implements OnClickListener 
         int idx = 0;
         for (final double dVal : sample) {
             // scale to maximum amplitude
-        	final short val = (short) (dVal * pureToneAmp); //Max: 32767
+        	final short val = (short) (dVal * pureToneAmp);//Max: 32767
             // in 16 bit wav PCM, first byte is the low order byte
             generatedSnd[idx++] = (byte) (val & 0x00ff);
             generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
@@ -146,9 +166,15 @@ public class PureToneDbTestActivity extends Activity implements OnClickListener 
                 AudioFormat.ENCODING_PCM_16BIT, generatedSnd.length,
                 AudioTrack.MODE_STATIC);
     	pureToneTestAudioTrack.write(generatedSnd, 0, generatedSnd.length);
-    	pureToneTestAudioTrack.stop();
+    	try{
+			pureToneTestAudioTrack.stop();
+		}
+		catch(Exception e) {
+			// TODO Auto-generated catch block
+			throw new RuntimeException(e);
+		}
     	
-    	pureToneTestAudioTrack.setStereoVolume(1, 0); // 
+    	pureToneTestAudioTrack.setStereoVolume(leftChannelState, rightChannelState); // 
     	
     	pureToneTestAudioTrack.play();
     }

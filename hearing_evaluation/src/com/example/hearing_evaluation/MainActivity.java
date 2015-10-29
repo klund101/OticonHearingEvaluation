@@ -1,11 +1,6 @@
 package com.example.hearing_evaluation;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import com.parse.Parse;
-import com.parse.ParseObject;
 
 import android.support.v7.app.ActionBarActivity;
 import android.accounts.Account;
@@ -22,11 +17,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity implements OnTouchListener {
@@ -152,6 +145,10 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
     protected void onResume() {
     super.onResume();
 	
+    }
+    
+    protected void onDestroy() {
+    super.onDestroy();
     }
 
 	// Get user details
