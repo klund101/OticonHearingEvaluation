@@ -9,6 +9,7 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,7 +36,7 @@ public class PureToneDbTestActivity extends Activity implements OnClickListener 
 	
 	public ParseObject ampToDbSplObject;
 	
-	public int duration = 40; // seconds
+	public int duration = 120; // seconds
     private final int sampleRate = 44100;
     private final int numSamples = duration * sampleRate;
     private final double sample[] = new double[numSamples];
@@ -53,6 +54,8 @@ public class PureToneDbTestActivity extends Activity implements OnClickListener 
 		genTone(0,0);
 		playSound();
 		pureToneTestAudioTrack.stop();
+		
+		//Log.d("", android.os.Build.MODEL.toString());
 	}
 
 	void initGui(){
@@ -122,6 +125,7 @@ public class PureToneDbTestActivity extends Activity implements OnClickListener 
 					ampToDbSplObject.put("Frequency", Double.toString(pureToneFreq));
 					ampToDbSplObject.put("DigitalAmplitude", Double.toString(pureToneAmp));
 					ampToDbSplObject.put("dBSPL", pureToneDBSPL);
+					ampToDbSplObject.put("Device", android.os.Build.MODEL.toString());
 					
 			        ampToDbSplObject.saveInBackground();
 				}
@@ -152,7 +156,7 @@ public class PureToneDbTestActivity extends Activity implements OnClickListener 
         int idx = 0;
         for (final double dVal : sample) {
             // scale to maximum amplitude
-        	final short val = (short) (dVal * pureToneAmp);//Max: 32767
+        	final short val = (short) (dVal * toneAmp);//Max: 32767
             // in 16 bit wav PCM, first byte is the low order byte
             generatedSnd[idx++] = (byte) (val & 0x00ff);
             generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
@@ -191,5 +195,27 @@ public class PureToneDbTestActivity extends Activity implements OnClickListener 
 		}
 	
     }
+    
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+	            || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+	        return true;
+	    else
+	        return true;
+	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP 
+	    		|| keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+	    	return true;
+	    else if (keyCode == KeyEvent.KEYCODE_BACK){
+    		super.onBackPressed();
+        	return true;
+	    }
+		else
+			return true;
+	}
 
 }

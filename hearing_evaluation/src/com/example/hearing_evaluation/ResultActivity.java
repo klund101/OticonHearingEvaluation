@@ -2,14 +2,15 @@ package com.example.hearing_evaluation;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.components.YAxis.AxisDependency;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.PointD;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -22,21 +23,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 public class ResultActivity extends IdentityActivity implements OnTouchListener {
@@ -49,7 +50,6 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 	private LineChart mChart;
 	public String createdAt;
 	public String readUserName;
-	public static String readInvertedEars;
 	//ArrayList<String> lineList = new ArrayList<String>();
 	float[] dBValues = new float[RepeatTask.freqValues.length];
 	float[] dBValuesLeft = new float[RepeatTask.freqValues.length];
@@ -64,11 +64,17 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 	public String chartJpgName;
 	
     public ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+    
+    public RelativeLayout resultRelativeLayout;
+    
+    public float[] displayValueX = new float[7];
+    public float[] displayValueY = new float[7];
 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_result);
 		
         initGui();
@@ -244,35 +250,37 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
     //mChart.animateXY(2000, 2000); // ANIMATION
 	
 	//Parse
-	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
-	query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
-	query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
+	ParseQuery<ParseObject> queryRight = ParseQuery.getQuery("hearingEvaluationData");
+	queryRight.whereEqualTo("GoogleId", MainActivity.staticEmailId);
+	queryRight.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
 		@Override
 		public void done(ParseObject object, ParseException e) {
-			readInvertedEars = (String) object.get("invertedEarPhones");
-			
-			Log.d("readInvertedEars", readInvertedEars);
-			if(readInvertedEars.equals("false")){
-				setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
-				setData(RepeatTask.freqValues.length,1,"HearingDataRight", "Right ear");
-			}
-			else if(readInvertedEars.equals("true")){
-				setData(RepeatTask.freqValues.length,1,"HearingDataRight", "Left ear");
-				setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Right ear");
-			}
+			setData(RepeatTask.freqValues.length,1,"HearingDataRight", "Right ear");
 		}
 	});
-			
+	
+	//Parse
+	ParseQuery<ParseObject> queryLeft = ParseQuery.getQuery("hearingEvaluationData");
+	queryLeft.whereEqualTo("GoogleId", MainActivity.staticEmailId);
+	queryLeft.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
+		@Override
+		public void done(ParseObject object, ParseException e) {
+			setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
+				if(displayValueX[0] == 0.0f){
+					
+					setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
+				}
+		}
+	});
+		
+	//drawAudiogramCrosses();
+	
 	}
 	
     //////////MPchart
     private void setData(int count, float range, final String dataChannel, final String channelLabel) {
     	
-
-       
-        //Log.d("d_result", parseDataObjectId);
-        
-        
+    	
 		//Parse
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
 		query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
@@ -294,30 +302,50 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		    String[] dBValuesReader = dBValuesStringSubS.split(",");
 		        for(int i=0; i<dBValues.length; i++){
 		        	dBValues[i] = Float.parseFloat(dBValuesReader[i]);
-		        	Log.d("dBValues", Float.toString(dBValues[i]));
+		        	//Log.d("dBValues", Float.toString(dBValues[i]));
 		            yVals.add(new Entry(dBValues[i], i));
-		            Log.d("yVals", Float.toString(dBValues[i]));
+		            //Log.d("yVals", yVals.toString());
+		            
+		            Log.d("ear", channelLabel);
+		            if(channelLabel.equals("Left ear")){
+		            
+			    		PointF posOfPoint = mChart.getPosition(new Entry(dBValues[i], i), AxisDependency.LEFT);
+			    		String audiogramCrossPos = posOfPoint.toString();
+			    		audiogramCrossPos = audiogramCrossPos.replace("PointF(", "");
+			    		audiogramCrossPos = audiogramCrossPos.replace(" ", "");
+			    		audiogramCrossPos = audiogramCrossPos.replace(")", "");
+			    		String[] audiogramCrossReader = audiogramCrossPos.split(",");
+	
+			    		displayValueX[i] = Float.parseFloat(audiogramCrossReader[0]);
+			    		displayValueY[i] = Float.parseFloat(audiogramCrossReader[1]);
+			    		
+			    		Log.d("audiogramCrossReader" + Integer.toString(i), "X: " + audiogramCrossReader[0] + ", Y: " +  audiogramCrossReader[1]);
+		            }
 		        }
+ 
 		        
 		        if(dataChannel == "HearingDataLeft"){
+				    if(displayValueX[0] != 0.0){
 		        	
-//		        	if(readInvertedEars == "true")
-//		        		dBValuesRight = dBValues.clone();
-//		        	else
-		        		dBValuesLeft = dBValues.clone();
-		        	
-		        	Log.d("dBValuesLeft", Float.toString(dBValuesLeft[1]));
-		        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
-			        set1.enableDashedLine(10f, 5f, 0f);
-			        if(readInvertedEars.equals("true")){
-				        set1.setColor(Color.RED);
-				        set1.setCircleColor(Color.RED);	
-			        }
-			        else{
-			        	set1.setColor(Color.BLUE);
-				        set1.setCircleColor(Color.BLUE);
-			        }
+	//		        	if(readInvertedEars == "true")
+	//		        		dBValuesRight = dBValues.clone();
+	//		        	else
+			        	dBValuesLeft = dBValues.clone();
 			        	
+			        	//Log.d("dBValuesLeft", Float.toString(dBValuesLeft[1]));
+			        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
+				        set1.enableDashedLine(10f, 5f, 0f);
+				        set1.setColor(Color.BLUE);
+					    set1.setCircleColor(Color.TRANSPARENT);
+					    
+	
+				        //mChart.getLegend().setEnabled(true);
+			        
+				    	drawAudiogramCrosses();
+				        //mChart.getLegend().setEnabled(false);
+
+				    
+				    
 			        set1.setLineWidth(1f);
 			        set1.setCircleSize(3f);
 			        set1.setDrawCircleHole(false);
@@ -326,6 +354,21 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			        set1.setFillAlpha(65);
 			        set1.setFillColor(Color.BLACK);
 			        dataSets.add(set1); // add the datasets
+			        
+			        for (int i = 0; i < RepeatTask.freqValues.length; i++) {
+			            xVals.add(Integer.toString(RepeatTask.freqValues[i]) + " Hz");
+			            //Log.d("xval", String.valueOf(xVals));
+			        }
+	
+			        // create a data object with the datasets
+			        LineData data = new LineData(xVals, dataSets);
+			        
+			        // set data
+			        
+			        mChart.setData(data);
+			    	mChart.setDescription(readUserName + ", " + createdAt); // set user name on audiogram
+			    	mChart.invalidate();
+				}
 		        }
 		        else if(dataChannel == "HearingDataRight"){
 		        	
@@ -334,42 +377,37 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 //		        	else
 		        		dBValuesRight = dBValues.clone();
 		        	
-		        	Log.d("dBValuesRight", Float.toString(dBValuesRight[1]));
+		        	//Log.d("dBValuesRight", Float.toString(dBValuesRight[1]));
 		        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
 			        set1.enableDashedLine(10f, 5f, 0f);
-			        if(readInvertedEars.equals("true")){
-				        set1.setColor(Color.BLUE);
-				        set1.setCircleColor(Color.BLUE);	
-			        }
-			        else{
-			        	set1.setColor(Color.RED);
-				        set1.setCircleColor(Color.RED);
-			        }
+			        set1.setColor(Color.RED);
+				    set1.setCircleColor(Color.RED);
 			        set1.setLineWidth(1f);
-			        set1.setCircleSize(3f);
-			        set1.setDrawCircleHole(false);
+			        set1.setCircleSize(4f);
+			        set1.setDrawCircleHole(true);
 			        set1.setValueTextSize(9f);
 			        set1.setDrawValues(false);
 			        set1.setFillAlpha(65);
 			        set1.setFillColor(Color.BLACK);
 			        dataSets.add(set1); // add the datasets
+			        
+			        for (int i = 0; i < RepeatTask.freqValues.length; i++) {
+			            xVals.add(Integer.toString(RepeatTask.freqValues[i]) + " Hz");
+			            //Log.d("xval", String.valueOf(xVals));
+			        }
+	
+			        // create a data object with the datasets
+			        LineData data = new LineData(xVals, dataSets);
+			        
+			        // set data
+			        
+			        mChart.setData(data);
+			    	mChart.setDescription(readUserName + ", " + createdAt); // set user name on audiogram
+			    	mChart.invalidate();
 		        }
-
-		        for (int i = 0; i < RepeatTask.freqValues.length; i++) {
-		            xVals.add(Integer.toString(RepeatTask.freqValues[i]) + " Hz");
-		            Log.d("xval", String.valueOf(xVals));
-		        }
-
-		        // create a data object with the datasets
-		        LineData data = new LineData(xVals, dataSets);
-		        
-		        // set data
-		        mChart.setData(data);
-		    	mChart.setDescription(readUserName + ", " + createdAt); // set user name on audiogram
-		    	mChart.invalidate();
-		    	
-		    	chartJpgName = readUserName + "_" + object.getObjectId() + ".jpg";
-		    	mChart.saveToGallery(chartJpgName, 100);
+		         	
+			    chartJpgName = readUserName + "_" + object.getObjectId() + ".jpg";
+			    mChart.saveToGallery(chartJpgName, 100);
 		    	
 			}
 		});
@@ -440,22 +478,12 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{uEmail.getText().toString()});
 			    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
 			    
-			    if(readInvertedEars.equals("false")){
 				    for(int i=0; i<dBValuesLeft.length; i++){
 				    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Integer.toString(-(int)dBValuesLeft[i]) + "dB]; ";
 				    	Log.d("DATA_LEFT",Float.toString(dBValuesLeft[i]));
 				    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Integer.toString(-(int)dBValuesRight[i]) + "dB]; ";
 				    	Log.d("DATA_RIGHT",Float.toString(dBValuesRight[i]));
 				    }
-			    }
-				else if(readInvertedEars.equals("true")){
-					for(int i=0; i<dBValuesLeft.length; i++){
-				    	freqsAndDataRight += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(-(int)dBValuesLeft[i]) + "dB]; ";
-				    	Log.d("DATA_RIGHT",Float.toString(dBValuesLeft[i]));
-				    	freqsAndDataLeft += "[" + Integer.toString(RepeatTask.freqValues[i]) + "Hz, " + Float.toString(-(int)dBValuesRight[i]) + "dB]; ";
-				    	Log.d("DATA_LEFT",Float.toString(dBValuesRight[i]));
-				    }
-			    }
 			    
 			    
 			    emailIntent.putExtra(Intent.EXTRA_TEXT   , "Oticon Mobile Hearing Evaluation data for " + readUserName + ", " + createdAt.toString() + ":" + "\n\n" + "Left ear" + "\n" + freqsAndDataLeft + "\n\n" + "Right ear" + "\n" + freqsAndDataRight);
@@ -551,5 +579,46 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
         //return emailCur;
         return emailCur;
     }
+	
+	void drawAudiogramCrosses(){
+		
+		//Draw blue crosses
+        int adjustCrossYPos = 40;
+        
+		ImageView audiogramCrossImage1 = (ImageView) findViewById(R.id.audiogramCross1);	
+		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins((int)displayValueX[0]-18,(int)displayValueY[0]+adjustCrossYPos, 0,0);
+		audiogramCrossImage1.setLayoutParams(params);
+		
+		ImageView audiogramCrossImage2 = (ImageView) findViewById(R.id.audiogramCross2);	
+		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins((int)displayValueX[1]-18,(int)displayValueY[1]+adjustCrossYPos, 0,0);
+		audiogramCrossImage2.setLayoutParams(params);
+		
+		ImageView audiogramCrossImage3 = (ImageView) findViewById(R.id.audiogramCross3);	
+		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins((int)displayValueX[2]-18,(int)displayValueY[2]+adjustCrossYPos, 0,0);
+		audiogramCrossImage3.setLayoutParams(params);
+		
+		ImageView audiogramCrossImage4 = (ImageView) findViewById(R.id.audiogramCross4);	
+		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins((int)displayValueX[3]-18,(int)displayValueY[3]+adjustCrossYPos, 0,0);
+		audiogramCrossImage4.setLayoutParams(params);
+		
+		ImageView audiogramCrossImage5 = (ImageView) findViewById(R.id.audiogramCross5);	
+		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins((int)displayValueX[4]-18,(int)displayValueY[4]+adjustCrossYPos, 0,0);
+		audiogramCrossImage5.setLayoutParams(params);
+		
+		ImageView audiogramCrossImage6 = (ImageView) findViewById(R.id.audiogramCross6);	
+		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins((int)displayValueX[5]-18,(int)displayValueY[5]+adjustCrossYPos, 0,0);
+		audiogramCrossImage6.setLayoutParams(params);
+		
+		ImageView audiogramCrossImage7 = (ImageView) findViewById(R.id.audiogramCross7);	
+		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins((int)displayValueX[6]-18,(int)displayValueY[6]+adjustCrossYPos, 0,0);
+		audiogramCrossImage7.setLayoutParams(params);
+	}
 
 }

@@ -32,10 +32,12 @@ public class ChannelShifterActivity extends Activity implements OnTouchListener 
 	
 	public static String parseDataObjectIdChannelShifter;
 	
-	public static boolean invertedEarPhones;
 	public long oneEarTestToneInitTime;
 	public final int startOneEarTestTestDelay = 1000;
-
+	
+	public String leftEarHearingData;
+	public String rightEarHearingData;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +50,18 @@ public class ChannelShifterActivity extends Activity implements OnTouchListener 
         if (b != null) {
         	parseDataObjectIdChannelShifter  = (String) b.get("parseDataObjectId");
         }
+        
+    	//Parse
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+    	query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
+    	query.getInBackground(TestActivity.parseDataObjectId, new GetCallback<ParseObject>() {
+    		@Override
+    		public void done(ParseObject object, ParseException e) {
+    			leftEarHearingData = (String) object.get("HearingDataLeft");
+    			rightEarHearingData = (String) object.get("HearingDataRight");
+
+    		}
+    	});
         
         oneEarTestToneInitTime = System.currentTimeMillis();
         
@@ -100,7 +114,8 @@ public class ChannelShifterActivity extends Activity implements OnTouchListener 
 		        query.getInBackground(TestActivity.parseDataObjectId, new GetCallback<ParseObject>() {
 		          public void done(ParseObject userDataObject, ParseException e) {
 		            if (e == null) {
-		            		userDataObject.put("invertedEarPhones", "true");
+		            			userDataObject.put("HearingDataLeft", rightEarHearingData);
+		            			userDataObject.put("HearingDataRight", leftEarHearingData);
 		            	try {
 		            		userDataObject.save();
 						} catch (ParseException e1) {
