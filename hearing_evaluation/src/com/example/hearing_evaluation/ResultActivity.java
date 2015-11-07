@@ -3,6 +3,7 @@ package com.example.hearing_evaluation;
 import java.io.File;
 import java.util.ArrayList;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -70,6 +71,8 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
     public float[] displayValueX = new float[7];
     public float[] displayValueY = new float[7];
 
+    public float tmpLeftEar;
+    public boolean drawLeftTrue = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +141,14 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 
 	int LimitLineAlpha = 60;
 	
-	LimitLine l_mild = new LimitLine(-23, "");
+	LimitLine l_mild = new LimitLine(-5, "Normal Hearing");
+	l_mild.setLineColor(Color.argb(0, 255, 255, 48));
+	l_mild.setLineWidth(0.2f);
+	leftAxis.addLimitLine(l_mild);
+	l_mild.setTextColor(Color.BLACK);
+	l_mild.setTextSize(10f);
+	
+	l_mild = new LimitLine(-23, "");
 	l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
 	l_mild.setLineWidth(12f);
 	leftAxis.addLimitLine(l_mild);
@@ -256,6 +266,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		@Override
 		public void done(ParseObject object, ParseException e) {
 			setData(RepeatTask.freqValues.length,1,"HearingDataRight", "Right ear");
+			
 		}
 	});
 	
@@ -266,10 +277,10 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		@Override
 		public void done(ParseObject object, ParseException e) {
 			setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
-				if(displayValueX[0] == 0.0f){
-					
-					setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
-				}
+//				if(displayValueX[0] == 0.0f){
+//					
+//					setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
+//				}
 		}
 	});
 		
@@ -307,6 +318,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		            //Log.d("yVals", yVals.toString());
 		            
 		            Log.d("ear", channelLabel);
+		            //tmpLeftEar = 0.1f;
 		            if(channelLabel.equals("Left ear")){
 		            
 			    		PointF posOfPoint = mChart.getPosition(new Entry(dBValues[i], i), AxisDependency.LEFT);
@@ -321,11 +333,15 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			    		
 			    		Log.d("audiogramCrossReader" + Integer.toString(i), "X: " + audiogramCrossReader[0] + ", Y: " +  audiogramCrossReader[1]);
 		            }
+		            tmpLeftEar = displayValueX[0];
 		        }
+				if(tmpLeftEar == 0.0f){
+					setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
+				}
  
 		        
 		        if(dataChannel == "HearingDataLeft"){
-				    if(displayValueX[0] != 0.0){
+				    if(tmpLeftEar != 0.0){
 		        	
 	//		        	if(readInvertedEars == "true")
 	//		        		dBValuesRight = dBValues.clone();
@@ -333,11 +349,14 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			        	dBValuesLeft = dBValues.clone();
 			        	
 			        	//Log.d("dBValuesLeft", Float.toString(dBValuesLeft[1]));
+			        	
 			        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
 				        set1.enableDashedLine(10f, 5f, 0f);
 				        set1.setColor(Color.BLUE);
 					    set1.setCircleColor(Color.TRANSPARENT);
 					    
+						if(tmpLeftEar != 0.0f){
+						}
 	
 				        //mChart.getLegend().setEnabled(true);
 			        
@@ -353,7 +372,11 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			        set1.setDrawValues(false);
 			        set1.setFillAlpha(65);
 			        set1.setFillColor(Color.BLACK);
-			        dataSets.add(set1); // add the datasets
+			        
+			        if(drawLeftTrue == true){
+			        	dataSets.add(set1); // add the datasets
+			        	drawLeftTrue = false;
+			        }
 			        
 			        for (int i = 0; i < RepeatTask.freqValues.length; i++) {
 			            xVals.add(Integer.toString(RepeatTask.freqValues[i]) + " Hz");
@@ -364,7 +387,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			        LineData data = new LineData(xVals, dataSets);
 			        
 			        // set data
-			        
+
 			        mChart.setData(data);
 			    	mChart.setDescription(readUserName + ", " + createdAt); // set user name on audiogram
 			    	mChart.invalidate();
@@ -408,6 +431,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		         	
 			    chartJpgName = readUserName + "_" + object.getObjectId() + ".jpg";
 			    mChart.saveToGallery(chartJpgName, 100);
+			    			
 		    	
 			}
 		});
