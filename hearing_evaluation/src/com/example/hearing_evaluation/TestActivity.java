@@ -39,7 +39,7 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 	public int tmpCount = 0; 
 	public static float[] testDbResultLeft = new float[RepeatTask.freqValues.length];
 	public static float[] testDbResultRight = new float[RepeatTask.freqValues.length];
-	public static int toneLevel = 40;
+	public static int toneLevel;
 	
 	public static int tmpToneLevel = 1000;
 	public final int startTestDelay = 3000;
@@ -56,6 +56,8 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 	public static String parseDataObjectId;
 	
 	RepeatTask repeatTask = new RepeatTask();
+	
+	public static int dBLevelIndex;
 	
 
 	@Override
@@ -87,7 +89,13 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
     	for(int i = 0; i <= 5; i++){
     		hearingThreshold[i] = 0;
     	}
-		toneLevel = 30;
+		toneLevel = 25;
+		dBLevelIndex = 3; // index + 1 of 25 dB
+		
+    	for(int i = 0; i<testDbResultLeft.length; i++){
+    		testDbResultLeft[i] = 0f;
+    		testDbResultRight[i] = 0f;
+    	}
 		
 		RepeatTask.timer = new Timer();
 		RepeatTask.timer.schedule(new RepeatTask(), startTestDelay);
@@ -194,6 +202,7 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 	            	
 	    			RepeatTask.timer = new Timer();
 	    			toneLevel -= 5;
+	    			dBLevelIndex--;
 	    			RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
 	            }
 	         })
@@ -205,6 +214,7 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 			    public void onCancel(DialogInterface dialog) {
 	    			RepeatTask.timer = new Timer(); 
 	    			toneLevel -= 5;
+	    			dBLevelIndex--;
 	    			RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
 			    }
 	         });
