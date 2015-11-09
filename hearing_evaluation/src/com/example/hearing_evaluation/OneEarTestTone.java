@@ -20,10 +20,14 @@ public class OneEarTestTone extends TimerTask {
 
 	public static Timer oneEarTestToneTimer = new Timer();
 	
+	public float testToneAmpdB;
+	
 	@Override
 	public void run() {
 
-		genTone(freqOfTone);
+        testToneAmpdB = TestActivity.dBhLArray[3][7];
+		
+		genTone(freqOfTone, testToneAmpdB);
 		playSound();
 		
 		oneEarTestToneTimer.cancel();
@@ -33,7 +37,7 @@ public class OneEarTestTone extends TimerTask {
 		
 	}
 	
-    void genTone(double toneFreq){
+    void genTone(double toneFreq, float amp){
         // fill out the array
         for (int i = 0; i < numSamples; ++i) {
             sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/toneFreq));
@@ -43,8 +47,8 @@ public class OneEarTestTone extends TimerTask {
         // assumes the sample buffer is normalised.
         int idx = 0;
         for (final double dVal : sample) {
-            // scale to maximum amplitude DIVIDED WITH ?????????
-        	final short val = (short) ((dVal * 32767)*Math.pow((-TestActivity.toneLevel),2)/800000);
+            // scale to maximum amplitude
+        	final short val = (short) ((dVal * amp)*TestActivity.env[idx]);
             // in 16 bit wav PCM, first byte is the low order byte
             generatedSnd[idx++] = (byte) (val & 0x00ff);
             generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
