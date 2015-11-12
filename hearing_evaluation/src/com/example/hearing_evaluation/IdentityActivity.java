@@ -111,6 +111,18 @@ public class IdentityActivity extends Activity implements OnTouchListener {
 		        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
 		        String currentDateandTime = sdf.format(new Date());
 		        ProfileIdActivity.newProfileObject.put("timeAndDate", currentDateandTime);
+		        
+		        ProfileIdActivity.newProfileObject.put("PerceptionQ_1", "");
+		        ProfileIdActivity.newProfileObject.put("PerceptionQ_2", "");
+		        ProfileIdActivity.newProfileObject.put("PerceptionQ_3", "");
+		        ProfileIdActivity.newProfileObject.put("PerceptionQ_4", "");
+		        ProfileIdActivity.newProfileObject.put("PerceptionQ_5", "");
+		        
+		        ProfileIdActivity.newProfileObject.put("AudiologicalQ_1", "");
+		        ProfileIdActivity.newProfileObject.put("AudiologicalQ_2", "");
+		        ProfileIdActivity.newProfileObject.put("AudiologicalQ_3", "");
+		        ProfileIdActivity.newProfileObject.put("AudiologicalQ_4", "");
+		        ProfileIdActivity.newProfileObject.put("AudiologicalQ_5", "");
 				
 				try {
 					ProfileIdActivity.newProfileObject.save();

@@ -1,0 +1,367 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content" 
+    	>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="1305dp"
+    android:background="@drawable/genericgreybackgroundsmall"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <TextView
+        android:id="@+id/tvText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/mumblingText"
+        android:layout_marginTop="20dp"
+        android:gravity="fill_horizontal"
+        android:text="Do you find it difficult to understand TV or speech on the telephone?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <RadioGroup
+        android:id="@+id/repeatGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/repeatText"
+        android:layout_below="@+id/repeatText" >
+
+        <RadioButton
+            android:id="@+id/repeatRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/repeatRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/mumblingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvGroup"
+        android:layout_below="@+id/tvGroup"
+        android:gravity="fill_horizontal"
+        android:paddingTop="20dp"
+        android:text="Do you occasionally feel that people are speaking very unclearly?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <RadioGroup
+        android:id="@+id/mumblingGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mumblingText"
+        android:layout_below="@+id/mumblingText" >
+
+        <RadioButton
+            android:id="@+id/mumblingRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/mumblingRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/repeatText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mumblingGroup"
+        android:layout_below="@+id/mumblingGroup"
+        android:gravity="fill_horizontal"
+        android:paddingTop="20dp"
+        android:text="Do you occasionally ask people to repeat themselves or speak louder?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <RadioGroup
+        android:id="@+id/tvGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvText"
+        android:layout_centerHorizontal="true" >
+
+        <RadioButton
+            android:id="@+id/tvRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/tvRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/softSpeechText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/repeatGroup"
+        android:gravity="fill"
+        android:paddingTop="20dp"
+        android:text="Do you find it difficult to understand soft speech?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <RadioGroup
+        android:id="@+id/softSpeechGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/softSpeechText"
+        android:layout_below="@+id/softSpeechText" >
+
+        <RadioButton
+            android:id="@+id/softSpeechRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/softSpeechRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/crowdText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/softSpeechGroup"
+        android:layout_below="@+id/softSpeechGroup"
+        android:gravity="fill"
+        android:paddingTop="20dp"
+        android:text="Do you have difficulties following conversations in a crowded room or restaurant?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <RadioGroup
+        android:id="@+id/crowdGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/crowdText"
+        android:layout_below="@+id/crowdText" >
+
+        <RadioButton
+            android:id="@+id/crowdRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/crowdRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/tinnitusGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/crowdText"
+        android:layout_below="@+id/tinnitusText" >
+
+        <RadioButton
+            android:id="@+id/tinnitusRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/tinnitusRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tinnitusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/crowdGroup"
+        android:layout_below="@+id/crowdGroup"
+        android:gravity="fill"
+        android:paddingTop="20dp"
+        android:text="Do you experience a constant ringing tone, referred to as tinnitus?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/hyperacousisText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tinnitusGroup"
+        android:layout_below="@+id/tinnitusGroup"
+        android:gravity="fill"
+        android:paddingTop="20dp"
+        android:text="Do you experience high sensitivity to loud sounds, referred to as hyperacousis?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <RadioGroup
+        android:id="@+id/hyperacousisGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tinnitusGroup"
+        android:layout_below="@+id/hyperacousisText" >
+
+        <RadioButton
+            android:id="@+id/hyperacousisRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/hyperacousisRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/surgeryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/hyperacousisGroup"
+        android:layout_below="@+id/hyperacousisGroup"
+        android:gravity="fill"
+        android:paddingTop="20dp"
+        android:text="Have you had ear surgery?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <RadioGroup
+        android:id="@+id/surgeryGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/hyperacousisGroup"
+        android:layout_below="@+id/surgeryText" >
+
+        <RadioButton
+            android:id="@+id/surgeryRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/surgeryRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/coldGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/surgeryText"
+        android:layout_below="@+id/coldText" >
+
+        <RadioButton
+            android:id="@+id/coldRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/coldRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/coldText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/coldGroup"
+        android:layout_below="@+id/surgeryGroup"
+        android:gravity="fill"
+        android:paddingTop="20dp"
+        android:text="Do you have a cold?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/painText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/coldGroup"
+        android:layout_below="@+id/coldGroup"
+        android:gravity="fill"
+        android:paddingTop="20dp"
+        android:text="Do you experience pain in one or both ears?"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <RadioGroup
+        android:id="@+id/painGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/coldGroup"
+        android:layout_below="@+id/painText" >
+
+        <RadioButton
+            android:id="@+id/painRadioYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/painRadioNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <ImageButton
+        android:id="@+id/q1ProceedBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/painGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/btnproceed" />
+
+</RelativeLayout>
+
+</ScrollView>

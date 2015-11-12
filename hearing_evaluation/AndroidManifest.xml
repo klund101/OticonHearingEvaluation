@@ -114,8 +114,21 @@
         </activity>
         <activity
             android:name=".PureToneDbTestActivity"
-            android:label="@string/title_activity_pure_tone_db_test" 
             android:configChanges="orientation"
+            android:label="@string/title_activity_pure_tone_db_test"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".QuestionOneActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".LoadingTestPrepActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:noHistory="true"
             android:screenOrientation="portrait">
         </activity>
     </application>

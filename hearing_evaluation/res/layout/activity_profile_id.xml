@@ -9,13 +9,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.hearing_evaluation.ProfileIdActivity" >
 
+    <Spinner
+        android:id="@+id/spinnerProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="168dp"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@android:color/white" />
+
     <ImageButton
         android:id="@+id/btnStartTestProfileAct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnNewUser"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="83dp"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:cropToPadding="true"
@@ -28,14 +40,14 @@
         android:id="@+id/btnDeleteProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnStartTestProfileAct"
         android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/btnNewUser"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:baselineAlignBottom="true"
         android:cropToPadding="true"
         android:fitsSystemWindows="true"
-        android:maxHeight="50dp"
+        android:maxHeight="47dp"
         android:scaleType="fitXY"
         android:src="@drawable/btndeleteprofile" />
 
@@ -45,27 +57,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/spinnerProfile"
-        android:layout_marginTop="77dp"
+        android:layout_marginTop="35dp"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:baselineAlignBottom="true"
         android:cropToPadding="true"
         android:fitsSystemWindows="true"
-        android:maxHeight="50dp"
+        android:maxHeight="47dp"
         android:scaleType="fitXY"
         android:src="@drawable/btnnewprofile" />
-
-    <Spinner
-        android:id="@+id/spinnerProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnDeleteProfile"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/btnNewUser"
-        android:layout_marginTop="168dp"
-        android:gravity="center_vertical|center_horizontal|center"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textColor="@android:color/white" />
 
 </RelativeLayout>

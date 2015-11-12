@@ -117,10 +117,24 @@ public class RepeatTask extends TimerTask {
         	for(int i = 0; i <= 5; i++){
         		TestActivity.hearingThreshold[i] = 0;
         	}
-        	TestActivity.dBLevelIndex = 5; // index + 1
-    		TestActivity.toneLevel = 30;
-    		TestActivity.hearingThreshold[5] = TestActivity.toneLevel;
-        	        	
+        	//TestActivity.dBLevelIndex = 5; // index + 1
+        	if(TestActivity.testGender.equals("F")){
+        			TestActivity.dBLevelIndex = TestActivity.offset[TestActivity.answerAll] + 
+        						TestActivity.expectedFemale[((int)(TestActivity.testAge/10))-2][freqOrder[TestActivity.currentFreq % freqOrder.length]] + 7; //offset + 40 dB (8) - 1
+        	}
+        	else if(TestActivity.testGender.equals("M")){
+    				TestActivity.dBLevelIndex = TestActivity.offset[TestActivity.answerAll] + 
+    						TestActivity.expectedMale[((int)(TestActivity.testAge/10))-2][freqOrder[TestActivity.currentFreq % freqOrder.length]] + 7; //offset + 40 dB (8) - 1
+        	}
+        	
+        	if(TestActivity.dBLevelIndex > 14)
+        		TestActivity.dBLevelIndex = 14;
+        	
+    		//TestActivity.toneLevel = 30;
+    		//TestActivity.hearingThreshold[5] = TestActivity.toneLevel;
+        	TestActivity.toneLevel = (TestActivity.dBLevelIndex*5)+5;
+        	TestActivity.hearingThreshold[5] = TestActivity.toneLevel;
+        	
 			if(AudioTrack.PLAYSTATE_PLAYING == audioTrack.getPlayState())
 				audioTrack.stop();
 			

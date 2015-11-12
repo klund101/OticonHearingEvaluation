@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 
+import com.github.mikephil.charting.components.YAxis.AxisDependency;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -27,6 +31,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.graphics.PorterDuff.Mode;
 import android.media.AudioTrack;
 import android.os.Bundle;
@@ -81,8 +86,50 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 		  {0f, 0f, 2.01072f, 9.12f, 12.8f, 26.1f, 45.05f, 80f, 140f, 249f, 441f, 792f, 1410f, 2535f, 4530f},
 		  {0f, 0f, 3.2f, 10.2f, 18.1f, 32.02f, 56f, 103f, 179f, 321f, 568f, 1020f, 1835f, 3280f, 5850f},
 		  {0f, 0f, 0f, 2.01f, 10.1f, 11.5f, 30.3f, 50.9f, 85.5f, 155f, 273.5f, 485f, 875f, 1555f, 2800f}
-		};
+	};
 	
+//	public static int[][] expectedFemale= new int[][]{
+//		{0,0,0,0,0,0,0},// 20-29
+//		{0,0,0,0,1,2,3},// 30-39
+//		{0,0,0,0,1,2,3},// 40-49
+//		{0,0,0,0,1,2,4},// 50-59
+//		{0,0,0,1,2,4,5},// 60-69
+//		{0,0,1,2,4,6,9},// 70-79
+//		{0,0,1,3,5,9,14}// 80-
+//	};
+//	public static int[][] expectedMale= new int[][]{
+//		{0,0,0,0,0,0,0},// 20-29
+//		{0,0,0,0,1,2,3},// 30-39
+//		{0,0,0,0,1,2,4},// 40-49
+//		{0,0,0,0,1,3,4},// 50-59
+//		{0,0,0,1,3,5,7},// 60-69
+//		{0,0,1,4,6,9,11},// 70-79
+//		{0,0,2,5,8,11,14}// 80-
+//	};
+	
+	public static int[][] expectedFemale= new int[][]{
+		{0,0,0,0,0,0,0},// 20-29
+		{0,0,0,0,0,1,1},// 30-39
+		{0,1,1,1,1,2,2},// 40-49
+		{0,1,1,1,2,3,4},// 50-59
+		{0,2,2,2,3,5,6},// 60-69
+		{0,3,3,3,5,7,10},// 70-79
+		{0,4,4,5,6,10,14}// 80-
+	};
+	public static int[][] expectedMale= new int[][]{
+		{0,0,0,0,0,0,0},// 20-29
+		{0,0,0,0,0,1,1},// 30-39
+		{0,1,1,1,1,2,3},// 40-49
+		{0,1,1,1,2,5,6},// 50-59
+		{0,2,2,2,4,7,9},// 60-69
+		{0,3,3,4,6,10,12},// 70-79
+		{0,4,5,5,8,12,14}// 80-
+	};
+	
+	public static String testGender;
+	public static int testAge;
+	public static int answerAll;
+	public static int[] offset = {0, 0, 1, 1, 2, 2};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -113,20 +160,57 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
     	for(int i = 0; i <= 5; i++){
     		hearingThreshold[i] = 0;
     	}
-		toneLevel = 25;
-		dBLevelIndex = 3; // index + 1 of 25 dB
+		
 		
     	for(int i = 0; i<testDbResultLeft.length; i++){
     		testDbResultLeft[i] = 0f;
     		testDbResultRight[i] = 0f;
     	}
+    	
+		//Parse
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+		query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
+		query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
+			@Override
+			public void done(ParseObject object, ParseException e) {
+				answerAll = Integer.parseInt((String) object.get("q_1")) + Integer.parseInt((String) object.get("q_2")) +
+						Integer.parseInt((String) object.get("q_3")) + Integer.parseInt((String) object.get("q_4")) + 
+						Integer.parseInt((String) object.get("q_5"));
+				testGender = (String) object.get("Gender");
+				//Log.d("testGender",testGender);
+				testAge = Integer.parseInt((String) object.get("Age"));
+				Log.d("testAge", Integer.toString(testAge));
+				
+				if(testAge < 20)
+					testAge = 20;
+				if(testAge > 89)
+					testAge = 80;
+				
+		    	if(testGender.equals("F")){
+		    		dBLevelIndex = offset[answerAll] + expectedFemale[((int)(testAge/10))-2][3] + 6; //offset + 40 dB (8) - 1
+		    	}
+		    	else if(testGender.equals("M")){
+		    		dBLevelIndex = offset[answerAll] + expectedMale[((int)(testAge/10))-2][3] + 6; //offset + 40 dB (8) - 1
+		    	}	
+	    	
+		    	toneLevel = (dBLevelIndex+1)*5;
+		    }
+		});
+		
+		
+		
+//		dBLevelIndex = 3; // index + 1 of 25 dB
+//    	toneLevel = 25;
+		
+    	
+    	/// Envelope for pulsed tone ----------------------------------------------------
     	for(int i = 1; i < numSamplesTest; ++i){
     		
     		env[i] = (i/pulseLength)%2;
     		//Log.d("env[i]", Float.toString(env[i]));
     		if(i >= numSamplesTest-transition){
     			env[i] = env[i-1]-(1.0f/transition);
-    			Log.d("fade", Float.toString(env[i]));
+    			//Log.d("fade", Float.toString(env[i]));
     		}
     		else {
     			
@@ -150,7 +234,8 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 	    		}
     		}
     	}
-		
+		///----------------------------------------------------------------------------
+    	
 		RepeatTask.timer = new Timer();
 		RepeatTask.timer.schedule(new RepeatTask(), startTestDelay);
 		System.out.println(Integer.toString(currentFreq));

@@ -19,5 +19,7 @@
     <string name="title_activity_loading">LoadingActivity</string>
     <string name="title_activity_interpretation">InterpretationActivity</string>
     <string name="title_activity_pure_tone_db_test">PureToneDbTestActivity</string>
+    <string name="title_activity_question_one">QuestionOneActivity</string>
+    <string name="title_activity_loading_test_prep">LoadingTestPrepActivity</string>
 
 </resources>

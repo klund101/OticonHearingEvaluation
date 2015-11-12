@@ -266,7 +266,6 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		@Override
 		public void done(ParseObject object, ParseException e) {
 			setData(RepeatTask.freqValues.length,1,"HearingDataRight", "Right ear");
-			
 		}
 	});
 	
@@ -320,18 +319,25 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		            Log.d("ear", channelLabel);
 		            //tmpLeftEar = 0.1f;
 		            if(channelLabel.equals("Left ear")){
+		            	
+			    		Log.d("dBValues[i]", Float.toString(dBValues[i]));
+
 		            
 			    		PointF posOfPoint = mChart.getPosition(new Entry(dBValues[i], i), AxisDependency.LEFT);
-			    		String audiogramCrossPos = posOfPoint.toString();
-			    		audiogramCrossPos = audiogramCrossPos.replace("PointF(", "");
-			    		audiogramCrossPos = audiogramCrossPos.replace(" ", "");
-			    		audiogramCrossPos = audiogramCrossPos.replace(")", "");
-			    		String[] audiogramCrossReader = audiogramCrossPos.split(",");
-	
-			    		displayValueX[i] = Float.parseFloat(audiogramCrossReader[0]);
-			    		displayValueY[i] = Float.parseFloat(audiogramCrossReader[1]);
+//			    		String audiogramCrossPos = posOfPoint.toString();
+//			    		Log.d("audiogramCrossReader",audiogramCrossPos);
+//			    		audiogramCrossPos = audiogramCrossPos.replace("PointF(", "");
+//			    		audiogramCrossPos = audiogramCrossPos.replace(" ", "");
+//			    		audiogramCrossPos = audiogramCrossPos.replace(")", "");
+//			    		String[] audiogramCrossReader = audiogramCrossPos.split(",");
+//	
+//			    		displayValueX[i] = Float.parseFloat(audiogramCrossReader[0]);
+//			    		displayValueY[i] = Float.parseFloat(audiogramCrossReader[1]);
 			    		
-			    		Log.d("audiogramCrossReader" + Integer.toString(i), "X: " + audiogramCrossReader[0] + ", Y: " +  audiogramCrossReader[1]);
+			    		displayValueX[i] = posOfPoint.x;
+			    		displayValueY[i] = posOfPoint.y;
+//			    		
+			    		Log.d("audiogramCrossReader" + Integer.toString(i), "X: " + Float.toString(displayValueX[i]) + ", Y: " +  Float.toString(displayValueY[i]));
 		            }
 		            tmpLeftEar = displayValueX[0];
 		        }
@@ -406,7 +412,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			        set1.setColor(Color.RED);
 				    set1.setCircleColor(Color.RED);
 			        set1.setLineWidth(1f);
-			        set1.setCircleSize(4f);
+			        set1.setCircleSize(5f);
 			        set1.setDrawCircleHole(true);
 			        set1.setValueTextSize(9f);
 			        set1.setDrawValues(false);
@@ -607,41 +613,46 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 	void drawAudiogramCrosses(){
 		
 		//Draw blue crosses
+        int adjustCrossXPos = -18;
         int adjustCrossYPos = 40;
         
 		ImageView audiogramCrossImage1 = (ImageView) findViewById(R.id.audiogramCross1);	
+		
+		adjustCrossXPos = (int)((float)audiogramCrossImage1.getMeasuredHeight()/2)*-1;
+		adjustCrossYPos = (int)((float)audiogramCrossImage1.getMeasuredHeight()/0.88);
+		
 		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		params.setMargins((int)displayValueX[0]-18,(int)displayValueY[0]+adjustCrossYPos, 0,0);
+		params.setMargins((int)displayValueX[0]+adjustCrossXPos,(int)displayValueY[0]+adjustCrossYPos, 0,0);
 		audiogramCrossImage1.setLayoutParams(params);
 		
 		ImageView audiogramCrossImage2 = (ImageView) findViewById(R.id.audiogramCross2);	
 		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		params.setMargins((int)displayValueX[1]-18,(int)displayValueY[1]+adjustCrossYPos, 0,0);
+		params.setMargins((int)displayValueX[1]+adjustCrossXPos,(int)displayValueY[1]+adjustCrossYPos, 0,0);
 		audiogramCrossImage2.setLayoutParams(params);
 		
 		ImageView audiogramCrossImage3 = (ImageView) findViewById(R.id.audiogramCross3);	
 		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		params.setMargins((int)displayValueX[2]-18,(int)displayValueY[2]+adjustCrossYPos, 0,0);
+		params.setMargins((int)displayValueX[2]+adjustCrossXPos,(int)displayValueY[2]+adjustCrossYPos, 0,0);
 		audiogramCrossImage3.setLayoutParams(params);
 		
 		ImageView audiogramCrossImage4 = (ImageView) findViewById(R.id.audiogramCross4);	
 		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		params.setMargins((int)displayValueX[3]-18,(int)displayValueY[3]+adjustCrossYPos, 0,0);
+		params.setMargins((int)displayValueX[3]+adjustCrossXPos,(int)displayValueY[3]+adjustCrossYPos, 0,0);
 		audiogramCrossImage4.setLayoutParams(params);
 		
 		ImageView audiogramCrossImage5 = (ImageView) findViewById(R.id.audiogramCross5);	
 		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		params.setMargins((int)displayValueX[4]-18,(int)displayValueY[4]+adjustCrossYPos, 0,0);
+		params.setMargins((int)displayValueX[4]+adjustCrossXPos,(int)displayValueY[4]+adjustCrossYPos, 0,0);
 		audiogramCrossImage5.setLayoutParams(params);
 		
 		ImageView audiogramCrossImage6 = (ImageView) findViewById(R.id.audiogramCross6);	
 		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		params.setMargins((int)displayValueX[5]-18,(int)displayValueY[5]+adjustCrossYPos, 0,0);
+		params.setMargins((int)displayValueX[5]+adjustCrossXPos,(int)displayValueY[5]+adjustCrossYPos, 0,0);
 		audiogramCrossImage6.setLayoutParams(params);
 		
 		ImageView audiogramCrossImage7 = (ImageView) findViewById(R.id.audiogramCross7);	
 		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		params.setMargins((int)displayValueX[6]-18,(int)displayValueY[6]+adjustCrossYPos, 0,0);
+		params.setMargins((int)displayValueX[6]+adjustCrossXPos,(int)displayValueY[6]+adjustCrossYPos, 0,0);
 		audiogramCrossImage7.setLayoutParams(params);
 	}
 

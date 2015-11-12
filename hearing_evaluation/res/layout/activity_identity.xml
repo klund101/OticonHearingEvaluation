@@ -32,8 +32,8 @@
         android:id="@+id/userAge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/diagnosisTxtRight"
+        android:layout_below="@+id/diagnosisTxtRight"
         android:ems="10"
         android:inputType="number"
         android:textColor="@android:color/white" />
@@ -91,7 +91,7 @@
         android:src="@drawable/btnsaveprofile" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/diagnosisTxtRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/userName"

@@ -61,7 +61,6 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 	public String profileAgeSpinner;
 	public String profileGenderSpinner;
 	
-	public MediaRecorder mRecorder = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +72,6 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 		initGui();
 		
 		updateProfileSpinner();
-		
-		startCheckAmbientSoundLevel();
-		getAmplitudeCheckAmbientSoundLevel();
-		startCheckAmbientSoundLevel();
 	}
 
 	private void initGui() {
@@ -145,13 +140,7 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
 				startTestProfileActButton.setColorFilter(Color.argb(0, 0, 0, 0));
 				if(arraySpinner.isEmpty() != true){
-					AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-					if(audioManager.isWiredHeadsetOn()) {
 						
-						int ambientAmp = (int)getAmplitudeCheckAmbientSoundLevel();
-						Log.d("ambientAmp", Integer.toString(ambientAmp));
-						
-						if(ambientAmp < 14000) {
 							//Parse 
 							userDataObject = new ParseObject("hearingEvaluationData");
 					        userDataObject.put("Username", profileNameSpinner);				        
@@ -176,41 +165,11 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 								e1.printStackTrace();
 							}
 							
-							Intent testA = new Intent(ProfileIdActivity.this, TestActivity.class);
+							Intent testA = new Intent(ProfileIdActivity.this, QuestionOneActivity.class);
 							testA.putExtra("parseDataObjectId", userDataObject.getObjectId());
 							Log.d("parseDataObjectId idAct", userDataObject.getObjectId());
 							startActivity(testA);
-						}
-						else{
-							//Log.d("ambientAmp",Integer.toString(ambientAmp));
-							AlertDialog alertDialog = new AlertDialog.Builder(ProfileIdActivity.this)
-					        .setTitle("Ambient noise is too loud!")
-					        .setMessage("Please relocate to a quieter area.")
-					        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					        public void onClick(DialogInterface dialog, int which) { 
-					            Log.d("mRecorder.toString", mRecorder.toString());
-					        	startCheckAmbientSoundLevel();
-					    				
-					            }
-					         })
-					         .setIcon(android.R.drawable.ic_dialog_alert)
-					         .show();
-						}
-					}
-					else{
 						
-						AlertDialog alertDialog = new AlertDialog.Builder(ProfileIdActivity.this)
-				        .setTitle("Insert earphones!")
-				        .setMessage("Please insert the supplied Sennheiser earphones to start the test")
-				        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				        public void onClick(DialogInterface dialog, int which) { 
-				            	
-				    				
-				            }
-				         })
-				         .setIcon(android.R.drawable.ic_dialog_alert)
-				         .show();
-				}
 			}
 		}
 		break;
@@ -344,42 +303,5 @@ public class ProfileIdActivity extends Activity implements OnItemSelectedListene
 		});
 		return;
 	}
-	
-    public void startCheckAmbientSoundLevel() {
-        if (mRecorder == null) {
-                mRecorder = new MediaRecorder();
-                mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-                mRecorder.setOutputFile("/dev/null"); 
-                try {
-					mRecorder.prepare();
-					mRecorder.start();
-					Log.d("prepare",".....");
-				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-         }
-}
-
-public void stopCheckAmbientSoundLevel() {
-        if (mRecorder != null) {
-                mRecorder.stop();       
-                mRecorder.release();
-                mRecorder = null;
-        }
-}
-
-public double getAmplitudeCheckAmbientSoundLevel() {
-        if (mRecorder != null)
-                return  mRecorder.getMaxAmplitude();
-        else
-                return 0;
-
-}
 
 }
