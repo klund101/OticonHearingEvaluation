@@ -66,6 +66,11 @@ public class RepeatTask extends TimerTask {
 				TestActivity.dBLevelIndex++;
 				System.out.println("+5");
 			}
+			else if(TestActivity.toneLevel > 70){
+				TestActivity.upperThresholdCount++;
+				Log.d("upperThresholdCount",Integer.toString(TestActivity.upperThresholdCount));
+			}
+				
 		}
 		TestActivity.yesBtnClicked = false;
 
@@ -79,7 +84,10 @@ public class RepeatTask extends TimerTask {
     		TestActivity.hearingThreshold[4] > TestActivity.hearingThreshold[3] &&
     		TestActivity.hearingThreshold[3] > TestActivity.hearingThreshold[2] &&
     		TestActivity.hearingThreshold[2] < TestActivity.hearingThreshold[1] &&
-    		TestActivity.hearingThreshold[1] > TestActivity.hearingThreshold[0]){
+    		TestActivity.hearingThreshold[1] > TestActivity.hearingThreshold[0] ||
+    		TestActivity.upperThresholdCount >= 3){
+    		
+    		TestActivity.upperThresholdCount = 0;
     		
     		if(TestActivity.isLeftChannel)
     			TestActivity.testDbResultLeft[freqOrder[TestActivity.currentFreq % freqOrder.length]] = -TestActivity.hearingThreshold[4];
@@ -159,7 +167,7 @@ public class RepeatTask extends TimerTask {
         	}
     		
 	        
-	        if(TestActivity.dBLevelIndex >= 0)
+	        if(TestActivity.dBLevelIndex >= 0 && TestActivity.dBLevelIndex <= 14)
 	        	testToneAmpdB = TestActivity.dBhLArray[freqOrder[TestActivity.currentFreq % freqOrder.length]][TestActivity.dBLevelIndex];
 	       
 	        Log.d("dBLevelIndex",Integer.toString(freqOrder[TestActivity.currentFreq % freqOrder.length]) + ", " + Integer.toString(TestActivity.dBLevelIndex)); 

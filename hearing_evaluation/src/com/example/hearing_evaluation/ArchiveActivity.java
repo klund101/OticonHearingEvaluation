@@ -10,6 +10,7 @@ import com.parse.ParseQuery;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,7 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class ArchiveActivity extends ListActivity {
-	
+		
 	//LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
     ArrayList<String> listItems = new ArrayList<String>();
 	ArrayList<String> lineList = new ArrayList<String>();
@@ -90,5 +91,63 @@ public class ArchiveActivity extends ListActivity {
 		archiveResultA.putExtra("pressedObjectId", publicParseObjectsList.get(publicParseObjectsList.size()-1-position).getObjectId().toString());
         startActivity(archiveResultA);
     }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onStart() {
+		super.onStart();
+	    Log.d("onStart","onStart");	
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onRestart() {
+		super.onRestart();
+	    Log.d("onRestart","onRestart");	
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onStop() {
+	    super.onStop();
+	    Log.d("onStop","onStop");
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onPause() {
+		super.onPause();
+	    Log.d("onPause","onPause");
+	    
+        if(MainActivity.initialRingVolume == 0){
+        	MainActivity.audioManager.setRingerMode(0);
+        }
+        else{
+        	MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.initialMusicVolume, 0);		
+	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_RING, MainActivity.initialRingVolume, 0);
+		MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, MainActivity.initialVibNote);
+		MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, MainActivity.initialVibRing);
+        }
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onResume() {
+	    super.onResume();
+	    Log.d("onResume","onResume");
+	    MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
+		MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
+		MainActivity.audioManager.setRingerMode(0);
+		MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.maxVolume, 0);
+		
+		Log.d("musicVolume", Integer.toString(MainActivity.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
 
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onDestroy() {
+	    super.onDestroy();
+	    Log.d("onDestroy","onDestroy");
+    }
 }

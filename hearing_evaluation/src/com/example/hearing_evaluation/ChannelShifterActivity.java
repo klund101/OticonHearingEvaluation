@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
 import android.util.Log;
@@ -138,21 +139,6 @@ public class ChannelShifterActivity extends Activity implements OnTouchListener 
 		return false;
 	}
 	
-	protected void onResume() {
-	    super.onResume();
-	    OneEarTestTone.oneEarTestToneTimer = new Timer();
-	    OneEarTestTone.oneEarTestToneTimer.schedule(new OneEarTestTone(), 500 + (int)(Math.random()*500));
-	}
-		
-	@Override
-	protected void onPause() {
-		super.onPause();
-		if(System.currentTimeMillis() > oneEarTestToneInitTime + startOneEarTestTestDelay && AudioTrack.PLAYSTATE_PLAYING == OneEarTestTone.oneEarTestToneAudioTrack.getPlayState())
-			OneEarTestTone.oneEarTestToneAudioTrack.stop();
-			OneEarTestTone.oneEarTestToneTimer.cancel();
-	    
-	}
-	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP 
@@ -166,4 +152,71 @@ public class ChannelShifterActivity extends Activity implements OnTouchListener 
 			return true;
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onStart() {
+		super.onStart();
+	    Log.d("onStart","onStart");	
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onRestart() {
+		super.onRestart();
+	    Log.d("onRestart","onRestart");	
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onStop() {
+	    super.onStop();
+	    Log.d("onStop","onStop");
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onPause() {
+		super.onPause();
+	    Log.d("onPause","onPause");
+	    
+        if(MainActivity.initialRingVolume == 0){
+        	MainActivity.audioManager.setRingerMode(0);
+    		if(System.currentTimeMillis() > oneEarTestToneInitTime + startOneEarTestTestDelay && AudioTrack.PLAYSTATE_PLAYING == OneEarTestTone.oneEarTestToneAudioTrack.getPlayState())
+    			OneEarTestTone.oneEarTestToneAudioTrack.stop();
+    			OneEarTestTone.oneEarTestToneTimer.cancel();
+        }
+        else{
+        	MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.initialMusicVolume, 0);		
+		    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_RING, MainActivity.initialRingVolume, 0);
+			MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, MainActivity.initialVibNote);
+			MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, MainActivity.initialVibRing);
+		if(System.currentTimeMillis() > oneEarTestToneInitTime + startOneEarTestTestDelay && AudioTrack.PLAYSTATE_PLAYING == OneEarTestTone.oneEarTestToneAudioTrack.getPlayState())
+			OneEarTestTone.oneEarTestToneAudioTrack.stop();
+			OneEarTestTone.oneEarTestToneTimer.cancel();
+        }
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onResume() {
+	    super.onResume();
+	    Log.d("onResume","onResume");
+	    MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
+		MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
+		MainActivity.audioManager.setRingerMode(0);
+		MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.maxVolume, 0);
+		
+		Log.d("musicVolume", Integer.toString(MainActivity.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
+		
+	    OneEarTestTone.oneEarTestToneTimer = new Timer();
+	    OneEarTestTone.oneEarTestToneTimer.schedule(new OneEarTestTone(), 500 + (int)(Math.random()*500));
+
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onDestroy() {
+	    super.onDestroy();
+	    Log.d("onDestroy","onDestroy");
+    }
 }

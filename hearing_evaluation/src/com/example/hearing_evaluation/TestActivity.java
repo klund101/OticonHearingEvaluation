@@ -33,6 +33,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.PorterDuff.Mode;
+import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -67,6 +68,7 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
     public int pulseLength = RepeatTask.sampleRate/2;
     public int envCount;
 	
+    public static int upperThresholdCount = 0;
     
     public static long initTime;
 
@@ -369,53 +371,7 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 			return true;
 	}
 	
-    protected void onResume() {
-    super.onResume();
-	RepeatTask.timer = new Timer();
-	toneLevel -= 5;
-	RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
-    }
-	
-    @Override
-    protected void onPause() {
-    super.onPause();
-	if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
-		RepeatTask.audioTrack.stop();
-		RepeatTask.timer.cancel();
-    
-    }
-    
-    @Override
-    protected void onStop() {
-        Log.d("", "Application stopped");
-
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
     	
-        Log.w("", "Application destroyed");
-
-        super.onDestroy();
-        
-		if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
-			RepeatTask.audioTrack.stop();
-			RepeatTask.timer.cancel();
-			
-        	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
-        	query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
-        	try {
-				Log.d("PARSE", parseDataObjectId);
-        	    query.get(parseDataObjectId).deleteInBackground();
-        	    query.get(parseDataObjectId).saveInBackground();
-			} 
-        	catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    }
-	
 	public static void goToResults(){
 			
 		
@@ -448,6 +404,94 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 	
 	public static Context getTestActivityContext() {
         return TestActivity.testActivityContext;
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onStart() {
+		super.onStart();
+	    Log.d("onStart","onStart");	
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onRestart() {
+		super.onRestart();
+	    Log.d("onRestart","onRestart");	
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onStop() {
+	    super.onStop();
+	    Log.d("onStop","onStop");
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onPause() {
+	    Log.d("onPause","onPause");
+	    
+	    super.onPause();
+	    
+        if(MainActivity.initialRingVolume == 0){
+        	MainActivity.audioManager.setRingerMode(0);
+			if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState()){
+				RepeatTask.audioTrack.stop();
+				RepeatTask.timer.cancel();
+			}
+        }
+        else{
+        	MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.initialMusicVolume, 0);		
+		    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_RING, MainActivity.initialRingVolume, 0);
+			MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, MainActivity.initialVibNote);
+			MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, MainActivity.initialVibRing);
+			if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState()){
+				RepeatTask.audioTrack.stop();
+				RepeatTask.timer.cancel();
+	        }
+        }
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onResume() {
+	    super.onResume();
+	    Log.d("onResume","onResume");
+	    MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
+		MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
+		MainActivity.audioManager.setRingerMode(0);
+		MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.maxVolume, 0);
+		
+		RepeatTask.timer = new Timer();
+		toneLevel -= 5;
+		dBLevelIndex--;
+		RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
+		
+		Log.d("musicVolume", Integer.toString(MainActivity.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
+
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onDestroy() {
+	    super.onDestroy();
+	    Log.d("onDestroy","onDestroy");
+		if(System.currentTimeMillis() > initTime + startTestDelay && AudioTrack.PLAYSTATE_PLAYING == RepeatTask.audioTrack.getPlayState())
+			RepeatTask.audioTrack.stop();
+			RepeatTask.timer.cancel();
+			
+        	ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+        	query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
+        	try {
+				Log.d("PARSE", parseDataObjectId);
+        	    query.get(parseDataObjectId).deleteInBackground();
+        	    query.get(parseDataObjectId).saveInBackground();
+			} 
+        	catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     }
 
 }

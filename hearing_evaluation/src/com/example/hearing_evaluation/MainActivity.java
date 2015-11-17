@@ -1,6 +1,7 @@
 package com.example.hearing_evaluation;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 import android.support.v7.app.ActionBarActivity;
 import android.accounts.Account;
@@ -30,13 +31,21 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
 	ImageButton newTestButton;
 	ImageButton archiveButton;
 	
-	public int initialRingVolume;	
+	public static AudioManager audioManager;
+	public static AudioManager audioVibManager;
+	public static int maxVolume;
+	public static int initialRingVolume;
+	public static int initialMusicVolume;
+	public static int initialVibNote;
+	public static int initialVibRing;
+	public static int initRingerMode;
 	
 	public String parseDataObjectId = "";
 	
 	static String staticEmailId;
 	
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -53,14 +62,24 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
         }
        
         Log.d("parseId_main", parseDataObjectId);
+        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);				// fix audio output volume
+        maxVolume = (int)audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         
+        audioVibManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         
-        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE); // fix audio output volume
+        initRingerMode = audioManager.getRingerMode();
         
-        initialRingVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
-        
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);		
-        audioManager.setStreamVolume(AudioManager.STREAM_RING, audioManager.getStreamMaxVolume(AudioManager.STREAM_RING), 0);		
+        if(initRingerMode == AudioManager.RINGER_MODE_VIBRATE){
+        	audioManager.setRingerMode(0);
+        }
+        else{	
+	        initialRingVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+	        initialMusicVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        }
+        initialVibNote = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
+        initialVibRing = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+//        initialVibNote = audioManager.getVibrateSetting(AudioManager.VIBRATE_SETTING_OFF);
+//        initialVibRing = audioManager.getVibrateSetting(AudioManager.VIBRATE_SETTING_OFF);
 
         //Parse
     }
@@ -141,15 +160,6 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
 			return true;
 	}
 	    
-	
-    protected void onResume() {
-    super.onResume();
-	
-    }
-    
-    protected void onDestroy() {
-    super.onDestroy();
-    }
 
 	// Get user details
 	private String getName(Context context) {
@@ -208,6 +218,65 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
         return emailCur;
     }
 	
-    
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onStart() {
+		super.onStart();
+	    Log.d("onStart","onStart");	
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onRestart() {
+		super.onRestart();
+	    Log.d("onRestart","onRestart");	
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onStop() {
+	    super.onStop();
+	    Log.d("onStop","onStop");
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onPause() {
+		super.onPause();
+	    Log.d("onPause","onPause");
+	    
+        if(initialRingVolume == 0){
+        	audioManager.setRingerMode(0);
+        }
+        else{
+	    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, initialMusicVolume, 0);		
+		audioManager.setStreamVolume(AudioManager.STREAM_RING, initialRingVolume, 0);
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, initialVibNote);
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, initialVibRing);
+        }
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onResume() {
+	    super.onResume();
+	    Log.d("onResume","onResume");
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
+		audioManager.setRingerMode(0);
+		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
+		
+		Log.d("musicVolume", Integer.toString(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
 
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    protected void onDestroy() {
+	    super.onDestroy();
+	    Log.d("onDestroy","onDestroy");
+    }
+	
+	
+	
 }

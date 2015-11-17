@@ -503,7 +503,11 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 							int ambientAmp = (int)getAmplitudeCheckAmbientSoundLevel();
 							Log.d("ambientAmp", Integer.toString(ambientAmp));
 							
-							if(ambientAmp < 14000) {
+							double dbSplTH = 20*Math.log(ambientAmp/1);
+							
+							Log.d("dbSplTH", Double.toString(dbSplTH));
+							
+							if(dbSplTH < 132) { // dbSplTH < 132
 								//Parse 
 						        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
 						        query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
@@ -532,7 +536,14 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 						            }
 						          }
 						        });
-								
+						        
+						        try{
+						        	stopCheckAmbientSoundLevel();
+						        }
+						        catch(Exception e){
+						        	
+						        }
+						        
 								Intent nextQ = new Intent(QuestionOneActivity.this, TestActivity.class);
 								nextQ.putExtra("parseDataObjectId", parseDataObjectId);
 								//nextQ.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -611,5 +622,64 @@ public double getAmplitudeCheckAmbientSoundLevel() {
         else
                 return 0;
 
+}
+
+@SuppressWarnings("deprecation")
+@Override
+protected void onStart() {
+	super.onStart();
+    Log.d("onStart","onStart");	
+}
+
+@SuppressWarnings("deprecation")
+@Override
+protected void onRestart() {
+	super.onRestart();
+    Log.d("onRestart","onRestart");	
+}
+
+@SuppressWarnings("deprecation")
+@Override
+protected void onStop() {
+    super.onStop();
+    Log.d("onStop","onStop");
+}
+
+@SuppressWarnings("deprecation")
+@Override
+protected void onPause() {
+	super.onPause();
+    Log.d("onPause","onPause");
+    
+    if(MainActivity.initialRingVolume == 0){
+    	MainActivity.audioManager.setRingerMode(0);
+    }
+    else{
+    	MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.initialMusicVolume, 0);		
+    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_RING, MainActivity.initialRingVolume, 0);
+	MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, MainActivity.initialVibNote);
+	MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, MainActivity.initialVibRing);
+    }
+}
+
+@SuppressWarnings("deprecation")
+@Override
+protected void onResume() {
+    super.onResume();
+    Log.d("onResume","onResume");
+    MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
+	MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
+	MainActivity.audioManager.setRingerMode(0);
+	MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.maxVolume, 0);
+	
+	Log.d("musicVolume", Integer.toString(MainActivity.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
+
+}
+
+@SuppressWarnings("deprecation")
+@Override
+protected void onDestroy() {
+    super.onDestroy();
+    Log.d("onDestroy","onDestroy");
 }
 }
