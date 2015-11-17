@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.util.Log;
 
 public class OneEarTestTone extends TimerTask {
 	
@@ -20,12 +21,23 @@ public class OneEarTestTone extends TimerTask {
 
 	public static Timer oneEarTestToneTimer = new Timer();
 	
+	public int oneEarOffset;
+	
 	public float testToneAmpdB;
 	
 	@Override
 	public void run() {
+		
+//		if(TestActivity.testGender.equals("F"))
+//			oneEarOffset = TestActivity.offset[TestActivity.answerAll] + TestActivity.expectedFemale[((int)(TestActivity.testAge/10))-2][3];
+//		else if(TestActivity.testGender.equals("M")){
+//			oneEarOffset = TestActivity.offset[TestActivity.answerAll] + TestActivity.expectedMale[((int)(TestActivity.testAge/10))-2][3];
+//		}
+		
 
-        testToneAmpdB = TestActivity.dBhLArray[3][7];
+        testToneAmpdB = TestActivity.dBhLArray[3][TestActivity.dBLevelIndex];
+        
+        Log.d("testToneAmpdB", Float.toString(testToneAmpdB));
 		
 		genTone(freqOfTone, testToneAmpdB);
 		playSound();

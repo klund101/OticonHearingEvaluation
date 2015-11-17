@@ -42,8 +42,7 @@ public class RepeatTask extends TimerTask {
     public static AudioTrack audioTrack;
     
 	public float testToneAmpdB;
-    
-	
+		
     @Override
     public void run() {
     	
@@ -143,8 +142,13 @@ public class RepeatTask extends TimerTask {
         	TestActivity.toneLevel = (TestActivity.dBLevelIndex*5)+5;
         	TestActivity.hearingThreshold[5] = TestActivity.toneLevel;
         	
-			if(AudioTrack.PLAYSTATE_PLAYING == audioTrack.getPlayState())
-				audioTrack.stop();
+        	try{
+				if(AudioTrack.PLAYSTATE_PLAYING == audioTrack.getPlayState())
+					audioTrack.stop();
+        	}
+        	catch(Exception e){
+        		
+        	}
 			
 			
 			

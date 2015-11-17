@@ -37,12 +37,12 @@
         android:scaleType="fitXY"
         android:src="@drawable/btnnewtest" />
 
-    <Button
-        android:id="@+id/btnPureToneTestActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="Pure tone test" />
+<!--     <Button -->
+<!--         android:id="@+id/btnPureToneTestActivity" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignParentBottom="true" -->
+<!--         android:layout_alignParentRight="true" -->
+<!--         android:text="Pure tone test" /> -->
 
 </RelativeLayout>

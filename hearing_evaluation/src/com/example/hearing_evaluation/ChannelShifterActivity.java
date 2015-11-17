@@ -60,13 +60,16 @@ public class ChannelShifterActivity extends Activity implements OnTouchListener 
     		public void done(ParseObject object, ParseException e) {
     			leftEarHearingData = (String) object.get("HearingDataLeft");
     			rightEarHearingData = (String) object.get("HearingDataRight");
-
     		}
     	});
         
         oneEarTestToneInitTime = System.currentTimeMillis();
-        
-        OneEarTestTone.oneEarTestToneTimer.schedule(new OneEarTestTone(), startOneEarTestTestDelay);
+        try{
+        	OneEarTestTone.oneEarTestToneTimer.schedule(new OneEarTestTone(), startOneEarTestTestDelay);
+        }
+        catch(Exception e){
+        	
+        }
 	}
 
 	private void initGui() {

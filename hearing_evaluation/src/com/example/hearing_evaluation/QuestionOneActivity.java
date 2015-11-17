@@ -2,10 +2,12 @@ package com.example.hearing_evaluation;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.github.mikephil.charting.data.Entry;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -38,6 +40,14 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 	public String parseDataObjectId;
 	public List<ParseObject> answerObjectsList;
 	public String testUserName;
+	
+	public String preObjdBValuesStringSubSLeft;
+	public String preObjdBValuesStringLeft;
+	float preObjdBValuesLeft = 0f;
+	
+	public String preObjdBValuesStringSubSRight;
+	public String preObjdBValuesStringRight;
+	float preObjdBValuesRight = 0f;
 	
 	public int q_1 = 100;
 	public int q_2 = 100;
@@ -133,126 +143,153 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 
       		    				answerObjectsList = objects;
       		    				
-      		    				if((String)(objects.get(objects.size()-2).get("q_1")) != null){
-      		    					q_1 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_1"));
-      		    					Log.d("q_1", Integer.toString(q_1));
-      		    					switch(q_1){
-	      		    					case 1:
-	      		    						radioTvYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioTvNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
-      		    				if((String)(objects.get(objects.size()-2).get("q_2")) != null){
-      		    					q_2 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_2"));
-      		    					Log.d("q_2", Integer.toString(q_2));
-      		    					switch(q_2){
-	      		    					case 1:
-	      		    						radioMumblingYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioMumblingNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
-      		    				if((String)(objects.get(objects.size()-2).get("q_3")) != null){
-      		    					q_3 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_3"));
-      		    					Log.d("q_3", Integer.toString(q_3));
-      		    					switch(q_3){
-	      		    					case 1:
-	      		    						radioRepeatYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioRepeatNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
-      		    				if((String)(objects.get(objects.size()-2).get("q_4")) != null){
-      		    					q_4 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_4"));
-      		    					Log.d("q_4", Integer.toString(q_4));
-      		    					switch(q_4){
-	      		    					case 1:
-	      		    						radioSoftSpeechYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioSoftSpeechNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
-      		    				if((String)(objects.get(objects.size()-2).get("q_5")) != null){
-      		    					q_5 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_5"));
-      		    					Log.d("q_5", Integer.toString(q_5));
-      		    					switch(q_5){
-	      		    					case 1:
-	      		    						radioCrowdYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioCrowdNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
-      		    				if((String)(objects.get(objects.size()-2).get("q_6")) != null){
-      		    					q_6 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_6"));
-      		    					Log.d("q_6", Integer.toString(q_6));
-      		    					switch(q_6){
-	      		    					case 1:
-	      		    						radioTinnitusYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioTinnitusNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
-      		    				if((String)(objects.get(objects.size()-2).get("q_7")) != null){
-      		    					q_7 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_7"));
-      		    					Log.d("q_7", Integer.toString(q_7));
-      		    					switch(q_7){
-	      		    					case 1:
-	      		    						radioHyperYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioHyperNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
-      		    				if((String)(objects.get(objects.size()-2).get("q_8")) != null){
-      		    					q_8 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_8"));
-      		    					Log.d("q_8", Integer.toString(q_8));
-      		    					switch(q_8){
-	      		    					case 1:
-	      		    						radioSurgeryYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioSurgeryNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
-      		    				if((String)(objects.get(objects.size()-2).get("q_9")) != null){
-      		    					q_9 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_9"));
-      		    					Log.d("q_9", Integer.toString(q_9));
-      		    					switch(q_9){
-	      		    					case 1:
-	      		    						radioColdYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioColdNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
-      		    				if((String)(objects.get(objects.size()-2).get("q_10")) != null){
-      		    					q_10 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_10"));
-      		    					Log.d("q_10", Integer.toString(q_10));
-      		    					switch(q_10){
-	      		    					case 1:
-	      		    						radioPainYes.setChecked(true);
-	      		    					break;
-	      		    					case 0:
-	      		    						radioPainNo.setChecked(true);
-	      		    					break;
-      		    					}
-      		    				}
+      		    				preObjdBValuesStringLeft = (String)(objects.get(objects.size()-2).get("HearingDataLeft"));
+      		    				preObjdBValuesStringSubSLeft = preObjdBValuesStringLeft.substring(1);
+      		    				preObjdBValuesStringSubSLeft = preObjdBValuesStringSubSLeft.replace(']', ' ');
+      		    				preObjdBValuesStringSubSLeft = preObjdBValuesStringSubSLeft.trim();
+      		    			    
+      		    			    String[] preObjdBValuesReaderLeft = preObjdBValuesStringSubSLeft.split(",");
+      		    			        for(int i=0; i<RepeatTask.freqValues.length; i++){
+      		    			        	preObjdBValuesLeft  += Float.parseFloat(preObjdBValuesReaderLeft[i]);
+      		    			        }
+      		    			        
+      	  		    			preObjdBValuesStringRight = (String)(objects.get(objects.size()-2).get("HearingDataRight"));
+          		    			preObjdBValuesStringSubSRight = preObjdBValuesStringRight.substring(1);
+          		    			preObjdBValuesStringSubSRight = preObjdBValuesStringSubSRight.replace(']', ' ');
+          		    			preObjdBValuesStringSubSRight = preObjdBValuesStringSubSRight.trim();
+          		    			   
+          		    			String[] preObjdBValuesReaderRight = preObjdBValuesStringSubSRight.split(",");
+          		    			    for(int i=0; i<RepeatTask.freqValues.length; i++){
+          		    			       	preObjdBValuesRight += Float.parseFloat(preObjdBValuesReaderRight[i]);
+
+          		    			    }
+      		    			    if(preObjdBValuesLeft + preObjdBValuesRight == 0){
+      		    			    	objects.get(objects.size()-2).deleteInBackground();
+      		    			    	objects.get(objects.size()-2).saveInBackground();
+      		    			    }
+      		    			    else{
+      		    				
+	      		    				if((String)(objects.get(objects.size()-2).get("q_1")) != null){
+	      		    					q_1 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_1"));
+	      		    					Log.d("q_1", Integer.toString(q_1));
+	      		    					switch(q_1){
+		      		    					case 1:
+		      		    						radioTvYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioTvNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    				if((String)(objects.get(objects.size()-2).get("q_2")) != null){
+	      		    					q_2 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_2"));
+	      		    					Log.d("q_2", Integer.toString(q_2));
+	      		    					switch(q_2){
+		      		    					case 1:
+		      		    						radioMumblingYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioMumblingNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    				if((String)(objects.get(objects.size()-2).get("q_3")) != null){
+	      		    					q_3 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_3"));
+	      		    					Log.d("q_3", Integer.toString(q_3));
+	      		    					switch(q_3){
+		      		    					case 1:
+		      		    						radioRepeatYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioRepeatNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    				if((String)(objects.get(objects.size()-2).get("q_4")) != null){
+	      		    					q_4 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_4"));
+	      		    					Log.d("q_4", Integer.toString(q_4));
+	      		    					switch(q_4){
+		      		    					case 1:
+		      		    						radioSoftSpeechYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioSoftSpeechNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    				if((String)(objects.get(objects.size()-2).get("q_5")) != null){
+	      		    					q_5 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_5"));
+	      		    					Log.d("q_5", Integer.toString(q_5));
+	      		    					switch(q_5){
+		      		    					case 1:
+		      		    						radioCrowdYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioCrowdNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    				if((String)(objects.get(objects.size()-2).get("q_6")) != null){
+	      		    					q_6 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_6"));
+	      		    					Log.d("q_6", Integer.toString(q_6));
+	      		    					switch(q_6){
+		      		    					case 1:
+		      		    						radioTinnitusYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioTinnitusNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    				if((String)(objects.get(objects.size()-2).get("q_7")) != null){
+	      		    					q_7 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_7"));
+	      		    					Log.d("q_7", Integer.toString(q_7));
+	      		    					switch(q_7){
+		      		    					case 1:
+		      		    						radioHyperYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioHyperNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    				if((String)(objects.get(objects.size()-2).get("q_8")) != null){
+	      		    					q_8 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_8"));
+	      		    					Log.d("q_8", Integer.toString(q_8));
+	      		    					switch(q_8){
+		      		    					case 1:
+		      		    						radioSurgeryYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioSurgeryNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    				if((String)(objects.get(objects.size()-2).get("q_9")) != null){
+	      		    					q_9 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_9"));
+	      		    					Log.d("q_9", Integer.toString(q_9));
+	      		    					switch(q_9){
+		      		    					case 1:
+		      		    						radioColdYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioColdNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    				if((String)(objects.get(objects.size()-2).get("q_10")) != null){
+	      		    					q_10 = Integer.parseInt((String)objects.get(objects.size()-2).get("q_10"));
+	      		    					Log.d("q_10", Integer.toString(q_10));
+	      		    					switch(q_10){
+		      		    					case 1:
+		      		    						radioPainYes.setChecked(true);
+		      		    					break;
+		      		    					case 0:
+		      		    						radioPainNo.setChecked(true);
+		      		    					break;
+	      		    					}
+	      		    				}
+	      		    			}
       		    			}
       		    		});      		    		
       		    }
@@ -507,7 +544,7 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 							
 							Log.d("dbSplTH", Double.toString(dbSplTH));
 							
-							if(dbSplTH < 132) { // dbSplTH < 132
+							if(true) { // dbSplTH < 132
 								//Parse 
 						        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
 						        query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
