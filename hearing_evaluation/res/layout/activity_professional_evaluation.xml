@@ -7,10 +7,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.hearing_evaluation.InterpretationActivity" >
-
+    tools:context="com.example.hearing_evaluation.ProfessionalEvaluationActivity" >
+    
     <TextView
-        android:id="@+id/diagnosisTxtRight"
+        android:id="@+id/appointmentTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -18,41 +18,40 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="28dp"
         android:gravity="left|center_horizontal"
-        android:textColor="#ff0000"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/diagnosisTxtLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/diagnosisTxtRight"
-        android:layout_marginTop="17dp"
-        android:gravity="left|center_horizontal"
-        android:textColor="#0000ff"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/diagnosisTxtRec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/diagnosisTxtLeft"
-        android:layout_alignRight="@+id/diagnosisTxtLeft"
-        android:layout_below="@+id/diagnosisTxtLeft"
-        android:layout_marginTop="23dp"
+        android:text="The audiologist should contact me regarding an appointment by:"
         android:textColor="#c5178b"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/checkBoxPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkBoxEmail"
+        android:text="phone"
+        android:textColor="#c5178b"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/checkBoxEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/checkBoxPhone"
+        android:layout_below="@+id/appointmentTxt"
+        android:layout_marginTop="26dp"
+        android:text="email"
+        android:textColor="#c5178b"
+        android:textSize="20sp" />
 
     <ImageButton
-        android:id="@+id/btnFreeEval"
+        android:id="@+id/btnSendRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
-        android:src="@drawable/btnfreeeval" />
+        android:src="@drawable/btnsendrequest" />
 
 </RelativeLayout>

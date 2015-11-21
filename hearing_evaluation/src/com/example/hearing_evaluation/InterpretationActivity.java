@@ -22,11 +22,14 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class InterpretationActivity extends Activity {
+public class InterpretationActivity extends Activity implements OnTouchListener {
 	
 	public String parseDataObjectId;
 	
@@ -46,6 +49,7 @@ public class InterpretationActivity extends Activity {
 	public TextView diagnosisRight;
 	
 	public TextView diagnosisRec;
+	public ImageButton freeEvalButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,34 +78,42 @@ public class InterpretationActivity extends Activity {
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 1 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 0)
 						recEnt = "We recommend that you seek an ear, nose and throat physician due to tinnitus.";
+						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 1 && Integer.parseInt((String)(object.get("q_10"))) == 0)
 						recEnt = "We recommend that you seek an ear, nose and throat physician due to hyperacousis.";
+						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 1)
 						recEnt = "We recommend that you seek an ear, nose and throat physician due to pain in the ear.";
+						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 1 && Integer.parseInt((String)(object.get("q_7"))) == 1 && Integer.parseInt((String)(object.get("q_10"))) == 0)
 						recEnt = "We recommend that you seek an ear, nose and throat physician due to tinnitus and hyperacousis.";
+						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 1 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 1)
 						recEnt = "We recommend that you seek an ear, nose and throat physician due to tinnitus and hyperacousis.";
+						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 1 && Integer.parseInt((String)(object.get("q_10"))) == 1)
 						recEnt = "We recommend that you seek an ear, nose and throat physician due to tinnitus and pain in the ear.";
+						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 1 && Integer.parseInt((String)(object.get("q_7"))) == 1 && Integer.parseInt((String)(object.get("q_10"))) == 1)
 						recEnt = "We recommend that you seek an ear, nose and throat physician due to tinnitus, hyperacousis and pain in the ear.";
+						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				
 				if((String)(object.get("q_9"))  != null)
 					ans9 = Integer.parseInt((String)(object.get("q_9")));
+				Log.d("ans9",Integer.toString(ans9));
 				
 				resultsValuesStringLeft = (String) object.get("HearingDataLeft");
 				resultsValuesStringLeftSubS = resultsValuesStringLeft.substring(1);
@@ -138,34 +150,51 @@ public class InterpretationActivity extends Activity {
 			        	diagnosisRight.setText("The results are unreliable due to that you have a cold. We recommend that you redo the test when you are over it." + "\n\n" + recEnt);
 			        	diagnosisRight.setTextColor(Color.parseColor("#c5178b"));
 			        	diagnosisLeft.setTextColor(color.transparent);
+			        	freeEvalButton.setVisibility(View.INVISIBLE);
 			        }
 		        	else{
 		        	
 				        if(ptaLeft < 21){
-				        	diagnosisLeft.setText("The test results suggest that you do not have a hearing loss on the left ear. ");		        
+				        	diagnosisLeft.setText("The test results suggest that you do not have a hearing loss on the left ear. ");
+				        	if((String)(object.get("q_6")) != null && (String)(object.get("q_7")) != null && (String)(object.get("q_8")) != null && (String)(object.get("q_10")) != null){
+								if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_8"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 0)
+									freeEvalButton.setVisibility(View.INVISIBLE);
+							}
 				        }
 				        else if(ptaLeft >= 21 && ptaLeft < 41){
 				        	diagnosisLeft.setText("The test results suggest that you have a mild hearing loss on the the left ear. You should contact a hearing professional for a hearing test. ");
+				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        else if(ptaLeft >= 41 && ptaLeft < 71){
 				        	diagnosisLeft.setText("The test results suggest that you have a moderate hearing loss on the the left ear. You should contact a hearing professional for a hearing test. ");
+				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        else if(ptaLeft >= 71){
 				        	diagnosisLeft.setText("The test results suggest that you have a severe hearing loss on the the left ear. You should contact a hearing professional for a hearing test. ");
+				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        
 				        
 				        if(ptaRight < 21){
 				        	diagnosisRight.setText("The test results suggest that you do not have a hearing loss on the right ear. ");
+				        	if(ptaLeft < 21){	
+					        	if((String)(object.get("q_6")) != null && (String)(object.get("q_7")) != null && (String)(object.get("q_8")) != null && (String)(object.get("q_10")) != null){
+									if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_8"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 0)
+										freeEvalButton.setVisibility(View.INVISIBLE);
+								}
+				        	}
 				        }
 				        else if(ptaRight >= 21 && ptaRight < 41){
 				        	diagnosisRight.setText("The test results suggest that you have a mild hearing loss on the the right ear. You should contact a hearing professional for a hearing test. ");
+				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        else if(ptaRight >= 41 && ptaRight < 71){
 				        	diagnosisRight.setText("The test results suggest that you have a moderate hearing loss on the the right ear. You should contact a hearing professional for a hearing test. ");
-						}
+				        	freeEvalButton.setVisibility(View.VISIBLE);
+				        }
 				        else if(ptaRight >= 71){
 				        	diagnosisRight.setText("The test results suggest that you have a severe hearing loss on the the right ear. You should contact a hearing professional for a hearing test. ");
+				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        
 				        diagnosisRec.setText(recEnt);
@@ -185,6 +214,10 @@ public class InterpretationActivity extends Activity {
 		diagnosisLeft = (TextView) findViewById(R.id.diagnosisTxtLeft);
 		diagnosisRight = (TextView) findViewById(R.id.diagnosisTxtRight);
 		diagnosisRec = (TextView) findViewById(R.id.diagnosisTxtRec);
+		
+		freeEvalButton = (ImageButton) findViewById(R.id.btnFreeEval);
+		freeEvalButton.setOnTouchListener(this);
+		freeEvalButton.setVisibility(View.INVISIBLE);
 	}
 	
 //	@Override
@@ -276,4 +309,20 @@ public class InterpretationActivity extends Activity {
 	    super.onDestroy();
 	    Log.d("onDestroy","onDestroy");
     }
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (v.getId()) {
+		case R.id.btnFreeEval:
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				freeEvalButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				freeEvalButton.setColorFilter(Color.argb(0, 0, 0, 0));
+				startActivity(new Intent(InterpretationActivity.this, ProfessionalEvaluationActivity.class)); //
+			}
+		break;
+		}
+		return false;
+	}
 }

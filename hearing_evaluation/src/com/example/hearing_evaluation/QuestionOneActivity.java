@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 
 import com.github.mikephil.charting.data.Entry;
 import com.parse.FindCallback;
@@ -544,7 +545,7 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 							
 							Log.d("dbSplTH", Double.toString(dbSplTH));
 							
-							if(true) { // dbSplTH < 132
+							if(dbSplTH < 132) { // dbSplTH < 132
 								//Parse 
 						        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
 						        query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
@@ -561,6 +562,8 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 						            		userDataObject.put("q_8", Integer.toString(q_8));
 						            		userDataObject.put("q_9", Integer.toString(q_9));
 						            		userDataObject.put("q_10", Integer.toString(q_10));
+						            		
+						            		userDataObject.put("AmbientNoise","false");
 
 						            	try {
 						            		userDataObject.save();
@@ -590,16 +593,64 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 								//Log.d("ambientAmp",Integer.toString(ambientAmp));
 								AlertDialog alertDialog = new AlertDialog.Builder(QuestionOneActivity.this)
 						        .setTitle("Ambient noise is too loud!")
-						        .setMessage("Please relocate to a quieter area.")
-						        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						        .setMessage("Please relocate to a quieter area. If you choose to proceed anyway the results can be inaccurate.")
+						        .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
 						        public void onClick(DialogInterface dialog, int which) { 
 						            Log.d("mRecorder.toString", mRecorder.toString());
 						        	startCheckAmbientSoundLevel();
 						    				
 						            }
 						         })
-						         .setIcon(android.R.drawable.ic_dialog_alert)
-						         .show();
+						         .setNegativeButton("Proceed", new DialogInterface.OnClickListener() {
+						         public void onClick(DialogInterface dialog, int which) {
+	            	
+										//Parse
+								        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
+								        query.whereEqualTo("GoogleId", MainActivity.staticEmailId);
+								        query.getInBackground(parseDataObjectId, new GetCallback<ParseObject>() {
+								          public void done(ParseObject userDataObject, ParseException e) {
+								            if (e == null) {
+								            		userDataObject.put("q_1", Integer.toString(q_1));
+								            		userDataObject.put("q_2", Integer.toString(q_2));
+								            		userDataObject.put("q_3", Integer.toString(q_3));
+								            		userDataObject.put("q_4", Integer.toString(q_4));
+								            		userDataObject.put("q_5", Integer.toString(q_5));
+								            		userDataObject.put("q_6", Integer.toString(q_6));
+								            		userDataObject.put("q_7", Integer.toString(q_7));
+								            		userDataObject.put("q_8", Integer.toString(q_8));
+								            		userDataObject.put("q_9", Integer.toString(q_9));
+								            		userDataObject.put("q_10", Integer.toString(q_10));
+								            		
+								            		userDataObject.put("AmbientNoise","true");
+
+								            	try {
+								            		userDataObject.save();
+												} catch (ParseException e1) {
+													// TODO Auto-generated catch block
+													e1.printStackTrace();
+												}
+								            } else {
+								              // something went wrong
+								            }
+								          }
+								        });
+								        
+								        try{
+								        	stopCheckAmbientSoundLevel();
+								        }
+								        catch(Exception e){
+								        	
+								        }
+								        
+										Intent nextQ = new Intent(QuestionOneActivity.this, TestActivity.class);
+										nextQ.putExtra("parseDataObjectId", parseDataObjectId);
+										//nextQ.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										startActivity(nextQ);
+
+						            }
+						         })
+						    .setIcon(android.R.drawable.ic_dialog_alert)
+						    .show();
 							}
 						}
 						else{

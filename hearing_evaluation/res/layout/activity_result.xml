@@ -143,4 +143,88 @@
         android:layout_marginTop="80dp"
         android:src="@drawable/audiogramcrosssmall" />
 
+   <ImageView
+       android:id="@+id/audiogrambanana"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignTop="@+id/results"
+       android:layout_toRightOf="@+id/chart"
+       android:adjustViewBounds="true"
+       android:scaleType="fitXY"
+       android:src="@drawable/audiogrambanana" />
+
+   <ImageView
+       android:id="@+id/bird"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentTop="true"
+       android:src="@drawable/iconbird" />
+
+   <ImageView
+       android:id="@+id/bus"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentTop="true"
+       android:src="@drawable/iconbus" />
+
+   <ImageView
+       android:id="@+id/dog"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentTop="true"
+       android:src="@drawable/icondog" />
+
+   <ImageView
+       android:id="@+id/phone"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentTop="true"
+       android:src="@drawable/iconphone" />
+
+   <ImageView
+       android:id="@+id/plane"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentTop="true"
+       android:src="@drawable/iconplane" />
+
+   <ImageView
+       android:id="@+id/tree"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentTop="true"
+       android:src="@drawable/icontree" />
+
+   <ImageView
+       android:id="@+id/watertap"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentTop="true"
+       android:src="@drawable/iconwatertap" />
+
+   <ImageView
+       android:id="@+id/normalHearing"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentTop="true"
+       android:src="@drawable/normalhearing"
+       android:scaleType="center"/>
+
+   <ImageView
+       android:id="@+id/profoundHearing"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentTop="true"
+       android:src="@drawable/profoundhearing"
+       android:scaleType="center"/>
+
 </RelativeLayout>

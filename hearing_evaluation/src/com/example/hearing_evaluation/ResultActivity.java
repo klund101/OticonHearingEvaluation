@@ -30,16 +30,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ResultActivity extends IdentityActivity implements OnTouchListener {
@@ -121,12 +125,12 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
  	leftAxis.setValueFormatter(new YvalueCustomFormatter());
  	//rightAxis.setValueFormatter(new YvalueCustomFormatter());
  	
-	XAxis xAxis = mChart.getXAxis(); 
+	XAxis xAxis = mChart.getXAxis();
 	xAxis.setLabelsToSkip(0);
 	//xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
 	//	
 	
-	mChart.setVisibleXRangeMinimum(1.03f);
+	mChart.setVisibleXRangeMinimum(1.1f);
 	//mChart.setVisibleXRangeMaximum(8000);
 //	mChart.setVisibleYRangeMaximum(0f,leftAxis);
 //	mChart.setVisibleYRangeMaximum(8000);
@@ -135,114 +139,11 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 //	LineDataSet set1 = new LineDataSet(yVals, "");
 //	LineDataSet set2 =  new LineDataSet(yVals, "");
 	
+	//mChart.setGridBackgroundColor(R.drawable.chartbg);
+	//mChart.setBackgroundResource(R.drawable.chartbg);
 	mChart.setDrawGridBackground(false);
+	
 
-	//Hearing Loss Limit Lines
-	leftAxis.removeAllLimitLines();
-
-	int LimitLineAlpha = 60;
-	
-	LimitLine l_mild = new LimitLine(-5, "Normal Hearing");
-	l_mild.setLineColor(Color.argb(0, 255, 255, 48));
-	l_mild.setLineWidth(0.2f);
-	leftAxis.addLimitLine(l_mild);
-	l_mild.setTextColor(Color.BLACK);
-	l_mild.setTextSize(10f);
-	
-	l_mild = new LimitLine(-23, "");
-	l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
-	l_mild.setLineWidth(12f);
-	leftAxis.addLimitLine(l_mild);
-	l_mild = new LimitLine(-28.8f, "");
-	l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
-	l_mild.setLineWidth(12f);
-	leftAxis.addLimitLine(l_mild);
-	l_mild = new LimitLine(-34.7f, "Mild Hearing Loss");
-	l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
-	l_mild.setLineWidth(12f);
-	l_mild.setTextColor(Color.BLACK);
-	l_mild.setTextSize(10f);
-	leftAxis.addLimitLine(l_mild);
-	l_mild = new LimitLine(-38.7f, "");
-	l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
-	l_mild.setLineWidth(4.0f);
-	leftAxis.addLimitLine(l_mild);
-	//
-	float adjustLine = 0.11f;
-	
-	LimitLine l_mod = new LimitLine(-43, "");
-	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
-	l_mod.setLineWidth(12f);
-	leftAxis.addLimitLine(l_mod);
-	l_mod = new LimitLine(-48.9f, "");
-	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
-	l_mod.setLineWidth(12f);
-	leftAxis.addLimitLine(l_mod);
-	l_mod = new LimitLine(-54.9f+(adjustLine), "Moderate Hearing Loss");
-	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
-	l_mod.setLineWidth(12f);
-	l_mod.setTextColor(Color.BLACK);
-	l_mod.setTextSize(10f);
-	leftAxis.addLimitLine(l_mod);
-	l_mod = new LimitLine(-60.78f+(adjustLine), "");
-	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
-	l_mod.setLineWidth(12f);
-	leftAxis.addLimitLine(l_mod);
-	l_mod = new LimitLine(-67.0f+(adjustLine*4), "");
-	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
-	l_mod.setLineWidth(12f);
-	leftAxis.addLimitLine(l_mod);
-	l_mod = new LimitLine(-70.0f, "");
-	l_mod.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
-	l_mod.setLineWidth(1.95f);
-	leftAxis.addLimitLine(l_mod);
-	//
-	LimitLine l_sev = new LimitLine(-73.5f, "");
-	l_sev.setLineColor(Color.argb(LimitLineAlpha, 255, 117, 48));
-	l_sev.setLineWidth(12f);
-	leftAxis.addLimitLine(l_sev);
-	l_sev = new LimitLine(-79.5f+(adjustLine*1), "");
-	l_sev.setLineColor(Color.argb(LimitLineAlpha, 255, 117, 48));
-	l_sev.setLineWidth(12f);
-	leftAxis.addLimitLine(l_sev);
-	l_sev = new LimitLine(-85.51f+(adjustLine*2), "Severe Hearing Loss");
-	l_sev.setLineColor(Color.argb(LimitLineAlpha, 255, 117, 48));
-	l_sev.setLineWidth(12f);
-	l_sev.setTextColor(Color.BLACK);
-	l_sev.setTextSize(10f);
-	leftAxis.addLimitLine(l_sev);
-	l_sev = new LimitLine(-89.35f+(adjustLine*3), "");
-	l_sev.setLineColor(Color.argb(LimitLineAlpha, 255, 117, 48));
-	l_sev.setLineWidth(3.1f);
-	leftAxis.addLimitLine(l_sev);
-	//
-	LimitLine l_prof = new LimitLine(-92.75f, "");
-	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
-	l_prof.setLineWidth(12f);
-	leftAxis.addLimitLine(l_prof);
-	l_prof = new LimitLine(-98.73f+(adjustLine*1), "");
-	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
-	l_prof.setLineWidth(12f);
-	leftAxis.addLimitLine(l_prof);
-	l_prof = new LimitLine(-104.6f+(adjustLine*1), "Profound Hearing Loss");
-	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
-	l_prof.setLineWidth(12f);
-	l_prof.setTextColor(Color.BLACK);
-	l_prof.setTextSize(10f);
-	leftAxis.addLimitLine(l_prof);
-	l_prof = new LimitLine(-110.56f+(adjustLine*2), "");
-	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
-	l_prof.setLineWidth(12f);
-	leftAxis.addLimitLine(l_prof);
-	l_prof = new LimitLine(-116.52f+(adjustLine*3), "");
-	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
-	l_prof.setLineWidth(12f);
-	leftAxis.addLimitLine(l_prof);
-	l_prof = new LimitLine(-120.0f+(adjustLine*5), "");
-	l_prof.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
-	l_prof.setLineWidth(1.3f);
-	leftAxis.addLimitLine(l_prof);
-	//
 	
   	parseDataObjectId = null;
 	pressedObjectId = null;
@@ -397,6 +298,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 
 			        mChart.setData(data);
 			    	mChart.setDescription(readUserName + ", " + createdAt); // set user name on audiogram
+			    	mChart.setDescriptionPosition((float)((mChart.getPosition(new Entry(0, 6), AxisDependency.LEFT)).x), (float)((mChart.getPosition(new Entry(-127, 0), AxisDependency.LEFT)).y));
 			    	mChart.invalidate();
 				}
 		        }
@@ -433,6 +335,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			        
 			        mChart.setData(data);
 			    	mChart.setDescription(readUserName + ", " + createdAt); // set user name on audiogram
+			    	mChart.setDescriptionPosition(100, mChart.getBottom());
 			    	mChart.invalidate();
 		        }
 		         	
@@ -612,11 +515,139 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
     }
 	
 	void drawAudiogramCrosses(){
+
+		int LimitLineAlpha = 20;
+		YAxis leftAxis = mChart.getAxisLeft();
+		
+		LimitLine l_mild = new LimitLine(-5, "");//Normal Hearing
+		l_mild.setLineColor(Color.argb(LimitLineAlpha, 37, 213, 33));
+		l_mild.setLineWidth(((float)mChart.getHeight())/(14.79f*(getResources().getDisplayMetrics().density/3)));
+		leftAxis.addLimitLine(l_mild);
+		l_mild.setTextColor(Color.BLACK);
+		l_mild.setTextSize(10f);
+		
+		l_mild = new LimitLine(-30, "");
+		l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 255, 48));
+		l_mild.setLineWidth(((float)mChart.getHeight())/(22.29f*(getResources().getDisplayMetrics().density/3))); //41f
+		leftAxis.addLimitLine(l_mild);
+		l_mild.setTextColor(Color.BLACK);
+		l_mild.setTextSize(10f);
+		
+		l_mild = new LimitLine(-30, "");//Mild Hearing Loss
+		l_mild.setLineColor(Color.argb(0, 255, 255, 48));
+		l_mild.setLineWidth(0.2f); //41f
+		leftAxis.addLimitLine(l_mild);
+		l_mild.setTextColor(Color.BLACK);
+		l_mild.setTextSize(10f);
+		
+		l_mild = new LimitLine(-55, "");
+		l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 186, 48));
+		l_mild.setLineWidth(((float)mChart.getHeight())/(14.79f*(getResources().getDisplayMetrics().density/3))); //62f
+		leftAxis.addLimitLine(l_mild);
+		l_mild.setTextColor(Color.BLACK);
+		l_mild.setTextSize(10f);
+		
+		l_mild = new LimitLine(-55, "");//Moderate Hearing Loss
+		l_mild.setLineColor(Color.argb(0, 255, 186, 48));
+		l_mild.setLineWidth(0.2f); //62f
+		leftAxis.addLimitLine(l_mild);
+		l_mild.setTextColor(Color.BLACK);
+		l_mild.setTextSize(10f);
+		
+		l_mild = new LimitLine(-80, "");
+		l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 117, 48));
+		l_mild.setLineWidth(((float)mChart.getHeight())/(22.29f*(getResources().getDisplayMetrics().density/3))); //41f
+		leftAxis.addLimitLine(l_mild);
+		l_mild.setTextColor(Color.BLACK);
+		l_mild.setTextSize(10f);
+		
+		l_mild = new LimitLine(-80, "");//Severe Hearing Loss
+		l_mild.setLineColor(Color.argb(0, 255, 117, 48));
+		l_mild.setLineWidth(0.2f); //41f
+		leftAxis.addLimitLine(l_mild);
+		l_mild.setTextColor(Color.BLACK);
+		l_mild.setTextSize(10f);
+		
+		l_mild = new LimitLine(-105, "");
+		l_mild.setLineColor(Color.argb(LimitLineAlpha, 255, 48, 48));
+		l_mild.setLineWidth(((float)mChart.getHeight())/(14.79f*(getResources().getDisplayMetrics().density/3))); //62f
+		leftAxis.addLimitLine(l_mild);
+		l_mild.setTextColor(Color.BLACK);
+		l_mild.setTextSize(10f);
+		
+		l_mild = new LimitLine(-105, "");//Profound Hearing Loss
+		l_mild.setLineColor(Color.argb(0, 255, 48, 48));
+		l_mild.setLineWidth(0.2f); //62f
+		leftAxis.addLimitLine(l_mild);
+		l_mild.setTextColor(Color.BLACK);
+		l_mild.setTextSize(10f);
+		
+		//Draw sound icons
+		ImageView iconBird = (ImageView) findViewById(R.id.bird);
+		LayoutParams birdParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		birdParams.setMargins((int)((mChart.getPosition(new Entry(0, 6), AxisDependency.LEFT)).x)-(int)((float)iconBird.getMeasuredWidth()/2), (int)((mChart.getPosition(new Entry(-25, 0), AxisDependency.LEFT)).y)+(int)((float)iconBird.getMeasuredHeight()/2), 0, 0);
+		iconBird.setLayoutParams(birdParams);
+		        
+		ImageView iconBus = (ImageView) findViewById(R.id.bus);
+		LayoutParams busParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		busParams.setMargins((int)((mChart.getPosition(new Entry(0, 0), AxisDependency.LEFT)).x), (int)((mChart.getPosition(new Entry(-100, 0), AxisDependency.LEFT)).y)+(int)((float)iconBus.getMeasuredHeight()/2), 0, 0);
+		iconBus.setLayoutParams(busParams);
+		        
+		ImageView iconDog = (ImageView) findViewById(R.id.dog);
+		LayoutParams dogParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		dogParams.setMargins((int)((mChart.getPosition(new Entry(0, 1), AxisDependency.LEFT)).x)-(int)((float)iconDog.getMeasuredWidth()/2), (int)((mChart.getPosition(new Entry(-70, 0), AxisDependency.LEFT)).y)+(int)((float)iconDog.getMeasuredHeight()/2), 0, 0);
+		iconDog.setLayoutParams(dogParams);
+		        
+		ImageView iconPhone = (ImageView) findViewById(R.id.phone);
+		LayoutParams phoneParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		phoneParams.setMargins((int)((mChart.getPosition(new Entry(0, 4), AxisDependency.LEFT)).x), (int)((mChart.getPosition(new Entry(-67, 0), AxisDependency.LEFT)).y)+(int)((float)iconPhone.getMeasuredHeight()/2), 0, 0);
+		iconPhone.setLayoutParams(phoneParams);
+		        
+		ImageView iconPlane = (ImageView) findViewById(R.id.plane);
+		LayoutParams planeParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		planeParams.setMargins((int)((mChart.getPosition(new Entry(0, 5), AxisDependency.LEFT)).x)-(int)((float)iconPlane.getMeasuredWidth()/2), (int)((mChart.getPosition(new Entry(-115, 0), AxisDependency.LEFT)).y)+(int)((float)iconPlane.getMeasuredHeight()/2), 0, 0);
+		iconPlane.setLayoutParams(planeParams);
+		        
+		ImageView iconTree = (ImageView) findViewById(R.id.tree);
+		LayoutParams treeParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		treeParams.setMargins((int)((mChart.getPosition(new Entry(0, 3), AxisDependency.LEFT)).x), (int)((mChart.getPosition(new Entry(-10, 0), AxisDependency.LEFT)).y)+(int)((float)iconTree.getMeasuredHeight()/2), 0, 0);
+		iconTree.setLayoutParams(treeParams);
+		        
+		ImageView iconWatertap = (ImageView) findViewById(R.id.watertap);
+		LayoutParams watertapParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		watertapParams.setMargins((int)((mChart.getPosition(new Entry(0, 1), AxisDependency.LEFT)).x)-(int)(float)iconWatertap.getMeasuredWidth(), (int)((mChart.getPosition(new Entry(-20, 0), AxisDependency.LEFT)).y)+(int)((float)iconWatertap.getMeasuredHeight()/2), 0, 0);
+		iconWatertap.setLayoutParams(watertapParams);
+		
+		//Draw speech banana
+        float dens = getResources().getDisplayMetrics().density;
+        Log.d("dens",Float.toString(dens));
+        
+        ImageView audiogramBanana = (ImageView) findViewById(R.id.audiogrambanana);
+        LayoutParams aBParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        aBParams.setMargins((int)((mChart.getPosition(new Entry(0, 0), AxisDependency.LEFT)).x), (int)((mChart.getPosition(new Entry(-7, 0), AxisDependency.LEFT)).y), 0, 0);
+        Log.d("topMargin", Integer.toString((int)((mChart.getPosition(new Entry(0, 0), AxisDependency.LEFT)).y)));
+        audiogramBanana.setLayoutParams(aBParams);
+        audiogramBanana.getLayoutParams().width = (int)((((mChart.getPosition(new Entry(0, 7), AxisDependency.LEFT)).x) - ((mChart.getPosition(new Entry(0, 0), AxisDependency.LEFT)).x)) - (((mChart.getPosition(new Entry(0, 1), AxisDependency.LEFT)).x) - ((mChart.getPosition(new Entry(0, 0), AxisDependency.LEFT)).x)*0.8));
+        audiogramBanana.getLayoutParams().height = (int)(((mChart.getPosition(new Entry(0, 0), AxisDependency.LEFT)).y)-((mChart.getPosition(new Entry(51, 0), AxisDependency.LEFT)).y));
+        Log.d("width", Integer.toString(9));
+        
+		//Draw Labels
+		Log.d("mChart.getRight()", Integer.toString(mChart.getRight()));
+
+		ImageView normalHearingImg = (ImageView) findViewById(R.id.normalHearing);
+        LayoutParams nHParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        nHParams.setMargins(mChart.getRight()-(int)((float)normalHearingImg.getMeasuredWidth()*2.8), (int)((mChart.getPosition(new Entry(-15, 0), AxisDependency.LEFT)).y)-(int)((float)normalHearingImg.getMeasuredHeight()/2), 0, 0);
+        normalHearingImg.setLayoutParams(nHParams);
+        
+		ImageView profoundHearingImg = (ImageView) findViewById(R.id.profoundHearing);
+        LayoutParams pHParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        pHParams.setMargins(mChart.getRight()-(int)((float)profoundHearingImg.getMeasuredWidth()*2.8), (int)((mChart.getPosition(new Entry(-115, 0), AxisDependency.LEFT)).y)-(int)((float)profoundHearingImg.getMeasuredHeight()/2), 0, 0);
+        profoundHearingImg.setLayoutParams(pHParams);
 		
 		//Draw blue crosses
         int adjustCrossXPos = -18;
         int adjustCrossYPos = 40;
-        
+
 		ImageView audiogramCrossImage1 = (ImageView) findViewById(R.id.audiogramCross1);	
 		
 		adjustCrossXPos = (int)((float)audiogramCrossImage1.getMeasuredHeight()/2)*-1;
@@ -661,7 +692,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 	@Override
     protected void onStart() {
 		super.onStart();
-	    Log.d("onStart","onStart");	
+	    Log.d("onStart","onStart");
     }
 	
 	@SuppressWarnings("deprecation")
