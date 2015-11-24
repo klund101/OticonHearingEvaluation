@@ -1,6 +1,10 @@
 package com.example.hearing_evaluation;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -23,8 +27,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +43,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.widget.EditText;
@@ -184,8 +192,9 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 //				}
 		}
 	});
-		
-	//drawAudiogramCrosses();
+	
+	
+	
 	
 	}
 	
@@ -340,7 +349,50 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		        }
 		         	
 			    chartJpgName = readUserName + "_" + object.getObjectId() + ".jpg";
-			    mChart.saveToGallery(chartJpgName, 100);
+//			    mChart.saveToGallery(chartJpgName, 100);
+			    
+			    int sBar = 0;
+			    int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+			    if (resourceId > 0)
+			    	sBar = getResources().getDimensionPixelSize(resourceId);
+			    
+			    Bitmap bitmap;
+			    View v1 = mChart.getRootView();
+			    v1.setDrawingCacheEnabled(true);
+			    bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+			    v1.setDrawingCacheEnabled(false);
+			    
+			    Bitmap lastBitmap = null;
+			    lastBitmap = Bitmap.createBitmap(bitmap, 0, mChart.getTop(), v1.getWidth(), (interpretationButton.getTop()-mChart.getTop()) + getStatusBarHeight() + getTitleBarHeight());
+			    
+			    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			    lastBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+			    File f = new File(Environment.getExternalStoragePublicDirectory(
+			            Environment.DIRECTORY_PICTURES
+			                            + File.separator), chartJpgName + ".jpg");
+			    try {
+					f.createNewFile();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			    //write the bytes in file
+			    FileOutputStream fo;
+				try {
+					fo = new FileOutputStream(f);
+					fo.write(bytes.toByteArray());
+					fo.close();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	
+			    
+			    Log.d("Screenshot!","Screenshot!");
 			    			
 		    	
 			}
@@ -425,8 +477,9 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			    freqsAndDataRight = ""; 
 			    
 			    emailIntent.setType("image/jpeg");
-		        File bitmapFile = new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
-		    		    chartJpgName);
+		        File bitmapFile = new File(Environment.getExternalStoragePublicDirectory(
+			            Environment.DIRECTORY_PICTURES
+                        + File.separator), chartJpgName + ".jpg");
 		        
 		        Log.d("", Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DCIM + "/" + 
 		    		    chartJpgName);
@@ -746,5 +799,17 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 	    super.onDestroy();
 	    Log.d("onDestroy","onDestroy");
     }
+	
+	public int getStatusBarHeight() {
+	    Rect r = new Rect();
+	    Window w = getWindow();
+	    w.getDecorView().getWindowVisibleDisplayFrame(r);
+	    return r.top;
+	}
+	 
+	public int getTitleBarHeight() {
+	    int viewTop = getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
+	    return (viewTop - getStatusBarHeight());
+	}
 
 }
