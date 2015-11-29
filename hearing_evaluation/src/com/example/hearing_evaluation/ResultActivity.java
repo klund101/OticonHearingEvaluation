@@ -23,8 +23,10 @@ import com.parse.ParseQuery;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -59,6 +61,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 	ImageButton closeResultsButton;
 	ImageButton sendEmailButton;
 	ImageButton interpretationButton;
+	ImageButton howToReadButton;
 	EditText uEmail;
 	
 	private LineChart mChart;
@@ -95,11 +98,11 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		
         initGui();
         
-        uEmail = (EditText)findViewById(R.id.userEmail);
-        uEmail.clearComposingText();
+       // uEmail = (EditText)findViewById(R.id.userEmail);
+        //uEmail.clearComposingText();
            
 		Log.d("user email", MainActivity.staticEmailId);
-		uEmail.setText(MainActivity.staticEmailId);	  
+		//uEmail.setText(MainActivity.staticEmailId);	  
         
         
 //////////MPchart 
@@ -363,7 +366,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			    v1.setDrawingCacheEnabled(false);
 			    
 			    Bitmap lastBitmap = null;
-			    lastBitmap = Bitmap.createBitmap(bitmap, 0, mChart.getTop(), v1.getWidth(), (interpretationButton.getTop()-mChart.getTop()) + getStatusBarHeight() + getTitleBarHeight());
+			    lastBitmap = Bitmap.createBitmap(bitmap, 0, mChart.getTop(), v1.getWidth(), (howToReadButton.getTop()-mChart.getTop()) + getStatusBarHeight() + getTitleBarHeight());
 			    
 			    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 			    lastBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -432,6 +435,9 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		sendEmailButton.setOnTouchListener(this);
 		interpretationButton= (ImageButton) findViewById(R.id.btnInterpretation);
 		interpretationButton.setOnTouchListener(this);
+		howToReadButton= (ImageButton) findViewById(R.id.btnHowToRead);
+		howToReadButton.setOnTouchListener(this);
+		
 	}
 	
 	public boolean onTouch(View v, MotionEvent event) {
@@ -461,7 +467,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 				sendEmailButton.setColorFilter(Color.argb(0, 0, 0, 0));
 			    Intent emailIntent = new Intent(Intent.ACTION_SEND);
 			    emailIntent.setType("message/rfc822");
-			    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{uEmail.getText().toString()});
+			    emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{MainActivity.staticEmailId});
 			    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Oticon Mobile Hearing Evaluation");
 			    
 				    for(int i=0; i<dBValuesLeft.length; i++){
@@ -506,6 +512,35 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 				Intent interpA = new Intent(ResultActivity.this, InterpretationActivity.class);
 				interpA.putExtra("parseDataObjectId", parseDataObjectId);
 	        	startActivity(interpA);
+			}
+		break;
+		case R.id.btnHowToRead:
+			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
+				howToReadButton.setColorFilter(Color.argb(100, 0, 0, 0));
+			}
+			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
+				howToReadButton.setColorFilter(Color.argb(0, 0, 0, 0));
+				
+	        	AlertDialog alertDialog = new AlertDialog.Builder(ResultActivity.this)
+		        .setTitle("Audiogram")
+		        .setMessage("The audiogram describes your hearing capability from low to high tones (125-8000 Hz). Normal hearing is around 0 dB and a hearing loss is defined from 20 dB and above. " +
+		        		"\n\nSound events of different loudnesses and tone heights are visible on the audiogram. Included sound events are:" +
+		        		"\n\n- bus (150 Hz, 100 dB)" +
+		        		"\n\n- water tap (200 Hz, 20 dB)" +
+		        		"\n\n- dog (250 Hz, 75 dB)" +
+		        		"\n\n- wind in trees (1300 Hz, 15 dB)" +
+		        		"\n\n- phone ringing (2500 Hz, 70 dB)" +
+		        		"\n\n- plane (4000 Hz, 110 dB)" +
+		        		"\n\n- bird chirping (8000 Hz, 25 dB)" +
+		        		"\n\nThe slightly darker area is called the speech cloud and covers the area of normal speech, including individual letters. The letters are also spread in loudness and tone height. " +
+		        		"\n\nIf your hearing audiogram for either ear lies below any of the sound events or the letters in the speech cloud, it indicates that you might experience difficulties hearing this particular sound.")
+		        .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) {
+
+		            }
+		         })
+		         .setIcon(android.R.drawable.ic_dialog_alert)
+		         .show();	
 			}
 		break;
 		}

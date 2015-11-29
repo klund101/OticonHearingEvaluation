@@ -14,41 +14,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:text="Audiogram - What does it mean?" />
+        android:text="Audiogram" 
+        android:textColor="#c5178b"/>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
-       
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btnInterpretation"
+        android:layout_above="@+id/btnHowToRead"
         android:layout_below="@+id/results"
         android:minHeight="10sp" >
 
     </com.github.mikephil.charting.charts.LineChart>
 
-    <EditText
-        android:id="@+id/userEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnSendEmail"
-        android:layout_alignLeft="@+id/chart"
-        android:layout_alignRight="@+id/chart"
-        android:ems="10"
-        android:enabled="true"
-        android:gravity="center"
-        android:inputType="textEmailAddress"
-        android:textAlignment="center"
-        android:textColor="#c5178b" >
-
-        <requestFocus />
-    </EditText>
-
     <ImageButton
         android:id="@+id/btnInterpretation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/userEmail"
+        android:layout_above="@+id/btnSendEmail"
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
@@ -227,5 +210,16 @@
        android:layout_alignParentTop="true"
        android:src="@drawable/profoundhearing"
        android:scaleType="center"/>
+
+   <ImageButton
+       android:id="@+id/btnHowToRead"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_above="@+id/btnInterpretation"
+       android:layout_centerHorizontal="true"
+       android:adjustViewBounds="true"
+       android:background="@android:color/transparent"
+       android:scaleType="fitXY"
+       android:src="@drawable/btnhowtoread" />
 
 </RelativeLayout>
