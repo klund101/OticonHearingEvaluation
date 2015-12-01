@@ -196,7 +196,12 @@ public class IdentityActivity extends Activity implements OnTouchListener {
         else{
         	MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.initialMusicVolume, 0);		
 	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_RING, MainActivity.initialRingVolume, 0);
-		MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, MainActivity.initialVibNote);
+	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_DTMF, MainActivity.initialDtmfVolume, 0);
+	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_ALARM, MainActivity.initialAlarmVolume, 0);
+	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, MainActivity.initialNoteVolume, 0);
+	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, MainActivity.initialSystemVolume, 0);
+	    
+	    MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, MainActivity.initialVibNote);
 		MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, MainActivity.initialVibRing);
         }
     }

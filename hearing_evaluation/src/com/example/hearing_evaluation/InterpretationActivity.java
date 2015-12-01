@@ -154,45 +154,45 @@ public class InterpretationActivity extends Activity implements OnTouchListener 
 			        }
 		        	else{
 		        	
-				        if(ptaLeft < 21){
+				        if(ptaLeft <= 20){
 				        	diagnosisLeft.setText("The test results suggest that you do not have a hearing loss on the left ear. ");
 				        	if((String)(object.get("q_6")) != null && (String)(object.get("q_7")) != null && (String)(object.get("q_8")) != null && (String)(object.get("q_10")) != null){
 								if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_8"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 0)
 									freeEvalButton.setVisibility(View.INVISIBLE);
 							}
 				        }
-				        else if(ptaLeft >= 21 && ptaLeft < 41){
+				        else if(ptaLeft > 20 && ptaLeft <= 40){
 				        	diagnosisLeft.setText("The test results suggest that you have a mild hearing loss on the the left ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
-				        else if(ptaLeft >= 41 && ptaLeft < 71){
+				        else if(ptaLeft > 40 && ptaLeft <= 70){
 				        	diagnosisLeft.setText("The test results suggest that you have a moderate hearing loss on the the left ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
-				        else if(ptaLeft >= 71){
+				        else if(ptaLeft > 70){
 				        	diagnosisLeft.setText("The test results suggest that you have a severe hearing loss on the the left ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        
 				        
-				        if(ptaRight < 21){
+				        if(ptaRight <= 20){
 				        	diagnosisRight.setText("The test results suggest that you do not have a hearing loss on the right ear. ");
-				        	if(ptaLeft < 21){	
+				        	if(ptaLeft <= 20){	
 					        	if((String)(object.get("q_6")) != null && (String)(object.get("q_7")) != null && (String)(object.get("q_8")) != null && (String)(object.get("q_10")) != null){
 									if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_8"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 0)
 										freeEvalButton.setVisibility(View.INVISIBLE);
 								}
 				        	}
 				        }
-				        else if(ptaRight >= 21 && ptaRight < 41){
+				        else if(ptaRight > 20 && ptaRight <= 40){
 				        	diagnosisRight.setText("The test results suggest that you have a mild hearing loss on the the right ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
-				        else if(ptaRight >= 41 && ptaRight < 71){
+				        else if(ptaRight > 40 && ptaRight <= 70){
 				        	diagnosisRight.setText("The test results suggest that you have a moderate hearing loss on the the right ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
-				        else if(ptaRight >= 71){
+				        else if(ptaRight > 70){
 				        	diagnosisRight.setText("The test results suggest that you have a severe hearing loss on the the right ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
@@ -284,7 +284,12 @@ public class InterpretationActivity extends Activity implements OnTouchListener 
         else{
         	MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, MainActivity.initialMusicVolume, 0);		
 	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_RING, MainActivity.initialRingVolume, 0);
-		MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, MainActivity.initialVibNote);
+	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_DTMF, MainActivity.initialDtmfVolume, 0);
+	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_ALARM, MainActivity.initialAlarmVolume, 0);
+	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, MainActivity.initialNoteVolume, 0);
+	    MainActivity.audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, MainActivity.initialSystemVolume, 0);
+	    
+	    MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, MainActivity.initialVibNote);
 		MainActivity.audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, MainActivity.initialVibRing);
         }
     }

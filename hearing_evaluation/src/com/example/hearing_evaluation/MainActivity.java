@@ -34,8 +34,15 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
 	public static AudioManager audioManager;
 	public static AudioManager audioVibManager;
 	public static int maxVolume;
+	
 	public static int initialRingVolume;
 	public static int initialMusicVolume;
+	public static int initialDtmfVolume;
+	public static int initialNoteVolume;
+	public static int initialAlarmVolume;
+	public static int initialSystemVolume;
+	
+	
 	public static int initialVibNote;
 	public static int initialVibRing;
 	public static int initRingerMode;
@@ -75,6 +82,10 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
         else{	
 	        initialRingVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
 	        initialMusicVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+	        initialDtmfVolume = audioManager.getStreamVolume(AudioManager.STREAM_DTMF);
+	        initialAlarmVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+	        initialNoteVolume = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+	        initialSystemVolume = audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM);
         }
         initialVibNote = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
         initialVibRing = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
@@ -251,6 +262,11 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
         else{
 	    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, initialMusicVolume, 0);		
 		audioManager.setStreamVolume(AudioManager.STREAM_RING, initialRingVolume, 0);
+		audioManager.setStreamVolume(AudioManager.STREAM_DTMF, initialDtmfVolume, 0);
+		audioManager.setStreamVolume(AudioManager.STREAM_ALARM, initialAlarmVolume, 0);
+		audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, initialNoteVolume, 0);
+		audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, initialSystemVolume, 0);
+		
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, initialVibNote);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, initialVibRing);
         }
