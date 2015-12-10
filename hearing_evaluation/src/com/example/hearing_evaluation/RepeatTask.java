@@ -227,6 +227,7 @@ public class RepeatTask extends TimerTask {
     		audioTrack.setStereoVolume(0, 1);
     	
         audioTrack.play();
+        Log.d("audioTrack.getPlaybackRate();", Integer.toString(audioTrack.getSampleRate()));
     }
         
 }

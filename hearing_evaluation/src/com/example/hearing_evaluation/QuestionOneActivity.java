@@ -536,16 +536,16 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 						
 						
 						AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-						if(audioManager.isWiredHeadsetOn()) {
+						if(audioManager.isWiredHeadsetOn()) { // audioManager.isWiredHeadsetOn()
 							
 							int ambientAmp = (int)getAmplitudeCheckAmbientSoundLevel();
 							Log.d("ambientAmp", Integer.toString(ambientAmp));
 							
-							double dbSplTH = 20*Math.log(ambientAmp/1);
+							//double dbSplTH = 20*Math.log(ambientAmp/1);
 							
-							Log.d("dbSplTH", Double.toString(dbSplTH));
+							//Log.d("dbSplTH", Double.toString(dbSplTH));
 							
-							if(dbSplTH < 132) { // dbSplTH < 132
+							if(ambientAmp < 736) { // dbSplTH < 132
 								//Parse 
 						        ParseQuery<ParseObject> query = ParseQuery.getQuery("hearingEvaluationData");
 						        query.whereEqualTo("GoogleId", MainActivity.staticEmailId);

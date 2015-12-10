@@ -40,7 +40,6 @@ import android.provider.ContactsContract;
 
 public class TestActivity extends ActionBarActivity implements OnTouchListener {
 	
-	private static final int MIN_SAMPLE_RATE = 44100;
 	
 	public static ImageButton yesButton;
 	
@@ -140,6 +139,8 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 		TestActivity.testActivityContext = getApplicationContext();
 				
 		setContentView(R.layout.activity_test);
+		
+		Log.d("LOL", Integer.toString(pulseLength));
 		
         initGui();
                                
