@@ -67,7 +67,6 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 	private LineChart mChart;
 	public String createdAt;
 	public String readUserName;
-	//ArrayList<String> lineList = new ArrayList<String>();
 	float[] dBValues = new float[RepeatTask.freqValues.length];
 	float[] dBValuesLeft = new float[RepeatTask.freqValues.length];
 	float[] dBValuesRight = new float[RepeatTask.freqValues.length];
@@ -97,17 +96,14 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		setContentView(R.layout.activity_result);
 		
         initGui();
-        
-       // uEmail = (EditText)findViewById(R.id.userEmail);
-        //uEmail.clearComposingText();
+       
            
-		Log.d("user email", MainActivity.staticEmailId);
-		//uEmail.setText(MainActivity.staticEmailId);	  
+		Log.d("user email", MainActivity.staticEmailId);	  
         
         
 //////////MPchart 
     	
-	//LineChart chart = (LineChart) findViewById(R.id.chart);
+
 	mChart = (LineChart) findViewById(R.id.chart);
 	// enable value highlighting
 	mChart.setHighlightEnabled(true);
@@ -127,31 +123,15 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
  	rightAxis.setEnabled(false);
  
  	leftAxis.setAxisMaxValue(10f);
- 	//rightAxis.setAxisMaxValue(10f);
  	leftAxis.setStartAtZero(false);
- 	//rightAxis.setStartAtZero(false);
  	leftAxis.setAxisMinValue(-120f);
- 	//rightAxis.setAxisMinValue(-120f);
  	
  	leftAxis.setValueFormatter(new YvalueCustomFormatter());
- 	//rightAxis.setValueFormatter(new YvalueCustomFormatter());
  	
 	XAxis xAxis = mChart.getXAxis();
 	xAxis.setLabelsToSkip(0);
-	//xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
-	//	
-	
+
 	mChart.setVisibleXRangeMinimum(1.1f);
-	//mChart.setVisibleXRangeMaximum(8000);
-//	mChart.setVisibleYRangeMaximum(0f,leftAxis);
-//	mChart.setVisibleYRangeMaximum(8000);
-	
-    //ArrayList<Entry> yVals = new ArrayList<Entry>();
-//	LineDataSet set1 = new LineDataSet(yVals, "");
-//	LineDataSet set2 =  new LineDataSet(yVals, "");
-	
-	//mChart.setGridBackgroundColor(R.drawable.chartbg);
-	//mChart.setBackgroundResource(R.drawable.chartbg);
 	mChart.setDrawGridBackground(false);
 	
 
@@ -189,10 +169,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		@Override
 		public void done(ParseObject object, ParseException e) {
 			setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
-//				if(displayValueX[0] == 0.0f){
-//					
-//					setData(RepeatTask.freqValues.length,1,"HearingDataLeft", "Left ear");
-//				}
+
 		}
 	});
 	
@@ -213,7 +190,6 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 			public void done(ParseObject object, ParseException e) {
 			dBValuesString = (String) object.get(dataChannel);
 			readUserName = (String) object.get("Username");
-			//readInvertedEars = (String) object.get("invertedEarPhones");
 			createdAt = (String) object.get("timeAndDate");
 			//Log.d("dBValuesString", dBValuesString);
 		    dBValuesStringSubS = dBValuesString.substring(1);
@@ -226,27 +202,16 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		    String[] dBValuesReader = dBValuesStringSubS.split(",");
 		        for(int i=0; i<dBValues.length; i++){
 		        	dBValues[i] = Float.parseFloat(dBValuesReader[i]);
-		        	//Log.d("dBValues", Float.toString(dBValues[i]));
 		            yVals.add(new Entry(dBValues[i], i));
-		            //Log.d("yVals", yVals.toString());
 		            
 		            Log.d("ear", channelLabel);
-		            //tmpLeftEar = 0.1f;
 		            if(channelLabel.equals("Left ear")){
 		            	
 			    		Log.d("dBValues[i]", Float.toString(dBValues[i]));
 
 		            
 			    		PointF posOfPoint = mChart.getPosition(new Entry(dBValues[i], i), AxisDependency.LEFT);
-//			    		String audiogramCrossPos = posOfPoint.toString();
-//			    		Log.d("audiogramCrossReader",audiogramCrossPos);
-//			    		audiogramCrossPos = audiogramCrossPos.replace("PointF(", "");
-//			    		audiogramCrossPos = audiogramCrossPos.replace(" ", "");
-//			    		audiogramCrossPos = audiogramCrossPos.replace(")", "");
-//			    		String[] audiogramCrossReader = audiogramCrossPos.split(",");
-//	
-//			    		displayValueX[i] = Float.parseFloat(audiogramCrossReader[0]);
-//			    		displayValueY[i] = Float.parseFloat(audiogramCrossReader[1]);
+
 			    		
 			    		displayValueX[i] = posOfPoint.x;
 			    		displayValueY[i] = posOfPoint.y;
@@ -263,25 +228,18 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		        if(dataChannel == "HearingDataLeft"){
 				    if(tmpLeftEar != 0.0){
 		        	
-	//		        	if(readInvertedEars == "true")
-	//		        		dBValuesRight = dBValues.clone();
-	//		        	else
+
 			        	dBValuesLeft = dBValues.clone();
 			        	
-			        	//Log.d("dBValuesLeft", Float.toString(dBValuesLeft[1]));
 			        	
 			        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
 				        set1.enableDashedLine(10f, 5f, 0f);
 				        set1.setColor(Color.BLUE);
 					    set1.setCircleColor(Color.TRANSPARENT);
-					    
-						if(tmpLeftEar != 0.0f){
-						}
 	
-				        //mChart.getLegend().setEnabled(true);
 			        
 				    	drawAudiogramCrosses();
-				        //mChart.getLegend().setEnabled(false);
+
 
 				    
 				    
@@ -316,10 +274,7 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		        }
 		        else if(dataChannel == "HearingDataRight"){
 		        	
-//		        	if(readInvertedEars == "true")
-//		        		dBValuesLeft = dBValues.clone();
-//		        	else
-		        		dBValuesRight = dBValues.clone();
+		        	dBValuesRight = dBValues.clone();
 		        	
 		        	//Log.d("dBValuesRight", Float.toString(dBValuesRight[1]));
 		        	LineDataSet set1 = new LineDataSet(yVals, channelLabel);
@@ -352,7 +307,6 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 		        }
 		         	
 			    chartJpgName = readUserName + "_" + object.getObjectId() + ".jpg";
-//			    mChart.saveToGallery(chartJpgName, 100);
 			    
 			    int sBar = 0;
 			    int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -448,15 +402,15 @@ public class ResultActivity extends IdentityActivity implements OnTouchListener 
 				}
 				else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
 					closeResultsButton.setColorFilter(Color.argb(0, 0, 0, 0));
-				//startActivity(new Intent(ResultActivity.this, MainActivity.class)); // 
-		    	if(pressedObjectId != null){
-		    		super.onBackPressed();
-		    	}
-		    	else{
-				Intent mainA = new Intent(ResultActivity.this, MainActivity.class);
-				mainA.putExtra("parseDataObjectId", parseDataObjectId);
-		        startActivity(mainA);
-		    	}
+
+					if(pressedObjectId != null){
+						super.onBackPressed();
+					}
+			    	else{
+						Intent mainA = new Intent(ResultActivity.this, MainActivity.class);
+						mainA.putExtra("parseDataObjectId", parseDataObjectId);
+				        startActivity(mainA);
+			    	}
 			}
 		break;
 		case R.id.btnSendEmail:

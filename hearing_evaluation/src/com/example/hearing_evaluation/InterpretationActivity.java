@@ -87,7 +87,7 @@ public class InterpretationActivity extends Activity implements OnTouchListener 
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 1)
-						recEnt = "We recommend that you seek an ear, nose and throat physician due to pain in the ear.";
+						recEnt = "We recommend that you seek an ear, nose and throat physician due to pain in your ear.";
 						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
@@ -102,12 +102,12 @@ public class InterpretationActivity extends Activity implements OnTouchListener 
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 1 && Integer.parseInt((String)(object.get("q_10"))) == 1)
-						recEnt = "We recommend that you seek an ear, nose and throat physician due to tinnitus and pain in the ear.";
+						recEnt = "We recommend that you seek an ear, nose and throat physician due to tinnitus and pain in your ear.";
 						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				if((String)(object.get("q_6"))  != null && (String)(object.get("q_7"))  != null && (String)(object.get("q_10"))  != null){
 					if(Integer.parseInt((String)(object.get("q_6"))) == 1 && Integer.parseInt((String)(object.get("q_7"))) == 1 && Integer.parseInt((String)(object.get("q_10"))) == 1)
-						recEnt = "We recommend that you seek an ear, nose and throat physician due to tinnitus, hyperacousis and pain in the ear.";
+						recEnt = "We recommend that you seek an ear, nose and throat physician due to tinnitus, hyperacousis and pain in your ear.";
 						freeEvalButton.setVisibility(View.VISIBLE);
 				}
 				
@@ -155,28 +155,28 @@ public class InterpretationActivity extends Activity implements OnTouchListener 
 		        	else{
 		        	
 				        if(ptaLeft <= 20){
-				        	diagnosisLeft.setText("The test results suggest that you do not have a hearing loss on the left ear. ");
+				        	diagnosisLeft.setText("The test results suggest that you do not have a hearing loss on your left ear. ");
 				        	if((String)(object.get("q_6")) != null && (String)(object.get("q_7")) != null && (String)(object.get("q_8")) != null && (String)(object.get("q_10")) != null){
 								if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_8"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 0)
 									freeEvalButton.setVisibility(View.INVISIBLE);
 							}
 				        }
 				        else if(ptaLeft > 20 && ptaLeft <= 40){
-				        	diagnosisLeft.setText("The test results suggest that you have a mild hearing loss on the the left ear. You should contact a hearing professional for a hearing test. ");
+				        	diagnosisLeft.setText("The test results suggest that you have a mild hearing loss on your left ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        else if(ptaLeft > 40 && ptaLeft <= 70){
-				        	diagnosisLeft.setText("The test results suggest that you have a moderate hearing loss on the the left ear. You should contact a hearing professional for a hearing test. ");
+				        	diagnosisLeft.setText("The test results suggest that you have a moderate hearing loss on your left ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        else if(ptaLeft > 70){
-				        	diagnosisLeft.setText("The test results suggest that you have a severe hearing loss on the the left ear. You should contact a hearing professional for a hearing test. ");
+				        	diagnosisLeft.setText("The test results suggest that you have a severe hearing loss on your left ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        
 				        
 				        if(ptaRight <= 20){
-				        	diagnosisRight.setText("The test results suggest that you do not have a hearing loss on the right ear. ");
+				        	diagnosisRight.setText("The test results suggest that you do not have a hearing loss on your right ear. ");
 				        	if(ptaLeft <= 20){	
 					        	if((String)(object.get("q_6")) != null && (String)(object.get("q_7")) != null && (String)(object.get("q_8")) != null && (String)(object.get("q_10")) != null){
 									if(Integer.parseInt((String)(object.get("q_6"))) == 0 && Integer.parseInt((String)(object.get("q_7"))) == 0 && Integer.parseInt((String)(object.get("q_8"))) == 0 && Integer.parseInt((String)(object.get("q_10"))) == 0)
@@ -185,15 +185,15 @@ public class InterpretationActivity extends Activity implements OnTouchListener 
 				        	}
 				        }
 				        else if(ptaRight > 20 && ptaRight <= 40){
-				        	diagnosisRight.setText("The test results suggest that you have a mild hearing loss on the the right ear. You should contact a hearing professional for a hearing test. ");
+				        	diagnosisRight.setText("The test results suggest that you have a mild hearing loss on your right ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        else if(ptaRight > 40 && ptaRight <= 70){
-				        	diagnosisRight.setText("The test results suggest that you have a moderate hearing loss on the the right ear. You should contact a hearing professional for a hearing test. ");
+				        	diagnosisRight.setText("The test results suggest that you have a moderate hearing loss on your right ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        else if(ptaRight > 70){
-				        	diagnosisRight.setText("The test results suggest that you have a severe hearing loss on the the right ear. You should contact a hearing professional for a hearing test. ");
+				        	diagnosisRight.setText("The test results suggest that you have a severe hearing loss on your right ear. You should contact a hearing professional for a hearing test. ");
 				        	freeEvalButton.setVisibility(View.VISIBLE);
 				        }
 				        
@@ -220,14 +220,6 @@ public class InterpretationActivity extends Activity implements OnTouchListener 
 		freeEvalButton.setVisibility(View.INVISIBLE);
 	}
 	
-//	@Override
-//	public void onClick(View v) {
-//		switch (v.getId()) {
-//		case R.id.btnInstructionsThreeProceed:
-//			startActivity(new Intent(InstructionsThreeActivity.this, ProfileIdActivity.class)); //
-//		break;
-//		}
-//	}
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

@@ -28,7 +28,7 @@ public class RepeatTask extends TimerTask {
 	public long startCheckTime, stopCheckTime; 
 	public final int nextTestEventTime = 3000;
 	public static int[] freqValues = {125, 250, 500, 1000, 2000, 4000, 8000};
-	public static int[] freqOrder = {3,4,5,6,2,1,0,3};
+	public static int[] freqOrder =  {3,4,5,6,2,1,0,3};// FULL TEST!! QUICK DEMO:  {3,4,5,2,3};
 	
 	public static Timer timer = new Timer();
 	

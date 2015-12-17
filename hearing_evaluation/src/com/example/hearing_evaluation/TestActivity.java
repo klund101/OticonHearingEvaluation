@@ -89,24 +89,6 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 		  {0f, 0f, 0f, 2.01f, 10.1f, 11.5f, 30.3f, 50.9f, 85.5f, 155f, 273.5f, 485f, 875f, 1555f, 2800f}
 	};
 	
-//	public static int[][] expectedFemale= new int[][]{
-//		{0,0,0,0,0,0,0},// 20-29
-//		{0,0,0,0,1,2,3},// 30-39
-//		{0,0,0,0,1,2,3},// 40-49
-//		{0,0,0,0,1,2,4},// 50-59
-//		{0,0,0,1,2,4,5},// 60-69
-//		{0,0,1,2,4,6,9},// 70-79
-//		{0,0,1,3,5,9,14}// 80-
-//	};
-//	public static int[][] expectedMale= new int[][]{
-//		{0,0,0,0,0,0,0},// 20-29
-//		{0,0,0,0,1,2,3},// 30-39
-//		{0,0,0,0,1,2,4},// 40-49
-//		{0,0,0,0,1,3,4},// 50-59
-//		{0,0,0,1,3,5,7},// 60-69
-//		{0,0,1,4,6,9,11},// 70-79
-//		{0,0,2,5,8,11,14}// 80-
-//	};
 	
 	public static int[][] expectedFemale= new int[][]{
 		{0,0,0,0,0,0,0},// 20-29
@@ -201,10 +183,6 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 		});
 		
 		
-		
-//		dBLevelIndex = 3; // index + 1 of 25 dB
-//    	toneLevel = 25;
-		
     	
     	/// Envelope for pulsed tone ----------------------------------------------------
     	for(int i = 1; i < numSamplesTest; ++i){
@@ -283,14 +261,8 @@ public class TestActivity extends ActionBarActivity implements OnTouchListener {
 			yesBtnClicked = true;
 			RepeatTask.timer.schedule(new RepeatTask(), 500 + (int)(Math.random()*500));
 			
-						        	       	        		 
-			//if(tmpCount>=100/*9*/){// number of tested frequencies
-//			if(currentFreq > 2){ //Testing 1000 Hz two times
-//				currentFreq = 2;
-////				
-//				goToResults();
-////				
-//			 }
+						        	       	        		
+
 			}
 		break;
 		}

@@ -25,8 +25,6 @@ import android.widget.ImageButton;
 
 public class MainActivity extends ActionBarActivity implements OnTouchListener {
 	
-//	Button webViewButton;
-//	Button pureToneTestButton;
 	
 	ImageButton newTestButton;
 	ImageButton archiveButton;
@@ -105,18 +103,13 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
 		archiveButton = (ImageButton) findViewById(R.id.btnArchive);
 		archiveButton.setOnTouchListener(this);
 		
-//		pureToneTestButton = (Button) findViewById(R.id.btnPureToneTestActivity);
-//		pureToneTestButton.setOnTouchListener(this);
 		
 	}
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
-//		case R.id.webViewMainBtn:
-//			Intent webViewA = new Intent(MainActivity.this, WebViewResultActivity.class);
-//	        startActivity(webViewA);
-//		break;
+
 		case R.id.btnNewTest:
 			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
 				newTestButton.setColorFilter(Color.argb(100, 0, 0, 0));
@@ -139,16 +132,7 @@ public class MainActivity extends ActionBarActivity implements OnTouchListener {
 				startActivity(archA);	
 			}
 		break;
-//		case R.id.btnPureToneTestActivity:
-//			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN){
-//
-//			}
-//			else if (event.getAction() == android.view.MotionEvent.ACTION_UP){
-//
-//				Intent pureToneA = new Intent(MainActivity.this, PureToneDbTestActivity.class);
-//				startActivity(pureToneA);	
-//			}
-//		break;
+
 		}
 		return false;
 	}

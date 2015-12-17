@@ -536,14 +536,11 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 						
 						
 						AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-						if(audioManager.isWiredHeadsetOn()) { // audioManager.isWiredHeadsetOn()
+						if(audioManager.isWiredHeadsetOn()) { 
 							
 							int ambientAmp = (int)getAmplitudeCheckAmbientSoundLevel();
 							Log.d("ambientAmp", Integer.toString(ambientAmp));
 							
-							//double dbSplTH = 20*Math.log(ambientAmp/1);
-							
-							//Log.d("dbSplTH", Double.toString(dbSplTH));
 							
 							if(ambientAmp < 736) { // dbSplTH < 132
 								//Parse 
@@ -586,7 +583,7 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 						        
 								Intent nextQ = new Intent(QuestionOneActivity.this, TestActivity.class);
 								nextQ.putExtra("parseDataObjectId", parseDataObjectId);
-								//nextQ.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+								
 								startActivity(nextQ);
 							}
 							else{
@@ -644,7 +641,7 @@ public class QuestionOneActivity extends Activity implements OnTouchListener {
 								        
 										Intent nextQ = new Intent(QuestionOneActivity.this, TestActivity.class);
 										nextQ.putExtra("parseDataObjectId", parseDataObjectId);
-										//nextQ.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										
 										startActivity(nextQ);
 
 						            }
